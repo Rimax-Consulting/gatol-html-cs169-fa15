@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Game-A-Thon of Learning</title>
+    <link rel="icon" type="image/png" href="images/gamecontroller-icon.png">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/index.js"></script>
+    <script type="text/javascript">
+        // This is a jQuery convention to say that once all the files
+        // load, the function GameAThon.start() should run.
+        // This function is defined in the index.js
+        $(function() {
+            //GameAThon.start();
+        });
+    </script>
+  </head>
+
+  <body>
+    <div class="dashboard_header">
+        <img src="images/gamecontroller-icon.png">
+        <header id="dashboard_title">
+            User Dashboard
+        </header>
+
+        <div class="right">
+            <button>Create Game</button> 
+            <button>Add Game</button>
+        </div>
+
+        <div class="clear_float">
+        </div>
+    </div>
+
+
+    <div id="dashboard_container" class="dashboard container">
+        <div class="inner_title">
+            Ready Games
+        </div>
+
+        <div>
+            <ul id="games_list" class="inner_container">
+                <li><a href="#sample_game_1">Sample Game 1</a></li>
+                <div class="fullbar"></div>
+                <li><a href="#sample_game_2">Sample Game 2</a></li>
+                <div class="fullbar"></div>
+            </ul>
+        </div>
+
+    </div>
+    
+  </body>
+</html>
+

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+    <title>Game-A-Thon of Learning - Specific Game</title>
+    <link rel="icon" type="image/png" href="images/gamecontroller-icon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/gameScreens.js"></script>
+    <script type="text/javascript">
+            // This is a jQuery convention to say that once all the files
+            // load, the function Smile.start() should run.
+            // This function is defined in the smiles.js
+            $(function() {
+                Screens.start();
+            });
+        </script>
+</head>
+<body>
+	<div class="screenTitle all">Screen Title</div>
+
+	<div class="centerText all"> INFO </div>
+
+	<div class="centerBtns">
+		<button class="btnSynopsis all">Start</button>
+		<button class="btnHowTo all all">How to Play</button>
+		<button class="btnQuitGame all">Quit</button>
+		<button class="btnSummary all">Summary</button>
+		<button class="btnMain all">Back to Main Menu</button>
+	</div>
+
+	<div class="questionText">
+		<div class="qSet all">Question Set</div>
+		<div class="qSetDescr all">Question Set Description</div>
+		<div class="currQuestion all">Current Question</div>
+		<div class="answer all">Choose between the following:</div>
+	</div>
+
+	<div class="bottomBtns">
+		<button class="btnMain all">Back to Main Menu</button>
+		<button class="btnGame all">Play</button>
+		<button class="btnNext all">Next Question</button>
+		<button class="btnQuitGame all">Quit</button>
+		<button class="btnDone all">Back to Win</button>
+	</div>
+
+</body>
+
+</html>
