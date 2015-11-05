@@ -1,3 +1,7 @@
-A Pen created at CodePen.io. You can find this one at http://codepen.io/alireza_attari/pen/xyIqv.
+== Game-a-Thon of learning Website Page
 
- login page 
+=== Links
+
+{Website} [http://allenyu94.github.io/gatol-html/]
+
+{Backend} [https://github.com/occhen11/gatol]
