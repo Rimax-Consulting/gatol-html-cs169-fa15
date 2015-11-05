@@ -15,8 +15,8 @@ var GameAThon = (function() {
      * HTTP POST request
      * @param  {string}   url       URL path, e.g. "/api/trainers"
      * @param  {Object}   data      JSON data to send in request body
-     * @param  {function} onSuccess   callback method to execute upon request success (200 status)
-     * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
+     * @param  {function} onSuccess   callback method to execute upon request success (201 status)
+     * @param  {function} onFailure   callback method to execute upon request failure (non-201 status)
      * @return {None}
      */
     var makePostRequest = function(url, data, onSuccess, onFailure) {
@@ -99,11 +99,6 @@ var GameAThon = (function() {
 
         loginContainer.on('click', '#sign_in', function(e) {
             // do user sign in logic
-
-            if (getCookie("auth_token") != "") {
-                alert("still signed in, auth_token: " + getCookie("auth_token"));
-                return;
-            }
             
             var creds = {} // prepare credentials for passing into backend
 
@@ -112,10 +107,9 @@ var GameAThon = (function() {
 
             var onSuccess = function(data) {
                 alert('successfully logged in as user');
-                setCookie("auth_token", data.auth_token);
                 document.cookie = data.auth_token;
                 console.log(data);
-                //window.location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+                window.location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
             };
             var onFailure = function() { 
                 console.error('failure to login as user');
@@ -209,9 +203,6 @@ var GameAThon = (function() {
         loginContainer = $("#login_container");
 
         attachCreateHandler();
-
-        // check if already logged in
-        checkCookie();
     };
 
     // PUBLIC METHODS
@@ -221,52 +212,3 @@ var GameAThon = (function() {
     };
 
 })();
-
-/**
- * Sets the cookie
- * 
- */
-function setCookie(cname, cvalue) {
-    // currently only doing expiration of 1 hour
-    var now = new Date();
-    var time = now.getTime();
-    time += 3600 * 1000;
-    now.setTime(time);
-
-    document.cookie= cname + "=" + cvalue +
-    "; expires=" + now.toUTCString() +
-    "; path=/"; 
-
-    console.log("set cookie: " + cname + "=" + cvalue +
-    "; expires=" + now.toUTCString() +
-    "; path=/");
-}
-
-/**
- * Gets the cookie
- *
- */
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        console.log(c);
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-    }
-    return "";
-}
-
-/**
- * Used for debugging
- *
- */
-function checkCookie() {
-    var auth = getCookie("auth_token");
-    if (auth != "") {
-        alert("Welcome again, auth token: " + auth);
-    }
-}
-
-
