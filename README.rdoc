@@ -2,6 +2,6 @@
 
 === Links
 
-{Website} [http://allenyu94.github.io/gatol-html/]
+{Website}[http://allenyu94.github.io/gatol-html/]
 
-{Backend} [https://github.com/occhen11/gatol]
+{Backend}[https://github.com/occhen11/gatol]
