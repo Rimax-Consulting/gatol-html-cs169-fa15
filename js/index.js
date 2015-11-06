@@ -6,30 +6,7 @@ var GameAThon = (function() {
     // PRIVATE VARIABLES
     var loginContainer; // holds login objects, value set in the "start" method below
 
-    // the backend we are using
-    var apiUrl = 'https://calm-garden-9078.herokuapp.com' 
-
     // PRIVATE METHODS
-
-     /**
-     * HTTP POST request
-     * @param  {string}   url       URL path, e.g. "/api/trainers"
-     * @param  {Object}   data      JSON data to send in request body
-     * @param  {function} onSuccess   callback method to execute upon request success (200 status)
-     * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
-     * @return {None}
-     */
-    var makePostRequest = function(url, data, onSuccess, onFailure) {
-        $.ajax({
-            type: 'POST',
-            url: apiUrl + url,
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            dataType: "JSON",
-            success: onSuccess,
-            error: onFailure
-        });
-    };
 
     var attachCreateHandler = function(e) {
 
@@ -100,10 +77,10 @@ var GameAThon = (function() {
         loginContainer.on('click', '#sign_in', function(e) {
             // do user sign in logic
 
-            if (getCookie("auth_token") != "") {
-                alert("still signed in, auth_token: " + getCookie("auth_token"));
-                return;
-            }
+            //if (getCookie("auth_token") != "") {
+            //    alert("still signed in, auth_token: " + getCookie("auth_token"));
+            //    return;
+            //}
             
             var creds = {} // prepare credentials for passing into backend
 
@@ -111,11 +88,11 @@ var GameAThon = (function() {
             creds.password = loginContainer.find('#user_password').val();
 
             var onSuccess = function(data) {
-                alert('successfully logged in as user');
+                alert('successfully logged in as user, auth token is: ' + data.auth_token);
                 setCookie("auth_token", data.auth_token);
-                document.cookie = data.auth_token;
                 console.log(data);
-                //window.location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+                //location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
+                location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
             };
             var onFailure = function() { 
                 console.error('failure to login as user');
@@ -130,6 +107,10 @@ var GameAThon = (function() {
         loginContainer.on('click', '#trainer_sign_in', function(e) {
             // do trainer sign in logic
         });
+
+        loginContainer.on('click', '#logout', function(e) {
+               
+        })
 
 
         // login back
@@ -199,19 +180,14 @@ var GameAThon = (function() {
 
     }
 
-    
-
     /**
-     * Start the app by displaying the most recent smiles and attaching event handlers.
+     * Start the app by and attach event handlers.
      * @return {None}
      */
     var start = function() {
         loginContainer = $("#login_container");
 
         attachCreateHandler();
-
-        // check if already logged in
-        checkCookie();
     };
 
     // PUBLIC METHODS
@@ -221,52 +197,4 @@ var GameAThon = (function() {
     };
 
 })();
-
-/**
- * Sets the cookie
- * 
- */
-function setCookie(cname, cvalue) {
-    // currently only doing expiration of 1 hour
-    var now = new Date();
-    var time = now.getTime();
-    time += 3600 * 1000;
-    now.setTime(time);
-
-    document.cookie= cname + "=" + cvalue +
-    "; expires=" + now.toUTCString() +
-    "; path=/"; 
-
-    console.log("set cookie: " + cname + "=" + cvalue +
-    "; expires=" + now.toUTCString() +
-    "; path=/");
-}
-
-/**
- * Gets the cookie
- *
- */
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        console.log(c);
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-    }
-    return "";
-}
-
-/**
- * Used for debugging
- *
- */
-function checkCookie() {
-    var auth = getCookie("auth_token");
-    if (auth != "") {
-        alert("Welcome again, auth token: " + auth);
-    }
-}
-
 

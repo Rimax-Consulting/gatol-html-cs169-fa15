@@ -7,27 +7,29 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/jquery.min.js"></script>
-    <script src="js/index.js"></script>
+    <script src="js/gatol.js"></script>
+    <script src="js/dashboard.js"></script>
     <script type="text/javascript">
         // This is a jQuery convention to say that once all the files
         // load, the function GameAThon.start() should run.
         // This function is defined in the index.js
         $(function() {
-            //GameAThon.start();
+            DashBoard.start();
         });
     </script>
   </head>
 
   <body>
-    <div class="dashboard_header">
+    <div id="dashboard_header" class="dashboard_header">
         <img src="images/gamecontroller-icon.png">
         <header id="dashboard_title">
             User Dashboard
         </header>
 
         <div class="right">
-            <button>Create Game</button> 
-            <button>Add Game</button>
+            <button id="logout" class="white_button">Logout</button>
+            <button id="create">Create Game</button> 
+            <button id="add">Add Game</button>
         </div>
 
         <div class="clear_float">

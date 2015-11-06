@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Game-A-Thon of Learning</title>
+    <link rel="icon" type="image/png" href="images/gamecontroller-icon.png">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/input_link.js"></script>
+    <script type="text/javascript">
+        // This is a jQuery convention to say that once all the files
+        // load, the function GameAThon.start() should run.
+        // This function is defined in the index.js
+        $(function() {
+            InputLink.start();
+        });
+    </script>
+  </head>
+
+  <body>
+
+   <div id="link_container" class="wrap container">
+        <div class="h1 inner_title">
+            Import Game from Link
+        </div>
+
+        <div id="link_inputs">
+            <input id="link_input" type="text" placeholder="Enter Link here"></input>
+		    <button id="link_go" class="margin_top20">Go</button>
+            <button id="cancel_link" class="other_buttons white_button">Cancel</button>
+        </div>
+
+	</div>
+    
+  </body>
+</html>

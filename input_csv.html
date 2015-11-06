@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Game-A-Thon of Learning</title>
+    <link rel="icon" type="image/png" href="images/gamecontroller-icon.png">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/input_csv.js"></script>
+    <script type="text/javascript">
+        // This is a jQuery convention to say that once all the files
+        // load, the function GameAThon.start() should run.
+        // This function is defined in the index.js
+        $(function() {
+            InputCSV.start();
+        });
+    </script>
+  </head>
+
+  <body>
+
+   <div id="csv_container" class="wrap container">
+        <div class="h1 inner_title">
+            Upload CSV
+        </div>
+
+        <div id="csv_inputs">
+            <input id="file_select" type="file"></input>
+		    <button id="upload" class="margin_top20">Upload</button>
+            <button id="cancel_upload" class="other_buttons white_button">Cancel</button>
+        </div>
+
+	</div>
+    
+  </body>
+</html>
