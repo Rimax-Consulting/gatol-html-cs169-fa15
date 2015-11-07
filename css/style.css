@@ -278,12 +278,7 @@ body {
     height: 460px;
 }
 
-#link_input {
-    padding: 5px;
-    width: 235px;
-}
-
-#login_container input {
+.wrap input {
 	border: none;
 	background: #fff;
     font-family:Lato ;
@@ -368,10 +363,6 @@ button:active {
     width: 300px;
 }
 
-.small_btn {
-    width: 200px;
-}
-
 #preview_play_btn {
     margin-left: 300px;
 }
@@ -418,10 +409,6 @@ button:active {
 
 .margin_top20 {
     margin-top: 20px;
-}
-
-.margin_left10 {
-    margin-left: 10px;
 }
 
 .padding_top50 {
