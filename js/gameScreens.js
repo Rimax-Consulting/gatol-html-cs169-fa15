@@ -208,7 +208,7 @@ var Screens = (function() {
 		var game = new Blobbers(document.getElementById("gameScreen"), 
 								this.game.width,
 								this.game.height,
-								this.game.questions[0].incorrectAnswerTexts.length +1, 
+								this.game.getCurrentQuestion().incorrectAnswerTexts.length +1, 
 								{
 									radius:40, 
 									numEnemies:0
