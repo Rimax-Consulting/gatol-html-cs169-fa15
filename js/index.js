@@ -100,32 +100,6 @@ var GameAThon = (function() {
         loginContainer.on('click', '#sign_in', function(e) {
             // do user sign in logic
             
-<<<<<<< HEAD
-            var creds = {} // prepare credentials for passing into backend
-
-            creds.email = loginContainer.find('#user_email').val();
-            creds.password = loginContainer.find('#user_password').val();
-
-            var onSuccess = function(data) {
-                alert('successfully logged in as user, auth token is: ' + data.auth_token);
-                setCookie("auth_token", data.auth_token);
-                console.log(data);
-                if (inDev) {
-                    location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
-                } else {
-                    location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
-                }
-            };
-            var onFailure = function() { 
-                console.error('failure to login as user');
-            };
-            
-            url = '/api/sessions'
-            console.log(creds);
-            makePostRequest(url, creds, onSuccess, onFailure);
-
-=======
->>>>>>> master
         });
 
         loginContainer.on('click', '#trainer_sign_in', function(e) {
