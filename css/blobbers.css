@@ -41,3 +41,9 @@ body {
 .bottomBtns {
 	margin-top: 10px;
 }
+
+.gameScreen {
+	margin: 5px;
+	padding: 5px;
+	display:block;
+}

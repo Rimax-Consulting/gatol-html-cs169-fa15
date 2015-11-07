@@ -6,7 +6,30 @@ var GameAThon = (function() {
     // PRIVATE VARIABLES
     var loginContainer; // holds login objects, value set in the "start" method below
 
+    // the backend we are using
+    var apiUrl = 'http://localhost:3000' 
+
     // PRIVATE METHODS
+
+     /**
+     * HTTP POST request
+     * @param  {string}   url       URL path, e.g. "/api/trainers"
+     * @param  {Object}   data      JSON data to send in request body
+     * @param  {function} onSuccess   callback method to execute upon request success (201 status)
+     * @param  {function} onFailure   callback method to execute upon request failure (non-201 status)
+     * @return {None}
+     */
+    var makePostRequest = function(url, data, onSuccess, onFailure) {
+        $.ajax({
+            type: 'POST',
+            url: apiUrl + url,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: "JSON",
+            success: onSuccess,
+            error: onFailure
+        });
+    };
 
     var attachCreateHandler = function(e) {
 
@@ -76,12 +99,8 @@ var GameAThon = (function() {
 
         loginContainer.on('click', '#sign_in', function(e) {
             // do user sign in logic
-
-            //if (getCookie("auth_token") != "") {
-            //    alert("still signed in, auth_token: " + getCookie("auth_token"));
-            //    return;
-            //}
             
+<<<<<<< HEAD
             var creds = {} // prepare credentials for passing into backend
 
             creds.email = loginContainer.find('#user_email').val();
@@ -105,15 +124,13 @@ var GameAThon = (function() {
             console.log(creds);
             makePostRequest(url, creds, onSuccess, onFailure);
 
+=======
+>>>>>>> master
         });
 
         loginContainer.on('click', '#trainer_sign_in', function(e) {
             // do trainer sign in logic
         });
-
-        loginContainer.on('click', '#logout', function(e) {
-               
-        })
 
 
         // login back
@@ -168,7 +185,7 @@ var GameAThon = (function() {
                 console.error('failure to register user');
             };
             
-            url = '/api/students';
+            url = '/api/trainers';
             console.log(creds);
             makePostRequest(url, creds, onSuccess, onFailure);
 
@@ -183,8 +200,10 @@ var GameAThon = (function() {
 
     }
 
+    
+
     /**
-     * Start the app by and attach event handlers.
+     * Start the app by displaying the most recent smiles and attaching event handlers.
      * @return {None}
      */
     var start = function() {
@@ -200,4 +219,3 @@ var GameAThon = (function() {
     };
 
 })();
-
