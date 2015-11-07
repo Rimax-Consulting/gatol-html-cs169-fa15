@@ -9,13 +9,19 @@ var InputLink = (function() {
 
         link_container.on('click', '#link_go', function(e) {
             alert('Starting Link!');
-            //location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
-            location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+            if (inDev) {
+                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
+            } else {
+                location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+            }
         });
 
         link_container.on('click', '#cancel_link', function(e) {
-            //location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
-            location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+            if (inDev) {
+                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
+            } else {
+                location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+            }
         });
 
     };

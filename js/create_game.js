@@ -8,19 +8,28 @@ var CreateGame = (function() {
     var attachCreateHandler = function(e) {
 
         create_container.on('click', '#add_csv_btn', function(e) {
-            //location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/input_csv.html';
-            location.href = 'http://allenyu94.github.io/gatol-html/input_csv'; 
+            if (inDev) {
+                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/input_csv.html';
+            } else {
+                location.href = 'http://allenyu94.github.io/gatol-html/input_csv'; 
+            }
         });
 
         create_container.on('click', '#create_finish', function(e) {
             alert('Finish!');
-            //location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
-            location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+            if (inDev) {
+                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
+            } else {
+                location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+            }
         });
 
         create_container.on('click', '#create_cancel', function(e) {
-            //location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
-            location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+            if (inDev) {
+                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
+            } else {
+                location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+            }
         });
 
     };

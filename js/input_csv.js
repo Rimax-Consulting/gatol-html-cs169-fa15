@@ -8,14 +8,54 @@ var InputCSV = (function() {
     var attachCreateHandler = function(e) {
 
         csv_container.on('click', '#upload', function(e) {
-            alert('upload!');
-            //location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/create_game.html';
-            location.href = 'http://allenyu94.github.io/gatol-html/create_game';
+
+            var files = document.getElementById('file_select').files;
+            token = getCookie('auth_token');
+            var csv = {}
+
+            console.log('token: ' + token);
+            console.log('files len: ' + files.length);
+
+            if (files.length <= 0) {
+                alert('please select a csv file');
+                return;
+            }
+
+            csv.file = files[0];
+
+            console.log('file: ' + csv.file);
+            console.log('file name: ' + csv.file.name);
+
+            console.log($('#file_select')[0]);
+            var test_file = $('#file_select')[0];
+
+            var formData = new FormData();
+            formData.append('file', csv.file);
+
+            var onSuccess = function(data) {
+                alert('csv successfully uploaded!');
+                if (inDev) {
+                    location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/create_game.html';
+                } else {
+                    location.href = 'http://allenyu94.github.io/gatol-html/create_game';
+                }
+            }
+
+            var onFailure = function() {
+                console.log('failed to upload csv');
+            }
+
+            url = '/api/question_sets/import'
+            uploadCSVrequest(url, formData, token, onSuccess, onFailure);
+            
         });
 
         csv_container.on('click', '#cancel_upload', function(e) {
-            //location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/create_game.html';
-            location.href = 'http://allenyu94.github.io/gatol-html/create_game';
+            if (inDev) {
+                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/create_game.html';
+            } else {
+                location.href = 'http://allenyu94.github.io/gatol-html/create_game';
+            }
         });
 
     };

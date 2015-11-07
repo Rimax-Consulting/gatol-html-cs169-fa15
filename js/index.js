@@ -91,8 +91,11 @@ var GameAThon = (function() {
                 alert('successfully logged in as user, auth token is: ' + data.auth_token);
                 setCookie("auth_token", data.auth_token);
                 console.log(data);
-                //location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
-                location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+                if (inDev) {
+                    location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
+                } else {
+                    location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+                }
             };
             var onFailure = function() { 
                 console.error('failure to login as user');

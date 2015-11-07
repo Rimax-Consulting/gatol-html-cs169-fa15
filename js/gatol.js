@@ -9,6 +9,9 @@
 // the backend we are using
 var apiUrl = 'https://calm-garden-9078.herokuapp.com' 
 
+// determine whether or not we are in development mode. 
+var inDev = false;
+
 /* =========================== JSON Request Logic =========================== */
 
 /**
@@ -24,6 +27,52 @@ var makePostRequest = function(url, data, onSuccess, onFailure) {
         type: 'POST',
         url: apiUrl + url,
         data: JSON.stringify(data),
+        contentType: "application/json",
+        dataType: "JSON",
+        success: onSuccess,
+        error: onFailure
+    });
+};
+
+/**
+ * HTTP POST request (with Authorization token)
+ * @param  {string}   url       URL path, e.g. "/api/trainers"
+ * @param  {Object}   data      JSON data to send in request body
+ * @param  {string}   token     authorization token
+ * @param  {function} onSuccess   callback method to execute upon request success (200 status)
+ * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
+ * @return {None}
+ */
+var makePostRequestWithAuthorization = function(url, data, token, onSuccess, onFailure) {
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + url,
+        headers: {'Authorization': token},
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        dataType: "JSON",
+        success: onSuccess,
+        error: onFailure
+    });
+};
+
+/**
+ * UPLOAD CSV request (with Authorization token)
+ * @param  {string}   url       URL path, e.g. "/api/trainers"
+ * @param  {Object}   data      JSON data to send in request body. In the form of FormData with file appended
+ * @param  {string}   token     authorization token
+ * @param  {function} onSuccess   callback method to execute upon request success (200 status)
+ * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
+ * @return {None}
+ */
+var uploadCSVrequest = function(url, data, token, onSuccess, onFailure) {
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + url,
+        headers: {'Authorization': token},
+        data: data,
+        processData: false,
+        contentType: false,
         contentType: "application/json",
         dataType: "JSON",
         success: onSuccess,
