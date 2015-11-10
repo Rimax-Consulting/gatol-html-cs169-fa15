@@ -158,18 +158,21 @@ var GameAThon = (function() {
             }
 
             creds.email = loginContainer.find('#register_email').val();
+            creds.username = loginContainer.find('#username').val();
             creds.password = loginContainer.find('#register_password').val();
             creds.confirm_password = loginContainer.find('#register_confirm_password').val();
 
             var onSuccess = function(data) {
                 alert('successfully registered user');
             };
-            var onFailure = function() { 
+            var onFailure = function(data) { 
+                console.error(data.status);
+                console.error(data.errors);
                 console.error('failure to register user');
             };
             
             url = '/api/students';
-            console.log(creds);
+            console.log('creds: ' + creds);
             makePostRequest(url, creds, onSuccess, onFailure);
 
         });

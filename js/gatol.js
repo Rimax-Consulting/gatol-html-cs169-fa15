@@ -10,7 +10,7 @@
 var apiUrl = 'https://calm-garden-9078.herokuapp.com' 
 
 // determine whether or not we are in development mode. 
-var inDev = false;
+var inDev = true;
 
 /* =========================== JSON Request Logic =========================== */
 
