@@ -1,47 +1,96 @@
 var Screens = (function() {
 
-	//Prototypes
+	var apiUrl = "https://calm-garden-9078.herokuapp.com";
 
-	function question(questionText, answer, incorrectAnswers) {
+	//Prototypes
+	function Question(questionText, answer, incorrectAnswers) {
 		this.questionText = questionText;
 		this.answerText = answer;
 		this.incorrectAnswerTexts = incorrectAnswers;
 	}
 
-	function game(questionList, w, h) {
+	function Game(questionList, w, h) {
 		this.questions = questionList;
 		this.width = w;
 		this.height = h;
 		this.score = 0;
+		this.index = 0;
+
 		this.setScore = function(newScore) {
 			score = newScore;
 		}
+
+		/**
+		 * Determines whether the user's answer is correct.
+		 * answer is user's answer from the game
+		 */
+		this.checkAnswer = function(answer) {
+			return answer == this.questions[this.index].answer
+		};
+
+		/**
+		 * Increases the user's score and increments the question number.
+		 * Called whenever the user attempts to answer a question.
+		 * Returns True if there is a next question or False if no more questions.
+		 * isCorrect is whether the user is True or False for the current question 
+		 */
+		this.isNextQuestion = function(isCorrect) {
+			if (isCorrect){
+				score += 200;
+			}
+
+			this.index += 1;
+			return this.index < this.questions.length
+		};
+		/** 
+		 * Returns the current question
+		 */
+		this.getCurrentQuestion = function() {
+			return this.questions[this.index];
+		};
 	}
 
+	this.game = new Game([],0,0);
+
 	//Ajax methods to communicate with backend
+   /**
+    * HTTP GET request 
+    * @param  {string}   url       URL path
+    * @param  {function} onSuccess   callback method to execute upon request success (200 status)
+    * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
+    * @return {None}
+    */
+   var getRequest = function(url, data, onSuccess, onFailure) {
+       $.ajax({
+           type: 'GET',
+           url: apiUrl + url,
+           data: JSON.stringify(data),
+           contentType: "application/json",
+           dataType: "json",
+           success: onSuccess,
+           error: onFailure
+       });
+   };
 
-	var getRequest = function(data, suceeded, failed) {
-		$.ajax({
-			data: JSON.stringify(data),
-			dataType: "json",
-			url: "https://gatol.herokuapp.com/" + "get_game",
-			type: "GET",
-			success: suceeded,
-			error: failed
-		});
-	};
-
-	var postRequest = function(data, suceeded, failed) {
-		$.ajax({
-			data: JSON.stringify(data),
-			contentType: "application/json",
+    /**
+     * HTTP POST request
+     * @param  {string}   url       URL path
+     * @param  {Object}   data      JSON data to send in request body
+     * @param  {function} onSuccess   callback method to execute upon request success (200 status)
+     * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
+     * @return {None}
+     */
+    var postRequest = function(url, data, onSuccess, onFailure) {
+        $.ajax({
+            type: 'POST',
+            url: apiUrl + url,
+            data: JSON.stringify(data),
+            contentType: "application/json",
             dataType: "json",
-			url: "https://gatol.herokuapp.com/" + "update_score",
-			type: "POST",
-			success: suceeded,
-			error: failed
-		});
-	};
+            success: onSuccess,
+            error: onFailure
+        });
+    };
 
 
 
@@ -66,10 +115,21 @@ var Screens = (function() {
 		$(".bottomBtns .btnMain").show();
 
 		
+		var blobberInstructions = "Use W, A, S, and D to move your bubble Up, Left, Down, and Right, respectively. To choose an answer, collide your bubble with the smaller bubble that represents answer."
+		
 		$(".screenTitle").text("How to Play");
+		$(".centerText").text(blobberInstructions);
 	};
 
 	var setSynopsisScreen = function() {
+		//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
+		//not even sure this is the right place
+		var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
+			new Question("The square root of 1600 is 40.", "true", ["false"]),
+			new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
+		this.game = new Game(questionList, $(".gameScreen").width(), $(".gameScreen").width()/2);
+		
+
 		$(".all").hide();
 
 		$(".screenTitle").show();
@@ -88,10 +148,17 @@ var Screens = (function() {
 		$(".currQuestion").show();
 		$(".answer").show();
 		$(".btnGame").show();
-		
 
-		$(".screenTitle").text("Question #");
+		var question = this.game.getCurrentQuestion();
+
+		$(".screenTitle").text("Question " + (this.game.index+1).toString());
+		$(".currQuestion").text(question.questionText);
 		$(".answer").text("Choose between the following:");
+
+		$(".answer").append("<div>"+question.answerText+"</div>");
+		for (var i = question.incorrectAnswerTexts.length - 1; i >= 0; i--) {
+			$(".answer").append("<div>"+question.incorrectAnswerTexts[i]+"</div>");
+		};
 	};
 
 	var setCorrectScreen = function(){
@@ -132,6 +199,23 @@ var Screens = (function() {
 	};
 
 
+	var answer = function(num) {
+		console.log(num);
+
+	}
+
+	var loadGame = function() {
+		var game = new Blobbers(document.getElementById("gameScreen"), 
+								this.game.width,
+								this.game.height,
+								this.game.getCurrentQuestion().incorrectAnswerTexts.length +1, 
+								{
+									radius:40, 
+									numEnemies:0
+								},
+								answer);
+	};
+
 	var attachHandlers = function() {
 		//pretty much just button clicks at this point
 		
@@ -156,11 +240,12 @@ var Screens = (function() {
 			setQuestionScreen(); 
 		});
 
-		$(".btnPlay").click(function() {
+		$(".btnGame").click(function() {
 			// Goes to start a level of the bubble game. Depends on how we 
 			// implement and merge the beginning of the game. Also depends on 
 			// which game template was chosed for this game.
-			// window.location.href="../public/scripts.testing.html"; 
+			// window.location.href="../public/scripts.testing.html";
+			loadGame();
 		});
 
 		$(".btnQuitGame").click(function() {
@@ -184,22 +269,21 @@ var Screens = (function() {
 		} else {
 			setCorrectScreen();
 		}
+		currGame.isNextQuestion();
 
 
-		// postRequest(...) //here to update the score of the current player
-	};
-
-	var nextQuestion = function() {
 
 		var update = function() {
-
+			console.log("it did it!");
 		}
 		var updateFailed = function() {
 			console.error('update score failed');
 		}
 		send_data = {student: studentID, gameName: gName, score: currScore, questionIndex: index};
-		postRequest(send_data, update, updateFailed);
-	}
+
+		postRequest("/api/games", send_data, update, updateFailed) //here to update the score of the current player
+	};
+
 
 	var start = function() {
 		//probably initialized in a public method that is called by the screen that chooses the game from the student's game list
@@ -220,7 +304,7 @@ var Screens = (function() {
 		}
 
 		send_data = {student: studentID, gameName: gName};
-		getRequest(send_data, setGame, gameNotReached);
+		postRequest("/api/game_instance", send_data, setGame, gameNotReached);
 
         attachHandlers();
         setMainTitleScreen();
