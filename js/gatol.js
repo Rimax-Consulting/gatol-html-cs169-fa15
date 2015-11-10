@@ -73,7 +73,6 @@ var uploadCSVrequest = function(url, data, token, onSuccess, onFailure) {
         data: data,
         processData: false,
         contentType: false,
-        contentType: "application/json",
         dataType: "JSON",
         success: onSuccess,
         error: onFailure

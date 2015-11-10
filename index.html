@@ -35,11 +35,12 @@
         <div id="select_screen">
             <button id="student_login" class="green_button">Login As Student</button>
 		    <button id="trainer_login" class="green_button other_buttons">Login As Trainer</button>
-		    <button id="register" class="other_buttons white_button">Register</button>
+		    <button id="register" class="other_buttons white_button">Register As Student</button>
+		    <button id="register_trainer" class="other_buttons white_button">Register As Trainer</button>
         </div>
 
         <div id="login_screen">
-           	<input id="user_email" class="first_item" type="text" placeholder="username" required>
+           	<input id="user_email" class="first_item" type="text" placeholder="email" required>
 		    <div class="bar">
 			    <i></i>
 		    </div>
@@ -50,11 +51,11 @@
         </div>
 
         <div id="trainer_login_screen">
-           	<input class="first_item" type="text" placeholder="username" required>
+           	<input id="trainer_email" class="first_item" type="text" placeholder="email" required>
 		    <div class="bar">
 			    <i></i>
 		    </div>
-		    <input class="last_item" type="password" placeholder="password" required>
+		    <input id="trainer_password" class="last_item" type="password" placeholder="password" required>
 		    <a href="#" onclick="forgotPassword" id="trainer_forgot" class="forgot_link">forgot ?</a>
 		    <button id="trainer_sign_in">Sign in</button> 
             <button id="trainer_login_back" class="other_buttons white_button">Back</button>
@@ -91,6 +92,24 @@
             <button id="trainer_forgot_back" class="other_buttons white_button">Back</button>
         </div>
 
+        <div id="register_trainer_screen">
+            <input id="register_trainer_email" class="first_item" type="text" placeholder="email" required>
+		    <div class="bar">
+			    <i></i>
+		    </div>
+           	<input id="trainer_username" type="text" placeholder="username" required>
+		    <div class="bar">
+			    <i></i>
+		    </div>
+		    <input id="register_trainer_password" type="password" placeholder="password" required>
+		    <div class="bar">
+			    <i></i>
+		    </div>
+            <input id="register_trainer_confirm_password" class="last_item" type="password" placeholder="confirm password" required>
+
+		    <button id="register_trainer" class="button_space_top">Register</button> 
+            <button id="register_trainer_back" class="other_buttons white_button">Back</button>
+        </div>
 
 	</div>
     
