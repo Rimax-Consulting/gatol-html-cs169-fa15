@@ -7,6 +7,9 @@ var Screens = (function() {
 		this.questionText = questionText;
 		this.answerText = answer;
 		this.incorrectAnswerTexts = incorrectAnswers;
+		this.allChoices = incorrectAnswers.concat([answer]);
+		// this will shuffle allChoices
+		for(var j, x, i = this.allChoices.length; i; j = Math.floor(Math.random() * i), x = this.allChoices[--i], this.allChoices[i] = this.allChoices[j], this.allChoices[j] = x);
 	}
 
 	function Game(questionList, w, h) {
@@ -15,6 +18,7 @@ var Screens = (function() {
 		this.height = h;
 		this.score = 0;
 		this.index = 0;
+		this.mostRecentAnswer = "";
 
 		this.setScore = function(newScore) {
 			score = newScore;
@@ -25,9 +29,8 @@ var Screens = (function() {
 		 * answer is user's answer from the game
 		 */
 		this.checkAnswer = function(answer) {
-			console.log(answer);
-			console.log(this.questions[this.index].answerText);
-			return answer == this.questions[this.index].answerText;
+			this.mostRecentAnswer = this.getCurrentQuestion().allChoices[answer];
+			return this.mostRecentAnswer == this.getCurrentQuestion().answerText;
 		};
 
 		/**
@@ -108,9 +111,9 @@ var Screens = (function() {
 		$(".currQuestion").text(question.questionText);
 		$(".answer").text("Choose between the following:");
 
-		$(".answer").append("<div>"+question.answerText+"</div>");
-		for (var i = question.incorrectAnswerTexts.length - 1; i >= 0; i--) {
-			$(".answer").append("<div>"+question.incorrectAnswerTexts[i]+"</div>");
+		// $(".answer").append("<div>"+question.answerText+"</div>");
+		for (var i = 0; i < question.allChoices.length; i++) {
+			$(".answer").append("<div>"+String.fromCharCode('A'.charCodeAt() + i)+ ") " + question.allChoices[i]+"</div>");
 		};
 	};
 
@@ -136,7 +139,7 @@ var Screens = (function() {
 		$(".bottomBtns .btnQuitGame").show();
 		
 		$(".screenTitle").text("Incorrect");
-		$(".answer").text("You chose: " + ". The correct answer is ");
+		$(".answer").text("You chose: " + currentGame.mostRecentAnswer + ". The correct answer is " + currentGame.questions[currentGame.index].answerText);
 	};
 
 	var setDoneScreen = function() {
@@ -165,12 +168,12 @@ var Screens = (function() {
 		//     gameDiv.removeChild(gameDiv.firstChild);
 		// }
 		var wasCorrect = currentGame.checkAnswer(num);
-		currentGame.isNextQuestion(wasCorrect);
 		if (wasCorrect) {
 			setCorrectScreen();
 		} else {
 			setIncorrectScreen();
 		}
+		currentGame.isNextQuestion(wasCorrect);
 	}
 
 	var loadGame = function() {
