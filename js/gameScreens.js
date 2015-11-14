@@ -16,9 +16,16 @@ var Screens = (function() {
 		this.score = 0;
 		this.index = 0;
 
+		/**
+		 * Accessor and Mutator for Game.score
+		 */
 		this.setScore = function(newScore) {
-			score = newScore;
-		}
+			this.score = newScore;
+		};
+
+		this.getScore = function() {
+			return this.score;
+		};
 
 		/**
 		 * Determines whether the user's answer is correct.
@@ -38,7 +45,7 @@ var Screens = (function() {
 		 */
 		this.isNextQuestion = function(isCorrect) {
 			if (isCorrect){
-				this.score += 200;
+				this.score += 200; //Score for a correct answer
 			}
 
 			this.index += 1;
@@ -50,6 +57,14 @@ var Screens = (function() {
 		this.getCurrentQuestion = function() {
 			return this.questions[this.index];
 		};
+
+		/**
+		 * Returns whether or not the player won the game.
+		 */
+		 this.isWin = function() {
+		 	return this.score >= (this.questions.length * 200 * 0.75)
+
+		 }
 	}
 
 
@@ -139,16 +154,21 @@ var Screens = (function() {
 		$(".answer").text("You chose: " + ". The correct answer is ");
 	};
 
-	var setDoneScreen = function() {
+	var setDoneScreen = function(gameWon) {
 		$(".all").hide();
 
 		$(".screenTitle").show();
-		$(".centerText").show();
+		// $(".centerText").show();
 		$(".centerBtns .btnQuitGame").show();
-		$(".btnSummary").show();
+		// $(".btnSummary").show();
 		$(".centerBtns .btnMain").show();
 		
-		$(".screenTitle").text("Completed");	
+		if (gameWon){
+			$(".screenTitle").text("You won");	
+		} else {
+			$(".screenTitle").text("Better luck next time");
+		}
+
 	};
 
 
@@ -165,12 +185,15 @@ var Screens = (function() {
 		//     gameDiv.removeChild(gameDiv.firstChild);
 		// }
 		var wasCorrect = currentGame.checkAnswer(num);
-		currentGame.isNextQuestion(wasCorrect);
-		if (wasCorrect) {
+		if (!currentGame.isNextQuestion(wasCorrect)){
+			setDoneScreen(currentGame.isWin());
+		} else if (wasCorrect) {
 			setCorrectScreen();
 		} else {
 			setIncorrectScreen();
 		}
+		
+
 	}
 
 	var loadGame = function() {
@@ -280,7 +303,7 @@ var Screens = (function() {
 
         attachHandlers();
         setMainTitleScreen();
-
+        // setDoneScreen();
 
 		//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
 		//not even sure this is the right place
