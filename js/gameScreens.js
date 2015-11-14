@@ -26,7 +26,9 @@ var Screens = (function() {
 		 * answer is user's answer from the game
 		 */
 		this.checkAnswer = function(answer) {
-			return answer == this.questions[this.index].answer
+			console.log(answer);
+			console.log(this.questions[this.index].answerText);
+			return answer == this.questions[this.index].answerText;
 		};
 
 		/**
@@ -37,7 +39,7 @@ var Screens = (function() {
 		 */
 		this.isNextQuestion = function(isCorrect) {
 			if (isCorrect){
-				score += 200;
+				this.score += 200;
 			}
 
 			this.index += 1;
