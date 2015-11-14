@@ -484,13 +484,25 @@ button:active {
 
 }
 
-.centerText, .questionText {
+.centerText, .qSetText {
     font-weight: bold;
     color: #E2FFFF;
     letter-spacing: 1pt;
     word-spacing: 2pt;
     font-size: 25px;
     margin: 15px
+}
+
+.gameScreen {
+    position: relative;
+}
+
+.questionText {
+    opacity: .5;
+    color: white;
+    position: absolute;
+    top: 20px;
+    left: 20px;
 }
 
 .centerBtns, .bottomBtns {
