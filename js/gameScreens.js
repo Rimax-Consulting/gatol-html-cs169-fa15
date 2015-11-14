@@ -1,6 +1,5 @@
 var Screens = (function() {
 
-	var apiUrl = "https://calm-garden-9078.herokuapp.com";
 	var currentGame = "";
 
 	//Prototypes
@@ -50,47 +49,6 @@ var Screens = (function() {
 			return this.questions[this.index];
 		};
 	}
-
-	//Ajax methods to communicate with backend
-   /**
-    * HTTP GET request 
-    * @param  {string}   url       URL path
-    * @param  {function} onSuccess   callback method to execute upon request success (200 status)
-    * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
-    * @return {None}
-    */
-   var getRequest = function(url, data, onSuccess, onFailure) {
-       $.ajax({
-           type: 'GET',
-           url: apiUrl + url,
-           data: JSON.stringify(data),
-           contentType: "application/json",
-           dataType: "json",
-           success: onSuccess,
-           error: onFailure
-       });
-   };
-
-    /**
-     * HTTP POST request
-     * @param  {string}   url       URL path
-     * @param  {Object}   data      JSON data to send in request body
-     * @param  {function} onSuccess   callback method to execute upon request success (200 status)
-     * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
-     * @return {None}
-     */
-    var postRequest = function(url, data, onSuccess, onFailure) {
-        $.ajax({
-            type: 'POST',
-            url: apiUrl + url,
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            dataType: "json",
-            success: onSuccess,
-            error: onFailure
-        });
-    };
-
 
 
 	//Mehtods for transition screens
@@ -289,8 +247,10 @@ var Screens = (function() {
 			console.error('update score failed');
 		}
 		send_data = {student: studentID, gameName: gName, score: currScore, questionIndex: index};
-
-		postRequest("/api/games", send_data, update, updateFailed) //here to update the score of the current player
+		
+		gameID = "0"
+		
+		makePutRequest("/api/game_instances/" + gameID, send_data, update, updateFailed) //here to update the score of the current player
 	};
 
 
@@ -313,7 +273,7 @@ var Screens = (function() {
 		}
 
 		send_data = {student: studentID, gameName: gName};
-		postRequest("/api/game_instance", send_data, setGame, gameNotReached);
+		makeGetRequest("/api/game_instances/" + gameID, setGame, gameNotReached);
 
         attachHandlers();
         setMainTitleScreen();
