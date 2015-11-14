@@ -1,6 +1,7 @@
 var Screens = (function() {
 
 	var apiUrl = "https://calm-garden-9078.herokuapp.com";
+	var currentGame = "";
 
 	//Prototypes
 	function Question(questionText, answer, incorrectAnswers) {
@@ -49,8 +50,6 @@ var Screens = (function() {
 			return this.questions[this.index];
 		};
 	}
-
-	this.game = new Game([],0,0);
 
 	//Ajax methods to communicate with backend
    /**
@@ -122,12 +121,6 @@ var Screens = (function() {
 	};
 
 	var setSynopsisScreen = function() {
-		//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
-		//not even sure this is the right place
-		var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
-			new Question("The square root of 1600 is 40.", "true", ["false"]),
-			new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-		this.game = new Game(questionList, $(".gameScreen").width(), $(".gameScreen").width()/2);
 		
 
 		$(".all").hide();
@@ -149,9 +142,9 @@ var Screens = (function() {
 		$(".answer").show();
 		$(".btnGame").show();
 
-		var question = this.game.getCurrentQuestion();
+		var question = currentGame.getCurrentQuestion();
 
-		$(".screenTitle").text("Question " + (this.game.index+1).toString());
+		$(".screenTitle").text("Question " + (currentGame.index+1).toString());
 		$(".currQuestion").text(question.questionText);
 		$(".answer").text("Choose between the following:");
 
@@ -200,15 +193,25 @@ var Screens = (function() {
 
 
 	var answer = function(num) {
-		console.log(num);
-
+		//TODO: report progress to database
+		var gameDiv = document.getElementById("gameScreen");
+		while (gameDiv.firstChild) {
+		    gameDiv.removeChild(gameDiv.firstChild);
+		}
+		var wasCorrect = currentGame.checkAnswer(num);
+		currentGame.isNextQuestion(wasCorrect);
+		if (wasCorrect) {
+			setCorrectScreen();
+		} else {
+			setIncorrectScreen();
+		}
 	}
 
 	var loadGame = function() {
 		var game = new Blobbers(document.getElementById("gameScreen"), 
-								this.game.width,
-								this.game.height,
-								this.game.getCurrentQuestion().incorrectAnswerTexts.length +1, 
+								currentGame.width,
+								currentGame.height,
+								currentGame.getCurrentQuestion().incorrectAnswerTexts.length +1, 
 								{
 									radius:40, 
 									numEnemies:0
@@ -308,6 +311,14 @@ var Screens = (function() {
 
         attachHandlers();
         setMainTitleScreen();
+
+
+		//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
+		//not even sure this is the right place
+		var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
+			new Question("The square root of 1600 is 40.", "true", ["false"]),
+			new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
+		currentGame = new Game(questionList, $(".gameScreen").width(), $(".gameScreen").width()/2);
         
     };
 
