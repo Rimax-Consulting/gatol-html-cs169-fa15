@@ -274,6 +274,7 @@ var Screens = (function() {
 			console.error("game load failure");
 		}
 
+		gameID = 0;
 		send_data = {student: studentID, gameName: gName};
 		makeGetRequest("/api/game_instances/" + gameID, setGame, gameNotReached);
 
