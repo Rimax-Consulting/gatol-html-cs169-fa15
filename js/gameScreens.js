@@ -194,10 +194,16 @@ var Screens = (function() {
 
 	var answer = function(num) {
 		//TODO: report progress to database
-		var gameDiv = document.getElementById("gameScreen");
-		while (gameDiv.firstChild) {
-		    gameDiv.removeChild(gameDiv.firstChild);
+		var gameDivChildren = document.getElementById("gameScreen").childNodes;
+		for (i = 0; i < gameDivChildren.length; i++) {
+			if (gameDivChildren[i].nodeName === "CANVAS") {
+				document.getElementById("gameScreen").removeChild(gameDivChildren[i]);
+			}
 		}
+		// while (gameDiv.firstChild) {
+		// 	console.log(gameDiv.firstChild.nodeName);
+		//     gameDiv.removeChild(gameDiv.firstChild);
+		// }
 		var wasCorrect = currentGame.checkAnswer(num);
 		currentGame.isNextQuestion(wasCorrect);
 		if (wasCorrect) {
