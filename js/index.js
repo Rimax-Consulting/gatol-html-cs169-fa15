@@ -6,30 +6,7 @@ var GameAThon = (function() {
     // PRIVATE VARIABLES
     var loginContainer; // holds login objects, value set in the "start" method below
 
-    // the backend we are using
-    var apiUrl = 'http://localhost:3000' 
-
     // PRIVATE METHODS
-
-     /**
-     * HTTP POST request
-     * @param  {string}   url       URL path, e.g. "/api/trainers"
-     * @param  {Object}   data      JSON data to send in request body
-     * @param  {function} onSuccess   callback method to execute upon request success (201 status)
-     * @param  {function} onFailure   callback method to execute upon request failure (non-201 status)
-     * @return {None}
-     */
-    var makePostRequest = function(url, data, onSuccess, onFailure) {
-        $.ajax({
-            type: 'POST',
-            url: apiUrl + url,
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            dataType: "JSON",
-            success: onSuccess,
-            error: onFailure
-        });
-    };
 
     var attachCreateHandler = function(e) {
 
@@ -42,6 +19,9 @@ var GameAThon = (function() {
         // hide the register screen initially
         loginContainer.find("#register_screen").hide();
 
+        // hide the register trainer screen initially
+        loginContainer.find('#register_trainer_screen').hide();
+
         // hide the forgot screen initially
         loginContainer.find('#forgot_screen').hide();
 
@@ -50,6 +30,7 @@ var GameAThon = (function() {
 
         // hide the login title
         loginContainer.find('#login_title').hide();
+
 
         // forgot password 
         loginContainer.on('click', '#user_forgot', function(e) {
@@ -99,12 +80,71 @@ var GameAThon = (function() {
 
         loginContainer.on('click', '#sign_in', function(e) {
             // do user sign in logic
+
+            //if (getCookie("auth_token") != "") {
+            //    alert("still signed in, auth_token: " + getCookie("auth_token"));
+            //    return;
+            //}
             
+            var creds = {} // prepare credentials for passing into backend
+
+            creds.email = loginContainer.find('#user_email').val();
+            creds.password = loginContainer.find('#user_password').val();
+
+            var onSuccess = function(data) {
+                alert('successfully logged in as user, auth token is: ' + data.auth_token);
+                setCookie("auth_token", data.auth_token);
+                setCookie("username", data.username);
+                if (inDev) {
+                    location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
+                } else {
+                    location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+                }
+            };
+            var onFailure = function() { 
+                console.error('failure to login as user');
+            };
+            
+            url = '/api/sessions'
+            console.log(creds);
+            makePostRequest(url, creds, onSuccess, onFailure);
+
         });
 
         loginContainer.on('click', '#trainer_sign_in', function(e) {
             // do trainer sign in logic
+
+            //if (getCookie("auth_token") != "") {
+            //    alert("still signed in, auth_token: " + getCookie("auth_token"));
+            //    return;
+            //}
+            
+            var creds = {} // prepare credentials for passing into backend
+
+            creds.email = loginContainer.find('#trainer_email').val();
+            creds.password = loginContainer.find('#trainer_password').val();
+
+            var onSuccess = function(data) {
+                alert('successfully logged in as trainer, auth token is: ' + data.auth_token);
+                setCookie("auth_token", data.auth_token);
+                setCookie("username", data.username);
+                if (inDev) {
+                    location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
+                } else {
+                    location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+                }
+            };
+            var onFailure = function() { 
+                console.error('failure to login as trainer');
+            };
+            
+            url = '/api/sessions'
+            makePostRequest(url, creds, onSuccess, onFailure);
         });
+
+        loginContainer.on('click', '#logout', function(e) {
+               
+        })
 
 
         // login back
@@ -134,10 +174,33 @@ var GameAThon = (function() {
         // register 
         loginContainer.on('click', '#register', function(e) {
             loginContainer.find('#login_title').html('');
-            loginContainer.find('#login_title').append('Register');
+            loginContainer.find('#login_title').append('Register As Student');
             loginContainer.find('#login_title').show();
             loginContainer.find('#select_screen').hide(); 
             loginContainer.find('#register_screen').show();
+        });
+
+        // register back
+        loginContainer.on('click', '#register_back', function(e) {
+            loginContainer.find('#login_title').hide();
+            loginContainer.find('#register_screen').hide();
+            loginContainer.find('#select_screen').show();
+        });
+
+        // register trainer
+        loginContainer.on('click', '#register_trainer', function(e) {
+            loginContainer.find('#login_title').html('');
+            loginContainer.find('#login_title').append('Register As Trainer');
+            loginContainer.find('#login_title').show();
+            loginContainer.find('#select_screen').hide(); 
+            loginContainer.find('#register_trainer_screen').show();
+        });
+
+        // register trainer back
+        loginContainer.on('click', '#register_trainer_back', function(e) {
+            loginContainer.find('#login_title').hide();
+            loginContainer.find('#register_trainer_screen').hide();
+            loginContainer.find('#select_screen').show();
         });
 
         loginContainer.on('click', '#register_user', function(e) {
@@ -149,35 +212,55 @@ var GameAThon = (function() {
             }
 
             creds.email = loginContainer.find('#register_email').val();
+            creds.username = loginContainer.find('#username').val();
             creds.password = loginContainer.find('#register_password').val();
             creds.confirm_password = loginContainer.find('#register_confirm_password').val();
 
             var onSuccess = function(data) {
                 alert('successfully registered user');
             };
-            var onFailure = function() { 
+            var onFailure = function(data) { 
+                console.error(data.status);
+                console.error(data.responseText);
                 console.error('failure to register user');
             };
             
-            url = '/api/trainers';
-            console.log(creds);
+            url = '/api/students';
             makePostRequest(url, creds, onSuccess, onFailure);
 
         });
 
-        // register back
-        loginContainer.on('click', '#register_back', function(e) {
-            loginContainer.find('#login_title').hide();
-            loginContainer.find('#register_screen').hide();
-            loginContainer.find('#select_screen').show();
+        loginContainer.on('click', '#register_trainer', function(e) {
+            var creds = {} // prepare credentials for passing into backend
+
+            if (loginContainer.find('#register_trainer_password').val() != loginContainer.find('#register_trainer_confirm_password').val()) {
+                alert('password does not match');
+                return;
+            }
+
+            creds.email = loginContainer.find('#register_trainer_email').val();
+            creds.username = loginContainer.find('#trainer_username').val();
+            creds.password = loginContainer.find('#register_trainer_password').val();
+            creds.confirm_password = loginContainer.find('#register_trainer_confirm_password').val();
+
+            var onSuccess = function(data) {
+                alert('successfully registered trainer');
+            };
+            var onFailure = function(data) { 
+                console.error(data.status);
+                console.error(data.responseText);
+                console.error('failure to register trainer');
+            };
+            
+            url = '/api/trainers';
+            makePostRequest(url, creds, onSuccess, onFailure);
+
         });
 
     }
 
-    
-
     /**
-     * Start the app by displaying the most recent smiles and attaching event handlers.
+     * Start the app by and attach event handlers.
      * @return {None}
      */
     var start = function() {
@@ -193,3 +276,5 @@ var GameAThon = (function() {
     };
 
 })();
+
+

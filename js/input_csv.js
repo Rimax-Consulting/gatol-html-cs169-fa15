@@ -41,8 +41,10 @@ var InputCSV = (function() {
                 }
             }
 
-            var onFailure = function() {
+            var onFailure = function(data) {
                 console.log('failed to upload csv');
+                console.log(data.status);
+                console.log(data.responseText);
             }
 
             url = '/api/question_sets/import'
