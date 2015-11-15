@@ -39,10 +39,8 @@
             </div>
 
             <div>
-                <ul class="margin_top10 small_inner_container">
-                    <li><a href="#sample_game_1">Sample CSV 1</a></li>
-                    <div class="fullbar"></div>
-                    <li><a href="#sample_game_2">Sample CSV 2</a></li>
+                <ul id="csv_list" class="margin_top10 small_inner_container">
+                    <li id="1"><a href="#sample_game_1" class="csv_item">Sample CSV 1</a></li>
                     <div class="fullbar"></div>
                 </ul>
             </div>
@@ -52,10 +50,8 @@
             </div>
 
             <div>
-                <ul class="small_inner_container">
-                    <li><a href="#sample_game_1">Sample Template 1</a></li>
-                    <div class="fullbar"></div>
-                    <li><a href="#sample_game_2">Sample Template 2</a></li>
+                <ul id="template_list" class="small_inner_container">
+                    <li id="1"><a href="#sample_game_1" class="template_item">Sample Template 1</a></li>
                     <div class="fullbar"></div>
                 </ul>
             </div>
@@ -64,7 +60,7 @@
         <div id="create_game_inputs" class="margin_top10 right_col">
             <div class="margin_top10 input inner_title">
                 Creator: 
-                <input class="first_item" type="text" placeholder="Your Name" required>
+                <input id="create_game_creator" class="first_item" type="text" placeholder="Your Name" required>
             </div> 
 
             <div class="input inner_title">
@@ -75,7 +71,7 @@
             <div class="input inner_title">
                 Description:
             </div> 
-            <textarea rows="4", cols="70" placeholder="Write Description here..."></textarea>
+            <textarea id="create_game_description" rows="4", cols="70" placeholder="Write Description here..."></textarea>
 
             <button id="create_finish" class="margin_top10 med_btn">Finish</button>
             <button id="create_cancel" class="margin_left10 margin_top10 small_btn white_button">Cancel</button>

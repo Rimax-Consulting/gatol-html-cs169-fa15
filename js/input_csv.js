@@ -34,6 +34,7 @@ var InputCSV = (function() {
 
             var onSuccess = function(data) {
                 alert('csv successfully uploaded!');
+                console.log(data);
                 if (inDev) {
                     location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/create_game.html';
                 } else {
@@ -43,8 +44,7 @@ var InputCSV = (function() {
 
             var onFailure = function(data) {
                 console.log('failed to upload csv');
-                console.log(data.status);
-                console.log(data.responseText);
+                consoleError(data);
             }
 
             url = '/api/question_sets/import'

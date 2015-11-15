@@ -50,6 +50,54 @@ var DashBoard = (function() {
 
     };
 
+    // checks the User type and updates the page accordingly.
+    var checkUser = function(e) {
+        trainer = getCookie('trainer');
+        token = getCookie('auth_token');
+        console.log(trainer);
+        if (trainer == 'true') {
+            // signed in as trainer
+            document.getElementById('create').style.visibility = 'visible';
+            document.getElementById('add').style.visibility = 'hidden';
+            document.getElementById('add').style.display = 'none';
+            url = '/api/games';
+        } else {
+            // signed in as student
+            document.getElementById('add').style.visibility = 'visible';
+            document.getElementById('create').style.visibility = 'hidden';
+            document.getElementById('create').style.display = 'none';
+            url = '/api/game_instances/active'
+        }
+
+        var onSuccess = function(data) {
+            console.log('data: ' + data);
+            games = JSON.parse(data.games);
+            console.log('games: ' + games);
+            var ul = document.getElementById('games_list');
+            for (var i = 0; i < games.length; i++) {
+                console.log(games[i]);
+                var li = document.createElement('li');
+                var a = document.createElement('a');
+                var bar = document.createElement('div');
+
+                a.setAttribute('href', '#' + games[i].name);
+                a.innerHTML = games[i].name;
+                bar.setAttribute('class', 'fullbar');
+                li.appendChild(a);
+                li.setAttribute('id', qsets[i].id);
+                ul.appendChild(li);
+                ul.appendChild(bar);
+            }
+        };
+
+        var onFailure = function(data) {
+            consoleError(data);
+        };
+
+        console.log('url: ' + url);
+        makeGetRequestWithAuthorization(url, token, onSuccess, onFailure); 
+    };
+
     /**
      * Start the app and attach event handlers.
      * @return {None}
@@ -59,9 +107,7 @@ var DashBoard = (function() {
         dash_container = $("#dashboard_container");
 
         attachCreateHandler();
-
-        console.log(getCookie("auth_token"));
-
+        //checkUser();
     };
 
     // PUBLIC METHODS

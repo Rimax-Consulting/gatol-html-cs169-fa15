@@ -15,6 +15,42 @@ var inDev = false;
 /* =========================== JSON Request Logic =========================== */
 
 /**
+ * HTTP GET request
+ * @param  {string}   url       URL path, e.g. "/api/question_sets"
+ * @param  {function} onSuccess   callback method to execute upon request success (200 status)
+ * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
+ * @return {None}
+ */
+var makeGetRequest = function(url, onSuccess, onFailure) {
+    $.ajax({
+        type: 'GET',
+        url: apiUrl + url,
+        dataType: "JSON",
+        success: onSuccess,
+        error: onFailure
+    });
+};
+
+/**
+ * HTTP GET request
+ * @param  {string}   url       URL path, e.g. "/api/question_sets"
+ * @param  {string}   token     authorization token
+ * @param  {function} onSuccess   callback method to execute upon request success (200 status)
+ * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
+ * @return {None}
+ */
+var makeGetRequestWithAuthorization = function(url, token, onSuccess, onFailure) {
+    $.ajax({
+        type: 'GET',
+        url: apiUrl + url,
+        headers: {'Authorization': token},
+        dataType: "JSON",
+        success: onSuccess,
+        error: onFailure
+    });
+};
+
+/**
  * HTTP POST request
  * @param  {string}   url       URL path, e.g. "/api/trainers"
  * @param  {Object}   data      JSON data to send in request body
@@ -146,6 +182,14 @@ function checkCookie() {
     if (auth != "") {
         alert("Welcome again, auth token: " + auth);
     }
+}
+
+/* =========================== Helpful Functions =========================== */
+
+// show error in console
+function consoleError(data) {
+    console.error(data.status);
+    console.error(data.responseText);
 }
 
 

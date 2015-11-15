@@ -95,6 +95,7 @@ var GameAThon = (function() {
                 alert('successfully logged in as user, auth token is: ' + data.auth_token);
                 setCookie("auth_token", data.auth_token);
                 setCookie("username", data.username);
+                setCookie("trainer", "false"); // determines whether or not I am a trainer
                 if (inDev) {
                     location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
                 } else {
@@ -128,6 +129,7 @@ var GameAThon = (function() {
                 alert('successfully logged in as trainer, auth token is: ' + data.auth_token);
                 setCookie("auth_token", data.auth_token);
                 setCookie("username", data.username);
+                setCookie("trainer", "true");
                 if (inDev) {
                     location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
                 } else {
