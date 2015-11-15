@@ -189,13 +189,13 @@ var Screens = (function() {
 		// }
 		var wasCorrect = currentGame.checkAnswer(num);
 
-		if (wasCorrect) {
+		if (!currentGame.isNextQuestion(wasCorrect)) {
+			setDoneScreen(currentGame.isWin());
+		} else if (wasCorrect) {
 			setCorrectScreen();
 		} else {
 			setIncorrectScreen();
 		}
-
-		currentGame.isNextQuestion(wasCorrect);
 	}
 
 	var loadGame = function() {
