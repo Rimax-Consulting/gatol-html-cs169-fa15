@@ -205,6 +205,14 @@
     background: #448ed3;
 }
 
+.small_inner_container li a:hover {
+    background: #448ed3;
+}
+
+.selected {
+    background: #448ed3;
+}
+
 .inner_container .first_item {
 }
 
@@ -363,6 +371,10 @@ button:active {
     width: 300px;
 }
 
+.small_btn {
+    width: 200px;
+}
+
 #preview_play_btn {
     margin-left: 300px;
 }
@@ -454,6 +466,10 @@ button:active {
 
 .col2 {
     margin-left: 45%;
+}
+
+.margin_left10 {
+    margin-left: 10px;
 }
 
 .margin_left15 {
