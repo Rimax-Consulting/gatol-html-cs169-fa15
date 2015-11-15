@@ -11,8 +11,8 @@
 var Blobbers = function(parent, width, height, num_choices, state, answerFunc) {
 	console.log({parent: parent, width:width, height:height, num_choices: num_choices, state:state, answerFunc:answerFunc})
 	// set up scene width and height
-	this._width = width-12;//window.innerWidth - 4;
-	this._height = height-12;//window.innerHeight - 4;
+	this._width = width-2;//window.innerWidth - 4;
+	this._height = height-2;//window.innerHeight - 4;
 
 	// set up rendering surface
 	this.renderer = new PIXI.CanvasRenderer(this._width, this._height);
@@ -54,8 +54,6 @@ var Blobbers = function(parent, width, height, num_choices, state, answerFunc) {
 Blobbers.prototype = {
 	// Build scene and start animating 
 	build: function() {
-		// set up the boundaries
-		this.setupBoundaries();
 		// create foods
 		this.createFoods();
 		//draw blob
@@ -81,21 +79,6 @@ Blobbers.prototype = {
 		this.foodGraphics = [];
 		this.answerChoices = [];
 		this.answerFunc(num);
-
-	},
-
-
-	// Draw the boundaries of the space arena
-	setupBoundaries: function() {
-		var walls= new PIXI.Graphics();
-		walls.beginFill(0xFFFFFFF, 0.5);
-		walls.drawRect(0,0, this._width, 10);
-		walls.drawRect(this._width - 10, 10, 10, this._height - 20);
-		walls.drawRect(0, this._height - 10, this._width, 10);
-		walls.drawRect(0,10,10,this._height - 20);
-
-		// attach the star to the stage
-		this.stage.addChild(walls);
 
 	},
 

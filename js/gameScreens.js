@@ -1,12 +1,15 @@
 var Screens = (function() {
 
-	var apiUrl = "https://calm-garden-9078.herokuapp.com";
+	var currentGame = "";
 
 	//Prototypes
 	function Question(questionText, answer, incorrectAnswers) {
 		this.questionText = questionText;
 		this.answerText = answer;
 		this.incorrectAnswerTexts = incorrectAnswers;
+		this.allChoices = incorrectAnswers.concat([answer]);
+		// this will shuffle allChoices
+		for(var j, x, i = this.allChoices.length; i; j = Math.floor(Math.random() * i), x = this.allChoices[--i], this.allChoices[i] = this.allChoices[j], this.allChoices[j] = x);
 	}
 
 	function Game(questionList, w, h) {
@@ -15,17 +18,26 @@ var Screens = (function() {
 		this.height = h;
 		this.score = 0;
 		this.index = 0;
+		this.mostRecentAnswer = "";
 
+		/**
+		 * Accessor and Mutator for Game.score
+		 */
 		this.setScore = function(newScore) {
-			score = newScore;
-		}
+			this.score = newScore;
+		};
+
+		this.getScore = function() {
+			return this.score;
+		};
 
 		/**
 		 * Determines whether the user's answer is correct.
 		 * answer is user's answer from the game
 		 */
 		this.checkAnswer = function(answer) {
-			return answer == this.questions[this.index].answer
+			this.mostRecentAnswer = this.getCurrentQuestion().allChoices[answer];
+			return this.mostRecentAnswer == this.getCurrentQuestion().answerText;
 		};
 
 		/**
@@ -36,7 +48,7 @@ var Screens = (function() {
 		 */
 		this.isNextQuestion = function(isCorrect) {
 			if (isCorrect){
-				score += 200;
+				this.score += 200; //Score for a correct answer
 			}
 
 			this.index += 1;
@@ -48,50 +60,15 @@ var Screens = (function() {
 		this.getCurrentQuestion = function() {
 			return this.questions[this.index];
 		};
+
+		/**
+		 * Returns whether or not the player won the game.
+		 */
+		 this.isWin = function() {
+		 	return this.score >= (this.questions.length * 200 * 0.75)
+
+		 }
 	}
-
-	this.game = new Game([],0,0);
-
-	//Ajax methods to communicate with backend
-   /**
-    * HTTP GET request 
-    * @param  {string}   url       URL path
-    * @param  {function} onSuccess   callback method to execute upon request success (200 status)
-    * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
-    * @return {None}
-    */
-   var getRequest = function(url, data, onSuccess, onFailure) {
-       $.ajax({
-           type: 'GET',
-           url: apiUrl + url,
-           data: JSON.stringify(data),
-           contentType: "application/json",
-           dataType: "json",
-           success: onSuccess,
-           error: onFailure
-       });
-   };
-
-    /**
-     * HTTP POST request
-     * @param  {string}   url       URL path
-     * @param  {Object}   data      JSON data to send in request body
-     * @param  {function} onSuccess   callback method to execute upon request success (200 status)
-     * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
-     * @return {None}
-     */
-    var postRequest = function(url, data, onSuccess, onFailure) {
-        $.ajax({
-            type: 'POST',
-            url: apiUrl + url,
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            dataType: "json",
-            success: onSuccess,
-            error: onFailure
-        });
-    };
-
 
 
 	//Mehtods for transition screens
@@ -122,12 +99,6 @@ var Screens = (function() {
 	};
 
 	var setSynopsisScreen = function() {
-		//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
-		//not even sure this is the right place
-		var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
-			new Question("The square root of 1600 is 40.", "true", ["false"]),
-			new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-		this.game = new Game(questionList, $(".gameScreen").width(), $(".gameScreen").width()/2);
 		
 
 		$(".all").hide();
@@ -149,15 +120,15 @@ var Screens = (function() {
 		$(".answer").show();
 		$(".btnGame").show();
 
-		var question = this.game.getCurrentQuestion();
+		var question = currentGame.getCurrentQuestion();
 
-		$(".screenTitle").text("Question " + (this.game.index+1).toString());
+		$(".screenTitle").text("Question " + (currentGame.index+1).toString());
 		$(".currQuestion").text(question.questionText);
 		$(".answer").text("Choose between the following:");
 
-		$(".answer").append("<div>"+question.answerText+"</div>");
-		for (var i = question.incorrectAnswerTexts.length - 1; i >= 0; i--) {
-			$(".answer").append("<div>"+question.incorrectAnswerTexts[i]+"</div>");
+		// $(".answer").append("<div>"+question.answerText+"</div>");
+		for (var i = 0; i < question.allChoices.length; i++) {
+			$(".answer").append("<div>"+String.fromCharCode('A'.charCodeAt() + i)+ ") " + question.allChoices[i]+"</div>");
 		};
 	};
 
@@ -183,32 +154,55 @@ var Screens = (function() {
 		$(".bottomBtns .btnQuitGame").show();
 		
 		$(".screenTitle").text("Incorrect");
-		$(".answer").text("You chose: " + ". The correct answer is ");
+		$(".answer").text("You chose: " + currentGame.mostRecentAnswer + ". The correct answer is " + currentGame.questions[currentGame.index].answerText);
 	};
 
-	var setDoneScreen = function() {
+	var setDoneScreen = function(gameWon) {
 		$(".all").hide();
 
 		$(".screenTitle").show();
-		$(".centerText").show();
+		// $(".centerText").show();
 		$(".centerBtns .btnQuitGame").show();
-		$(".btnSummary").show();
+		// $(".btnSummary").show();
 		$(".centerBtns .btnMain").show();
 		
-		$(".screenTitle").text("Completed");	
+		if (gameWon){
+			$(".screenTitle").text("You won");	
+		} else {
+			$(".screenTitle").text("Better luck next time");
+		}
+
 	};
 
 
 	var answer = function(num) {
-		console.log(num);
+		//TODO: report progress to database
+		var gameDivChildren = document.getElementById("gameScreen").childNodes;
+		for (i = 0; i < gameDivChildren.length; i++) {
+			if (gameDivChildren[i].nodeName === "CANVAS") {
+				document.getElementById("gameScreen").removeChild(gameDivChildren[i]);
+			}
+		}
+		// while (gameDiv.firstChild) {
+		// 	console.log(gameDiv.firstChild.nodeName);
+		//     gameDiv.removeChild(gameDiv.firstChild);
+		// }
+		var wasCorrect = currentGame.checkAnswer(num);
 
+		if (!currentGame.isNextQuestion(wasCorrect)) {
+			setDoneScreen(currentGame.isWin());
+		} else if (wasCorrect) {
+			setCorrectScreen();
+		} else {
+			setIncorrectScreen();
+		}
 	}
 
 	var loadGame = function() {
 		var game = new Blobbers(document.getElementById("gameScreen"), 
-								this.game.width,
-								this.game.height,
-								this.game.getCurrentQuestion().incorrectAnswerTexts.length +1, 
+								currentGame.width,
+								currentGame.height,
+								currentGame.getCurrentQuestion().incorrectAnswerTexts.length +1, 
 								{
 									radius:40, 
 									numEnemies:0
@@ -280,8 +274,10 @@ var Screens = (function() {
 			console.error('update score failed');
 		}
 		send_data = {student: studentID, gameName: gName, score: currScore, questionIndex: index};
-
-		postRequest("/api/games", send_data, update, updateFailed) //here to update the score of the current player
+		
+		gameID = "0"
+		
+		makePutRequest("/api/game_instances/" + gameID, send_data, update, updateFailed) //here to update the score of the current player
 	};
 
 
@@ -303,11 +299,20 @@ var Screens = (function() {
 			console.error("game load failure");
 		}
 
+		gameID = 0;
 		send_data = {student: studentID, gameName: gName};
-		postRequest("/api/game_instance", send_data, setGame, gameNotReached);
+		makeGetRequest("/api/game_instances/" + gameID, setGame, gameNotReached);
 
         attachHandlers();
         setMainTitleScreen();
+        // setDoneScreen();
+
+		//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
+		//not even sure this is the right place
+		var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
+			new Question("The square root of 1600 is 40.", "true", ["false"]),
+			new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
+		currentGame = new Game(questionList, $(".gameScreen").width(), $(".gameScreen").width()/2);
         
     };
 
