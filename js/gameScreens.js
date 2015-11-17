@@ -213,11 +213,9 @@ var Screens = (function() {
 	var loadGame = function() {
 		$(".all").hide();
 		$(".gameScreen").show();
-		$(".questionText").show();
+		// $(".questionText").show();
 		$(".currQuestion").show();
 		$(".answer").show();
-		// $(".questionText").css('position','absolute')
-		// $(".questionText").css('z-index',5)
 
 		var game = new Blobbers(document.getElementById("gameScreen"), 
 								currentGame.width,
