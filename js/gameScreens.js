@@ -186,8 +186,12 @@ var Screens = (function() {
 	};
 
 
+	/**
+	 * This will be called when the game is over and it will determine whether
+	 * the question was answered correctly or incorrectly.
+	 */
 	var answer = function(num) {
-		//TODO: report progress to database
+		
 		var gameDivChildren = document.getElementById("gameScreen").childNodes;
 		for (i = 0; i < gameDivChildren.length; i++) {
 			if (gameDivChildren[i].nodeName === "CANVAS") {
@@ -207,6 +211,13 @@ var Screens = (function() {
 		} else {
 			setIncorrectScreen();
 		}
+
+		//TODO: report progress to database
+
+		// send_data = {student: studentID, gameName: gName, score: currScore, questionIndex: index};		
+		// gameID = "0"
+		// makePutRequest("/api/game_instances/" + gameID, send_data, update, updateFailed) //here to update the score of the current player
+
 
 	}
 
@@ -265,40 +276,6 @@ var Screens = (function() {
 		});
 	};
 
-	/**
-	 * This will be called when the game is over and it will determine whether
-	 * the question was answered correctly or incorrectly.
-	 */
-	var levelOver = function() {
-		// until we figure out how we are going to merge the game level in, this 
-		// will not be very robust
-
-		isCorrect = false;
-
-		if (isCorrect) {
-
-			setIncorrectScreen();
-		} else {
-			setCorrectScreen();
-		}
-		currGame.incrementQuestion();
-
-
-
-		var update = function() {
-			console.log("it did it!");
-		}
-		var updateFailed = function() {
-			console.error('update score failed');
-		}
-		send_data = {student: studentID, gameName: gName, score: currScore, questionIndex: index};
-		
-		gameID = "0"
-		
-		makePutRequest("/api/game_instances/" + gameID, send_data, update, updateFailed) //here to update the score of the current player
-	};
-
-
 	var start = function() {
 		//probably initialized in a public method that is called by the screen that chooses the game from the student's game list
 		studentID = 0; 
@@ -315,6 +292,13 @@ var Screens = (function() {
 		};
 		var gameNotReached = function(){
 			console.error("game load failure");
+
+		//TEMPORARY QUESTION INITIALIZATION CODE
+		var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
+			new Question("The square root of 1600 is 40.", "true", ["false"]),
+			new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
+		currentGame = new Game(questionList, $(".gameScreen").width(), $(".gameScreen").height());
+
 		}
 
 		gameID = 0;
@@ -323,14 +307,7 @@ var Screens = (function() {
 
         attachHandlers();
         setMainTitleScreen();
-        // setDoneScreen();
 
-		//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
-		//not even sure this is the right place
-		var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
-			new Question("The square root of 1600 is 40.", "true", ["false"]),
-			new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-		currentGame = new Game(questionList, $(".gameScreen").width(), $(".gameScreen").height());
         
     };
 
