@@ -46,12 +46,17 @@ var Screens = (function() {
 		 * Returns True if there is a next question or False if no more questions.
 		 * isCorrect is whether the user is True or False for the current question 
 		 */
-		this.isNextQuestion = function(isCorrect) {
+		this.incrementQuestion = function(isCorrect) {
 			if (isCorrect){
 				this.score += 200; //Score for a correct answer
 			}
-
 			this.index += 1;
+		};
+
+		/**
+		 * Check to see if the next question exists
+		 */
+		this.hasNextQuestion = function(isCorrect) {
 			return this.index < this.questions.length
 		};
 		/** 
@@ -165,6 +170,8 @@ var Screens = (function() {
 		$(".centerBtns .btnQuitGame").show();
 		// $(".btnSummary").show();
 		$(".centerBtns .btnMain").show();
+
+		currentGame = "";
 		
 		if (gameWon){
 			$(".screenTitle").text("You won");	
@@ -189,7 +196,7 @@ var Screens = (function() {
 		// }
 		var wasCorrect = currentGame.checkAnswer(num);
 
-		if (!currentGame.isNextQuestion(wasCorrect)) {
+		if (!currentGame.hasNextQuestion(wasCorrect)) {
 			setDoneScreen(currentGame.isWin());
 		} else if (wasCorrect) {
 			setCorrectScreen();
@@ -263,7 +270,7 @@ var Screens = (function() {
 		} else {
 			setCorrectScreen();
 		}
-		currGame.isNextQuestion();
+		currGame.incrementQuestion();
 
 
 
