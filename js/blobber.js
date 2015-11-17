@@ -157,15 +157,19 @@ Blobbers.prototype = {
 	handleKeys: function (key, state) {
 		switch(key) {
 			case 65:
+			case 37:
 			this.keyLeft = state;
 			break;
 			case 68:
+			case 39:
 			this.keyRight = state;
 			break;
 			case 87:
+			case 38:
 			this.keyUp = state;
 			break;
 			case 83:
+			case 40:
 			this.keyDown = state;
 			break;
 		}
