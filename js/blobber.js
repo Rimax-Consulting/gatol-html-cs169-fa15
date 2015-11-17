@@ -276,6 +276,8 @@ var BlobbersMetaGame = function() {
 			return null;
 		}
 		var numEnemies = Math.floor(5*index/total);
+		console.log(correct, index, total);
+		console.log({radius:radius, numEnemies:numEnemies});
 		return {radius:radius, numEnemies:numEnemies};
 	};
 	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {

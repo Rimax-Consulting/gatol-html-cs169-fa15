@@ -47,11 +47,7 @@ var Screens = (function() {
 		 * isCorrect is whether the user is True or False for the current question 
 		 */
 		this.incrementQuestion = function(isCorrect) {
-			if (isCorrect){
-				this.score += 200; // Score for a correct answer
-			} else {
-				this.score -= 100; // Score for an incorrect answer
-			}
+			this.numCorrect += isCorrect ? 1:0;
 			this.index += 1;
 		};
 
@@ -91,7 +87,7 @@ var Screens = (function() {
 		 * @return numEnemies - this should slowly increase over the course of the game
 		 */
 		this.getMetaGame = function() {
-			return this.metaGame.getMetaGame(this.numCorrect, this.index, this.questions.lenth);
+			return this.metaGame.getMetaGame(this.numCorrect, this.index, this.questions.length);
 		};
 
 		this.initializeGame = function(answer) {
