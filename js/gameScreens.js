@@ -57,7 +57,7 @@ var Screens = (function() {
 		 * Check to see if the next question exists
 		 */
 		this.hasNextQuestion = function() {
-			return this.index < this.questions.length -1
+			return this.index < this.questions.length - 1
 		};
 		/** 
 		 * Returns the current question
