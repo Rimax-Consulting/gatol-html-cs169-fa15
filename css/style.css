@@ -514,11 +514,21 @@ button:active {
 }
 
 .questionText {
-    opacity: .5;
+    /*opacity: .5;*/
     color: white;
     position: absolute;
     top: 20px;
     left: 20px;
+}
+
+.gameScreen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    /*background: rgba(51,51,51,0.7);*/
+    z-index: -1;
 }
 
 .centerBtns, .bottomBtns {

@@ -56,7 +56,7 @@ var Screens = (function() {
 		/**
 		 * Check to see if the next question exists
 		 */
-		this.hasNextQuestion = function(isCorrect) {
+		this.hasNextQuestion = function() {
 			return this.index < this.questions.length
 		};
 		/** 
@@ -147,6 +147,8 @@ var Screens = (function() {
 		
 		$(".screenTitle").text("Correct!");
 		$(".answer").text("Good job! You got the correct answer: ");
+
+		$(".questionText").css('position','relative')
 	};
 
 	var setIncorrectScreen = function() {
@@ -160,6 +162,8 @@ var Screens = (function() {
 		
 		$(".screenTitle").text("Incorrect");
 		$(".answer").text("You chose: " + currentGame.mostRecentAnswer + ". The correct answer is " + currentGame.questions[currentGame.index].answerText);
+
+		$(".questionText").css('position','relative')
 	};
 
 	var setDoneScreen = function(gameWon) {
@@ -196,16 +200,25 @@ var Screens = (function() {
 		// }
 		var wasCorrect = currentGame.checkAnswer(num);
 
-		if (!currentGame.hasNextQuestion(wasCorrect)) {
+		if (!currentGame.hasNextQuestion()) {
 			setDoneScreen(currentGame.isWin());
 		} else if (wasCorrect) {
 			setCorrectScreen();
 		} else {
 			setIncorrectScreen();
 		}
+		currentGame.incrementQuestion(wasCorrect);
 	}
 
 	var loadGame = function() {
+		$(".all").hide();
+		$(".gameScreen").show();
+		$(".questionText").show();
+		$(".currQuestion").show();
+		$(".answer").show();
+		// $(".questionText").css('position','absolute')
+		// $(".questionText").css('z-index',5)
+
 		var game = new Blobbers(document.getElementById("gameScreen"), 
 								currentGame.width,
 								currentGame.height,
@@ -319,7 +332,7 @@ var Screens = (function() {
 		var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
 			new Question("The square root of 1600 is 40.", "true", ["false"]),
 			new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-		currentGame = new Game(questionList, $(".gameScreen").width(), $(".gameScreen").width()/2);
+		currentGame = new Game(questionList, $(".gameScreen").width(), $(".gameScreen").height());
         
     };
 
