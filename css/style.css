@@ -516,7 +516,7 @@ button:active {
 .questionText {
     /*opacity: .5;*/
     color: white;
-    /*position: absolute;*/
+    position: relative;
     top: 20px;
     left: 20px;
 }

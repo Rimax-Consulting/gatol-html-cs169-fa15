@@ -72,7 +72,7 @@ var Screens = (function() {
 		 * Returns whether or not the player won the game.
 		 */
 		this.isWin = function() {
-			return this.score >= (this.questions.length * 200 * 0.75)
+			return this.getScore() >= (this.questions.length * 200 * 0.75)
 
 		};
 
@@ -80,7 +80,7 @@ var Screens = (function() {
 		 * Resets the state of the game
 		 */
 		this.reset = function() {
-			this.score = 0;
+			this.numCorrect = 0;
 			this.index = 0;
 			this.mostRecentAnswer = "";		 	
 		};
@@ -126,7 +126,7 @@ var Screens = (function() {
 		$(".bottomBtns .btnMain").show();
 
 		
-		var blobberInstructions = "Use W, A, S, and D to move your bubble Up, Left, Down, and Right, respectively. To choose an answer, collide your bubble with the smaller bubble that represents answer."
+		var blobberInstructions = "Use W, A, S, and D (or arrow keys) to move your bubble Up, Left, Down, and Right, respectively. To choose an answer, collide your bubble with the smaller bubble that represents answer."
 		
 		$(".screenTitle").text("How to Play");
 		$(".centerText").text(blobberInstructions);
@@ -190,7 +190,7 @@ var Screens = (function() {
 		$(".bottomBtns .btnQuitGame").show();
 		
 		$(".screenTitle").text("Incorrect");
-		$(".answer").text("You chose: " + currentGame.mostRecentAnswer + ". The correct answer is " + currentGame.questions[currentGame.index].answerText);
+		$(".answer").text("You chose: " + currentGame.mostRecentAnswer + ". The correct answer is " + currentGame.questions[currentGame.index-1].answerText);
 
 		$(".questionText").css('position','relative')
 	};
