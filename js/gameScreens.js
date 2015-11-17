@@ -57,7 +57,7 @@ var Screens = (function() {
 		 * Check to see if the next question exists
 		 */
 		this.hasNextQuestion = function() {
-			return this.index < this.questions.length - 1
+			return this.index < this.questions.length 
 		};
 		/** 
 		 * Returns the current question
@@ -199,7 +199,7 @@ var Screens = (function() {
 		//     gameDiv.removeChild(gameDiv.firstChild);
 		// }
 		var wasCorrect = currentGame.checkAnswer(num);
-
+		currentGame.incrementQuestion(wasCorrect);
 		if (!currentGame.hasNextQuestion()) {
 			setDoneScreen(currentGame.isWin());
 		} else if (wasCorrect) {
@@ -207,7 +207,7 @@ var Screens = (function() {
 		} else {
 			setIncorrectScreen();
 		}
-		currentGame.incrementQuestion(wasCorrect);
+
 	}
 
 	var loadGame = function() {
