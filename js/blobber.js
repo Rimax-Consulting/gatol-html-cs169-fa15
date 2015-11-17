@@ -258,3 +258,32 @@ Blobbers.prototype = {
 		this.updatePhysics();
 	}
 };
+
+var BlobbersMetaGame = function() {
+	/**
+	 * calculates score based on how many we got right and possibly how many we got wrong
+	 */
+	this.calculateScore = function(correct, index) {
+		return 200*correct;
+	};
+	/** 
+	 * returns object of radius and numEnemies based on game progress
+	 */
+	this.getMetaGame = function(correct, index, total) {
+		var incorrect = index - correct;
+		var radius = 40 + 60*(correct/total) - 120*(incorrect/total);
+		if (radius < 0) {
+			return null;
+		}
+		var numEnemies = Math.floor(5*index/total);
+		return {radius:radius, numEnemies:numEnemies};
+	};
+	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {
+		var Game = new Blobbers(parent, width, height, num_choices, state, answerFunc);
+	};
+	return {
+		getMetaGame:this.getMetaGame,
+		calculateScore:this.calculateScore,
+		initializeGame:this.initializeGame
+	};
+};

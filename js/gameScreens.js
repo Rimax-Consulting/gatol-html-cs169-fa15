@@ -12,23 +12,23 @@ var Screens = (function() {
 		for(var j, x, i = this.allChoices.length; i; j = Math.floor(Math.random() * i), x = this.allChoices[--i], this.allChoices[i] = this.allChoices[j], this.allChoices[j] = x);
 	}
 
-	function Game(questionList, w, h) {
+	function Game(questionList, metaGame) {
 		this.questions = questionList;
-		this.width = w;
-		this.height = h;
-		this.score = 0;
+		this.numCorrect = 0;
 		this.index = 0;
 		this.mostRecentAnswer = "";
+		this.metaGame = metaGame;
 
-		/**
+		/** EDIT: not sure if game.score is a good idea because it's more specific for gametype
+		 *  I refactored so that Game only stores numCorrect and relies on metaGame to handle actual scoring
 		 * Accessor and Mutator for Game.score
-		 */
 		this.setScore = function(newScore) {
 			this.score = newScore;
 		};
+		 */
 
 		this.getScore = function() {
-			return this.score;
+			return this.metaGame.getScore(this.numCorrect, this.questions.length);
 		};
 
 		/**
@@ -48,7 +48,9 @@ var Screens = (function() {
 		 */
 		this.incrementQuestion = function(isCorrect) {
 			if (isCorrect){
-				this.score += 200; //Score for a correct answer
+				this.score += 200; // Score for a correct answer
+			} else {
+				this.score -= 100; // Score for an incorrect answer
 			}
 			this.index += 1;
 		};
@@ -69,11 +71,38 @@ var Screens = (function() {
 		/**
 		 * Returns whether or not the player won the game.
 		 */
-		 this.isWin = function() {
-		 	return this.score >= (this.questions.length * 200 * 0.75)
+		this.isWin = function() {
+			return this.score >= (this.questions.length * 200 * 0.75)
 
-		 }
-	}
+		};
+
+		/**
+		 * Resets the state of the game
+		 */
+		this.reset = function() {
+			this.score = 0;
+			this.index = 0;
+			this.mostRecentAnswer = "";		 	
+		};
+
+		/**
+		 * Returns mid-game metagame state data for blobber
+		 * @return radius - this is some function of the current score. bigger score = bigger blob
+		 * @return numEnemies - this should slowly increase over the course of the game
+		 */
+		this.getMetaGame = function() {
+			return this.metaGame.getMetaGame(this.numCorrect, this.index, this.questions.lenth);
+		};
+
+		this.initializeGame = function(answer) {
+			this.metaGame.initializeGame(document.getElementById("gameScreen"), 
+								$(".gameScreen").width(),
+								$(".gameScreen").height(),
+								this.getCurrentQuestion().incorrectAnswerTexts.length +1, 
+								this.getMetaGame(),
+								answer);
+		}
+	};
 
 
 	//Mehtods for transition screens
@@ -174,14 +203,14 @@ var Screens = (function() {
 		$(".centerBtns .btnQuitGame").show();
 		// $(".btnSummary").show();
 		$(".centerBtns .btnMain").show();
-
-		currentGame = "";
 		
 		if (gameWon){
 			$(".screenTitle").text("You won");	
 		} else {
 			$(".screenTitle").text("Better luck next time");
 		}
+
+		currentGame.reset();
 
 	};
 
@@ -217,15 +246,7 @@ var Screens = (function() {
 		$(".currQuestion").show();
 		$(".answer").show();
 
-		var game = new Blobbers(document.getElementById("gameScreen"), 
-								currentGame.width,
-								currentGame.height,
-								currentGame.getCurrentQuestion().incorrectAnswerTexts.length +1, 
-								{
-									radius:40, 
-									numEnemies:0
-								},
-								answer);
+		var game = currentGame.initializeGame(answer);
 	};
 
 	var attachHandlers = function() {
@@ -330,7 +351,7 @@ var Screens = (function() {
 		var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
 			new Question("The square root of 1600 is 40.", "true", ["false"]),
 			new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-		currentGame = new Game(questionList, $(".gameScreen").width(), $(".gameScreen").height());
+		currentGame = new Game(questionList, BlobbersMetaGame());
         
     };
 
