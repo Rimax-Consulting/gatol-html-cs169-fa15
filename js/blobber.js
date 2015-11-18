@@ -248,6 +248,11 @@ Blobbers.prototype = {
 			this.blob.force[0] -= this.speed;
 		}
 
+		for (i = 0; i < this.enemyBodies.length; i++) {
+			this.enemyBodies[i].force[0] += this.enemyBodies[i].velocity[1];
+			this.enemyBodies[i].force[1] -= this.enemyBodies[i].velocity[0];
+		}
+
 
 		this.blobGraphics.x = this.blob.position[0];
 		this.blobGraphics.y = this.blob.position[1];
