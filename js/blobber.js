@@ -41,6 +41,8 @@ var Blobbers = function(parent, width, height, num_choices, state, answerFunc) {
 
 	this.foodBodies = [];
 	this.foodGraphics = [];
+	this.enemyBodies = [];
+	this.enemyGraphics = [];
 	this.answerChoices = [];
 
 	this.blobRadius = state.radius || 40;
@@ -59,6 +61,8 @@ Blobbers.prototype = {
 		this.createFoods();
 		//draw blob
 		this.createBlob();
+		// draw enemies
+		this.createEnemies();
 		// start first frame
 		requestAnimationFrame(this.tick.bind(this));
 	},
@@ -77,6 +81,8 @@ Blobbers.prototype = {
 		}
 		this.stage.removeChild(this.questionText);
 
+		this.foodBodies = [];
+		this.foodGraphics = [];
 		this.foodBodies = [];
 		this.foodGraphics = [];
 		this.answerChoices = [];
@@ -167,6 +173,44 @@ Blobbers.prototype = {
 		}
 	},
 
+	createEnemies: function() {
+		for (i = 0; i < this.numEnemies; i++) {
+			var x = Math.round(Math.random() * this._width);
+			var y = Math.round(Math.random() * this._height);	
+			while (Math.sqrt(Math.pow(x - this._width/2, 2) + Math.pow(y - this._height/2, 2)) < this.blobRadius * 2) {
+				x = Math.round(Math.random() * this._width);
+				y = Math.round(Math.random() * this._height);	
+			}
+			var vx = (Math.random() - 0.5) * this.speed/12;
+			var vy = (Math.random() - 0.5) * this.speed/12;
+			var va = (Math.random() - 0.5) * this.speed/100;
+			// create the enemy physics body
+			var enemy = new p2.Body({
+				position: [x,y],
+				mass: 1,
+				damping: 0,
+				angularDamping: 0,
+				velocity: [vx, vy],
+				angularVelocity: va
+			});
+			var enemyShape = new p2.Circle({radius: 10});
+			enemy.addShape(enemyShape);
+			this.world.addBody(enemy);
+
+			// Create the graphics
+			var enemyGraphics = new PIXI.Graphics();
+			enemyGraphics.beginFill(0xE62E25);
+			enemyGraphics.drawCircle(0,0,20);
+			enemyGraphics.endFill();
+
+			this.stage.addChild(enemyGraphics);
+
+			this.enemyBodies.push(enemy);
+			this.enemyGraphics.push(enemyGraphics);
+			
+		}
+	},
+
 	handleKeys: function (key, state) {
 		switch(key) {
 			case 65:
@@ -253,6 +297,22 @@ Blobbers.prototype = {
 			}
 		}
 
+		// wrap enemies
+		for (i = 0; i < this.enemyBodies.length; i++) {
+			if (this.enemyBodies[i].position[0] > this._width - this.enemyBodies[i].shapes[0].radius) {
+				this.enemyBodies[i].velocity[0] *= -1;
+			}
+			if (this.enemyBodies[i].position[1] > this._height - this.enemyBodies[i].shapes[0].radius) {
+				this.enemyBodies[i].velocity[1] *= -1;
+			}
+			if (this.enemyBodies[i].position[0] < this.enemyBodies[i].shapes[0].radius) {
+				this.enemyBodies[i].velocity[0] *= -1;
+			}
+			if (this.enemyBodies[i].position[1] < this.enemyBodies[i].shapes[0].radius) {
+				this.enemyBodies[i].velocity[1] *= -1;
+			}
+		}
+
 		this.blobGraphics.rotation = this.blob.angle;
 		// update food positions
 		for (var i = 0; i < this.foodBodies.length; i++) {
@@ -262,6 +322,13 @@ Blobbers.prototype = {
 			this.answerChoices[i].x = this.foodBodies[i].position[0]-8;
 			this.answerChoices[i].y = this.foodBodies[i].position[1]-14;
 		}
+
+		// update enemy positions
+		for (var i = 0; i < this.enemyBodies.length; i++) {
+			this.enemyGraphics[i].x = this.enemyBodies[i].position[0];
+			this.enemyGraphics[i].y = this.enemyBodies[i].position[1];
+		}
+
 
 		this.world.step(1/60);
 	},
@@ -288,8 +355,8 @@ var BlobbersMetaGame = function() {
 	this.getMetaGame = function(correct, index, total) {
 		var incorrect = index - correct;
 		var radius = 40 + 60*(correct/total) - 120*(incorrect/total);
-		if (radius < 0) {
-			return {radius:15, numEnemies:numEnemies};
+		if (radius < 10) {
+			return {radius:10, numEnemies:0};
 		}
 		var numEnemies = Math.floor(5*index/total);
 		console.log(correct, index, total);
