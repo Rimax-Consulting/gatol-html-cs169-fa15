@@ -198,7 +198,7 @@ Blobbers.prototype = {
 			this.world.addBody(enemy);
 
 			// Create the graphics
-			var enemyGraphics = new PIXI.Text("*", {font: "36px Verdana", fill: 0xE62E25});
+			var enemyGraphics = new PIXI.Text("*", {font: "36px Verdana", fill: 0x762E25});
 			this.stage.addChild(enemyGraphics);
 
 			this.enemyBodies.push(enemy);
