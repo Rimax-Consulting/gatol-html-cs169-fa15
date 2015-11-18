@@ -113,6 +113,7 @@ var Screens = (function() {
 		// $(".centerBtns .btnQuitGame").show();
 
 		$(".screenTitle").text("Blobbers"); //name of game template.
+		$(".centerText").removeClass("centerBtns");
 	};
 
 	var setHowToScreen = function() {
@@ -178,7 +179,14 @@ var Screens = (function() {
 		$(".screenTitle").text("Correct!");
 		$(".answer").text("Good job! You got the correct answer: " + currentGame.questions[currentGame.index-1].answerText + ".");
 
-		$(".questionText").css('position','relative')
+		$(".questionText").css('position','relative');
+
+		if (!currentGame.hasNextQuestion()) {
+			$(".btnNext").text("Finish");
+		} else {
+			$(".btnNext").text("Next Question");
+		}
+
 	};
 
 	var setIncorrectScreen = function() {
@@ -194,7 +202,13 @@ var Screens = (function() {
 		$(".screenTitle").text("Incorrect");
 		$(".answer").text("You chose: " + currentGame.mostRecentAnswer + ". The correct answer is " + currentGame.questions[currentGame.index-1].answerText + ".");
 
-		$(".questionText").css('position','relative')
+		$(".questionText").css('position','relative');
+
+		if (!currentGame.hasNextQuestion()) {
+			$(".btnNext").text("Finish");
+		} else {
+			$(".btnNext").text("Next Question");
+		}
 	};
 
 	var setDoneScreen = function(gameWon) {
@@ -213,6 +227,8 @@ var Screens = (function() {
 			$(".screenTitle").text("Better luck next time");
 		}
 
+		$(".centerText").text("Your final score is " + currentGame.getScore().toString() + ".");
+		$(".centerText").addClass("centerBtns"); //this is only to make the div center-aligned
 		currentGame.reset();
 
 	};
@@ -236,9 +252,7 @@ var Screens = (function() {
 		// }
 		var wasCorrect = currentGame.checkAnswer(num);
 		currentGame.incrementQuestion(wasCorrect);
-		if (!currentGame.hasNextQuestion()) {
-			setDoneScreen(currentGame.isWin());
-		} else if (wasCorrect) {
+		if (wasCorrect) {
 			setCorrectScreen();
 		} else {
 			setIncorrectScreen();
@@ -284,7 +298,11 @@ var Screens = (function() {
 			//Increment Question number
 
 			//If question number is the question limit -> setDoneScreen(); else
-			setQuestionScreen(); 
+			if (!currentGame.hasNextQuestion()) {
+				setDoneScreen(currentGame.isWin());
+			} else {
+				setQuestionScreen();
+			}
 		});
 
 		$(".btnGame").click(function() {
