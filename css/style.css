@@ -489,7 +489,7 @@ button:active {
 
 .screenTitle {
     font-weight: bold;
-    color: #E2FFFF;
+    color: white;
     letter-spacing: 1pt;
     word-spacing: 2pt;
     font-size: 65px;
@@ -502,7 +502,7 @@ button:active {
 
 .centerText, .qSetText {
     font-weight: bold;
-    color: #E2FFFF;
+    color: white;
     letter-spacing: 1pt;
     word-spacing: 2pt;
     font-size: 25px;
@@ -519,6 +519,11 @@ button:active {
     position: relative;
     top: 20px;
     left: 20px;
+}
+
+.questionZoomed {
+    font-size: 25px;
+    padding-right: 20px
 }
 
 .gameScreen {
