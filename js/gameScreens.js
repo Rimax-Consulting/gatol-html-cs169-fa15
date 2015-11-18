@@ -19,13 +19,6 @@ var Screens = (function() {
 		this.mostRecentAnswer = "";
 		this.metaGame = metaGame;
 
-		/** EDIT: not sure if game.score is a good idea because it's more specific for gametype
-		 *  I refactored so that Game only stores numCorrect and relies on metaGame to handle actual scoring
-		 * Accessor and Mutator for Game.score
-		this.setScore = function(newScore) {
-			this.score = newScore;
-		};
-		 */
 
 		this.getScore = function() {
 			return this.metaGame.getScore(this.numCorrect, this.questions.length);
@@ -68,8 +61,7 @@ var Screens = (function() {
 		 * Returns whether or not the player won the game.
 		 */
 		this.isWin = function() {
-			return this.getScore() >= (this.questions.length * 200 * 0.75)
-
+			return this.getScore() >= (this.questions.length * 200 * 0.75);
 		};
 
 		/**
@@ -325,8 +317,6 @@ var Screens = (function() {
 
         attachHandlers();
         setMainTitleScreen();
-
-        
     };
 
     return {
