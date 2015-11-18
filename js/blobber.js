@@ -198,11 +198,7 @@ Blobbers.prototype = {
 			this.world.addBody(enemy);
 
 			// Create the graphics
-			var enemyGraphics = new PIXI.Graphics();
-			enemyGraphics.beginFill(0xE62E25);
-			enemyGraphics.drawCircle(0,0,20);
-			enemyGraphics.endFill();
-
+			var enemyGraphics = new PIXI.Text("*", {font: "36px Verdana", fill: 0xE62E25});
 			this.stage.addChild(enemyGraphics);
 
 			this.enemyBodies.push(enemy);
@@ -326,7 +322,7 @@ Blobbers.prototype = {
 		// update enemy positions
 		for (var i = 0; i < this.enemyBodies.length; i++) {
 			this.enemyGraphics[i].x = this.enemyBodies[i].position[0];
-			this.enemyGraphics[i].y = this.enemyBodies[i].position[1];
+			this.enemyGraphics[i].y = this.enemyBodies[i].position[1]-19;
 		}
 
 
@@ -354,10 +350,8 @@ var BlobbersMetaGame = function() {
 	 */
 	this.getMetaGame = function(correct, index, total) {
 		var incorrect = index - correct;
-		var radius = 40 + 60*(correct/total) - 120*(incorrect/total);
-		if (radius < 10) {
-			return {radius:10, numEnemies:0};
-		}
+		var radius = 40 + 60*(correct/total) - 80*(incorrect/total);
+		radius = Math.max(10, radius);
 		var numEnemies = Math.floor(5*index/total);
 		console.log(correct, index, total);
 		console.log({radius:radius, numEnemies:numEnemies});
