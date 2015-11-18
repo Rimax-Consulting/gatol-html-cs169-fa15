@@ -176,7 +176,7 @@ var Screens = (function() {
 		// $(".btnNext").show();
 		
 		$(".screenTitle").text("Correct!");
-		$(".answer").text("Good job! You got the correct answer: ");
+		$(".answer").text("Good job! You got the correct answer: " + currentGame.questions[currentGame.index-1].answerText + ".");
 
 		$(".questionText").css('position','relative')
 	};
@@ -192,7 +192,7 @@ var Screens = (function() {
 		$(".bottomBtns .btnQuitGame").show();
 		
 		$(".screenTitle").text("Incorrect");
-		$(".answer").text("You chose: " + currentGame.mostRecentAnswer + ". The correct answer is " + currentGame.questions[currentGame.index-1].answerText);
+		$(".answer").text("You chose: " + currentGame.mostRecentAnswer + ". The correct answer is " + currentGame.questions[currentGame.index-1].answerText + ".");
 
 		$(".questionText").css('position','relative')
 	};
