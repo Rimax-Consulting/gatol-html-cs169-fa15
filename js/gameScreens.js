@@ -101,7 +101,7 @@ var Screens = (function() {
 	};
 
 
-	//Mehtods for transition screens
+	//Methods for transition screens
 
 	var setMainTitleScreen = function() {
 		$(".all").hide();
@@ -183,10 +183,7 @@ var Screens = (function() {
 
 		if (!currentGame.hasNextQuestion()) {
 			$(".btnNext").text("Finish");
-		} else {
-			$(".btnNext").text("Next Question");
 		}
-
 	};
 
 	var setIncorrectScreen = function() {
@@ -206,8 +203,6 @@ var Screens = (function() {
 
 		if (!currentGame.hasNextQuestion()) {
 			$(".btnNext").text("Finish");
-		} else {
-			$(".btnNext").text("Next Question");
 		}
 	};
 
@@ -230,7 +225,7 @@ var Screens = (function() {
 		$(".centerText").text("Your final score is " + currentGame.getScore().toString() + ".");
 		$(".centerText").addClass("centerBtns"); //this is only to make the div center-aligned
 		currentGame.reset();
-
+		$(".btnNext").text("Next Question");
 	};
 
 
