@@ -21,7 +21,7 @@ var Screens = (function() {
 
 
 		this.getScore = function() {
-			return this.metaGame.getScore(this.numCorrect, this.questions.length);
+			return this.metaGame.calculateScore(this.numCorrect, this.questions.length);
 		};
 
 		/**
@@ -93,25 +93,28 @@ var Screens = (function() {
 	};
 
 
-	//Mehtods for transition screens
+	//Methods for transition screens
 
 	var setMainTitleScreen = function() {
 		$(".all").hide();
 		
 		$(".screenTitle").show();
-		$(".btnSynopsis").show();
-		$(".btnHowTo").show();
-		$(".centerBtns .btnQuitGame").show();
+		$(".main").show();
+		// $(".btnSynopsis").show();
+		// $(".btnHowTo").show();
+		// $(".centerBtns .btnQuitGame").show();
 
 		$(".screenTitle").text("Blobbers"); //name of game template.
+		$(".centerText").removeClass("centerBtns");
 	};
 
 	var setHowToScreen = function() {
 		$(".all").hide();
 
 		$(".screenTitle").show();
-		$(".centerText").show();
-		$(".bottomBtns .btnMain").show();
+		$(".howTo").show();
+		// $(".centerText").show();
+		// $(".bottomBtns .btnMain").show();
 
 		
 		var blobberInstructions = "Use W, A, S, and D (or arrow keys) to move your bubble Up, Left, Down, and Right, respectively. To choose an answer, collide your bubble with the smaller bubble that represents answer."
@@ -126,9 +129,10 @@ var Screens = (function() {
 		$(".all").hide();
 
 		$(".screenTitle").show();
-		$(".qSet").show();
-		$(".qSetDescr").show();
-		$(".btnNext").show();
+		$(".synopsis").show();
+		// $(".qSet").show();
+		// $(".qSetDescr").show();
+		// $(".btnNext").show();
 		
 
 		$(".screenTitle").text("Synopsis");
@@ -138,9 +142,10 @@ var Screens = (function() {
 		$(".all").hide();
 
 		$(".screenTitle").show();
-		$(".currQuestion").show();
-		$(".answer").show();
-		$(".btnGame").show();
+		$(".questionDisp").show();
+		// $(".currQuestion").show();
+		// $(".answer").show();
+		// $(".btnGame").show();
 
 		var question = currentGame.getCurrentQuestion();
 
@@ -158,39 +163,50 @@ var Screens = (function() {
 		$(".all").hide();
 
 		$(".screenTitle").show();
-		$(".currQuestion").show();
-		$(".answer").show();
-		$(".btnNext").show();
+		$(".answerDisp").show();
+		// $(".currQuestion").show();
+		// $(".answer").show();
+		// $(".btnNext").show();
 		
 		$(".screenTitle").text("Correct!");
-		$(".answer").text("Good job! You got the correct answer: ");
+		$(".answer").text("Good job! You got the correct answer: " + currentGame.questions[currentGame.index-1].answerText + ".");
 
-		$(".questionText").css('position','relative')
+		$(".questionText").css('position','relative');
+
+		if (!currentGame.hasNextQuestion()) {
+			$(".btnNext").text("Finish");
+		}
 	};
 
 	var setIncorrectScreen = function() {
 		$(".all").hide();
 
 		$(".screenTitle").show();
-		$(".currQuestion").show();
-		$(".answer").show();
-		$(".btnNext").show();
+		$(".answerDisp").show();
+		// $(".currQuestion").show();
+		// $(".answer").show();
+		// $(".btnNext").show();
 		$(".bottomBtns .btnQuitGame").show();
 		
 		$(".screenTitle").text("Incorrect");
-		$(".answer").text("You chose: " + currentGame.mostRecentAnswer + ". The correct answer is " + currentGame.questions[currentGame.index-1].answerText);
+		$(".answer").text("You chose: " + currentGame.mostRecentAnswer + ". The correct answer is " + currentGame.questions[currentGame.index-1].answerText + ".");
 
-		$(".questionText").css('position','relative')
+		$(".questionText").css('position','relative');
+
+		if (!currentGame.hasNextQuestion()) {
+			$(".btnNext").text("Finish");
+		}
 	};
 
 	var setDoneScreen = function(gameWon) {
 		$(".all").hide();
 
 		$(".screenTitle").show();
+		$(".done").show();
 		// $(".centerText").show();
-		$(".centerBtns .btnQuitGame").show();
+		// $(".centerBtns .btnQuitGame").show();
 		// $(".btnSummary").show();
-		$(".centerBtns .btnMain").show();
+		// $(".centerBtns .btnMain").show();
 		
 		if (gameWon){
 			$(".screenTitle").text("You won");	
@@ -198,8 +214,10 @@ var Screens = (function() {
 			$(".screenTitle").text("Better luck next time");
 		}
 
+		$(".centerText").text("Your final score is " + currentGame.getScore().toString() + ".");
+		$(".centerText").addClass("centerBtns"); //this is only to make the div center-aligned
 		currentGame.reset();
-
+		$(".btnNext").text("Next Question");
 	};
 
 
@@ -208,7 +226,7 @@ var Screens = (function() {
 	 * the question was answered correctly or incorrectly.
 	 */
 	var answer = function(num) {
-		
+		$(".questionText").addClass("questionZoomed");
 		var gameDivChildren = document.getElementById("gameScreen").childNodes;
 		for (i = 0; i < gameDivChildren.length; i++) {
 			if (gameDivChildren[i].nodeName === "CANVAS") {
@@ -221,9 +239,7 @@ var Screens = (function() {
 		// }
 		var wasCorrect = currentGame.checkAnswer(num);
 		currentGame.incrementQuestion(wasCorrect);
-		if (!currentGame.hasNextQuestion()) {
-			setDoneScreen(currentGame.isWin());
-		} else if (wasCorrect) {
+		if (wasCorrect) {
 			setCorrectScreen();
 		} else {
 			setIncorrectScreen();
@@ -269,7 +285,11 @@ var Screens = (function() {
 			//Increment Question number
 
 			//If question number is the question limit -> setDoneScreen(); else
-			setQuestionScreen(); 
+			if (!currentGame.hasNextQuestion()) {
+				setDoneScreen(currentGame.isWin());
+			} else {
+				setQuestionScreen();
+			}
 		});
 
 		$(".btnGame").click(function() {
@@ -278,6 +298,7 @@ var Screens = (function() {
 			// which game template was chosed for this game.
 			// window.location.href="../public/scripts.testing.html";
 			loadGame();
+			$(".questionText").removeClass("questionZoomed");
 		});
 
 		$(".btnQuitGame").click(function() {

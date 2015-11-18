@@ -8,11 +8,11 @@
 #title {
     font-weight: bold;
     color: #FFFFFF;
-    letter-spacing: 1pt;
+    letter-spacing: -1pt;
     word-spacing: 2pt;
     font-size: 65px;
     text-align: center;
-    font-family: comic sans, comic sans ms, cursive, verdana, arial, sans-serif;
+    font-family: verdana, arial, sans-serif;
     line-height: 1;
     margin-top: 5%;
     margin-bottom: -95px;
@@ -21,10 +21,10 @@
 #dashboard_title {
     font-weight: bold;
     color: #FFFFFF;
-    letter-spacing: 1pt;
+    letter-spacing: -1pt;
     word-spacing: 2pt;
     font-size: 30px;
-    font-family: comic sans, comic sans ms, cursive, verdana, arial, sans-serif;
+    font-family: verdana, arial, sans-serif;
     line-height: 1;
     margin-top: 35px;
     margin-left: 15px;
@@ -35,10 +35,10 @@
 .dashboard_header {
     font-weight: bold;
     color: #FFFFFF;
-    letter-spacing: 1pt;
+    letter-spacing: -1pt;
     word-spacing: 2pt;
     font-size: 30px;
-    font-family: comic sans, comic sans ms, cursive, verdana, arial, sans-serif;
+    font-family: verdana, arial, sans-serif;
 }
 
 .dashboard_header img {
@@ -69,10 +69,10 @@
 .inner_title {
     font-weight: bold;
     color: #FFFFFF;
-    letter-spacing: 1pt;
+    letter-spacing: -1pt;
     word-spacing: 2pt;
     font-size: 20px;
-    font-family: comic sans, comic sans ms, cursive, verdana, arial, sans-serif;
+    font-family: verdana, arial, sans-serif;
     line-height: 1;
     margin: 15px 0px 20px 0px;
 }
@@ -80,10 +80,10 @@
 .inner_desc {
     height: 95px;
     color: black;
-    letter-spacing: 1pt;
+    letter-spacing: -1pt;
     word-spacing: 2pt;
     font-size: 18px;
-    font-family: comic sans, comic sans ms, cursive, verdana, arial, sans-serif;
+    font-family: verdana, arial, sans-serif;
     line-height: 1;
     margin: 15px 0px 20px 0px;
 }
@@ -113,11 +113,11 @@
     padding-right: 20px;
 
     color: white;
-    letter-spacing: 1pt;
+    letter-spacing: -1pt;
     word-spacing: 2pt;
     text-align: center;
     font-size: 12px;
-    font-family: comic sans, comic sans ms, cursive, verdana, arial, sans-serif;
+    font-family: verdana, arial, sans-serif;
     line-height: 1;
 }
 
@@ -149,11 +149,11 @@
 	margin: auto;
 
     color: white;
-    letter-spacing: 1pt;
+    letter-spacing: -1pt;
     word-spacing: 2pt;
     text-align: center;
     font-size: 12px;
-    font-family: comic sans, comic sans ms, cursive, verdana, arial, sans-serif;
+    font-family: verdana, arial, sans-serif;
     line-height: 1;
 }
 
@@ -184,11 +184,11 @@
 
     font-weight: bold;
     color: white;
-    letter-spacing: 1pt;
+    letter-spacing: -1pt;
     word-spacing: 2pt;
     text-align: center;
     font-size: 15px;
-    font-family: comic sans, comic sans ms, cursive, verdana, arial, sans-serif;
+    font-family: verdana, arial, sans-serif;
     line-height: 1;
 }
 
@@ -223,11 +223,11 @@
 #login_title {
     font-weight: bold;
     color: #FFFFFF;
-    letter-spacing: 1pt;
+    letter-spacing: -1pt;
     word-spacing: 2pt;
     font-size: 20px;
     text-align: center;
-    font-family: comic sans, comic sans ms, cursive, verdana, arial, sans-serif;
+    font-family: verdana, arial, sans-serif;
     line-height: 1;
     margin-top: 15px;
 }
@@ -489,12 +489,12 @@ button:active {
 
 .screenTitle {
     font-weight: bold;
-    color: #E2FFFF;
-    letter-spacing: 1pt;
+    color: white;
+    letter-spacing: -1pt;
     word-spacing: 2pt;
     font-size: 65px;
     text-align: center;
-    font-family: comic sans, comic sans ms, cursive, verdana, arial, sans-serif;
+    font-family: verdana, arial, sans-serif;
     margin-top: 5%;
     margin-bottom: 35px;
 
@@ -502,7 +502,7 @@ button:active {
 
 .centerText, .qSetText {
     font-weight: bold;
-    color: #E2FFFF;
+    color: white;
     letter-spacing: 1pt;
     word-spacing: 2pt;
     font-size: 25px;
@@ -519,6 +519,11 @@ button:active {
     position: relative;
     top: 20px;
     left: 20px;
+}
+
+.questionZoomed {
+    font-size: 25px;
+    padding-right: 20px
 }
 
 .gameScreen {

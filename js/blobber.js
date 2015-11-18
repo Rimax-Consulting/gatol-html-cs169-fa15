@@ -289,7 +289,7 @@ var BlobbersMetaGame = function() {
 		var incorrect = index - correct;
 		var radius = 40 + 60*(correct/total) - 120*(incorrect/total);
 		if (radius < 0) {
-			return null;
+			return {radius:15, numEnemies:numEnemies};
 		}
 		var numEnemies = Math.floor(5*index/total);
 		console.log(correct, index, total);
