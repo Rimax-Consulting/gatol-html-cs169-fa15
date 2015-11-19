@@ -8,7 +8,7 @@
  		radius: the radius of the blob
  		numEnemies: pretty self explanatory
  */
-var Blobbers = function(parent, width, height, num_choices, state, answerFunc) {
+var Baskets = function(parent, width, height, num_choices, state, answerFunc) {
 	console.log({parent: parent, width:width, height:height, num_choices: num_choices, state:state, answerFunc:answerFunc})
 	// set up scene width and height
 	this._width = width-2;//window.innerWidth - 4;
@@ -25,7 +25,7 @@ var Blobbers = function(parent, width, height, num_choices, state, answerFunc) {
 
 	// physics shit
 	this.world = new p2.World({
-		gravity: [0,0]
+		gravity: [0,500]
 	});
 
 	// speed
@@ -54,7 +54,7 @@ var Blobbers = function(parent, width, height, num_choices, state, answerFunc) {
 	this.build();
 };
 
-Blobbers.prototype = {
+Baskets.prototype = {
 	// Build scene and start animating 
 	build: function() {
 		// create foods
@@ -343,7 +343,7 @@ Blobbers.prototype = {
 	}
 };
 
-var BlobbersMetaGame = function() {
+var BasketsMetaGame = function() {
 	/**
 	 * calculates score based on how many we got right and possibly how many we got wrong
 	 */
@@ -364,14 +364,14 @@ var BlobbersMetaGame = function() {
 	};
 	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {
 		if (state) {
-			var Game = new Blobbers(parent, width, height, num_choices, state, answerFunc);
+			var Game = new Baskets(parent, width, height, num_choices, state, answerFunc);
 			return true;
 		} else {
 			return false;
 		}
 	};
 	this.getTitle = function() {
-		return "Blobbers";
+		return "Baskets";
 	};
 	this.getInstructions = function() {
 		return "Use W, A, S, and D (or arrow keys) to move your bubble Up, Left, Down, and Right, respectively. To choose an answer, collide your bubble with the smaller bubble that represents answer.";
