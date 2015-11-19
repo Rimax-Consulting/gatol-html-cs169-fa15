@@ -74,13 +74,19 @@ var Screens = (function() {
 		};
 
 		/**
-		 * Returns mid-game metagame state data for blobber
-		 * @return radius - this is some function of the current score. bigger score = bigger blob
-		 * @return numEnemies - this should slowly increase over the course of the game
+		 * Returns mid-game metagame state data for whatever game is loaded
 		 */
 		this.getMetaGame = function() {
 			return this.metaGame.getMetaGame(this.numCorrect, this.index, this.questions.length);
 		};
+
+		this.getTitle = function() {
+			return this.metaGame.getTitle();
+		}
+
+		this.getInstructions = function() {
+			return this.metaGame.getInstructions();
+		}
 
 		this.initializeGame = function(answer) {
 			this.metaGame.initializeGame(document.getElementById("gameScreen"), 
@@ -104,7 +110,7 @@ var Screens = (function() {
 		// $(".btnHowTo").show();
 		// $(".centerBtns .btnQuitGame").show();
 
-		$(".screenTitle").text("Blobbers"); //name of game template.
+		$(".screenTitle").text(currentGame.getTitle()); //name of game template.
 		$(".centerText").removeClass("centerBtns");
 	};
 
@@ -116,11 +122,8 @@ var Screens = (function() {
 		// $(".centerText").show();
 		// $(".bottomBtns .btnMain").show();
 
-		
-		var blobberInstructions = "Use W, A, S, and D (or arrow keys) to move your bubble Up, Left, Down, and Right, respectively. To choose an answer, collide your bubble with the smaller bubble that represents answer."
-		
 		$(".screenTitle").text("How to Play");
-		$(".centerText").text(blobberInstructions);
+		$(".centerText").text(currentGame.getInstructions());
 	};
 
 	var setSynopsisScreen = function() {
