@@ -102,7 +102,8 @@ var CreateGame = (function() {
     var setGameTemplates = function(e) {
 
         var onSuccess = function(data) {
-            templates = JSON.parse(data.game_templates);
+            templates = data.templates;
+            console.log(templates);
             var ul = document.getElementById('template_list');
             for (var i = 0; i < templates.length; i++) {
                 console.log(templates[i]);
@@ -136,7 +137,7 @@ var CreateGame = (function() {
         create_container = $("#create_game_container");
 
         setQuestionSets();
-        //setGameTemplates();
+        setGameTemplates();
 
         attachCreateHandler();
 
