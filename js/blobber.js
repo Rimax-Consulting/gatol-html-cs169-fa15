@@ -16,6 +16,7 @@ var Blobbers = function(parent, width, height, num_choices, state, answerFunc) {
 
 	// set up rendering surface
 	this.renderer = new PIXI.CanvasRenderer(this._width, this._height);
+	this.renderer.backgroundColor = 0x448ed3;	
 	this.parent = parent;
 	this.parent.appendChild(this.renderer.view);
 
@@ -40,6 +41,8 @@ var Blobbers = function(parent, width, height, num_choices, state, answerFunc) {
 
 	this.foodBodies = [];
 	this.foodGraphics = [];
+	this.enemyBodies = [];
+	this.enemyGraphics = [];
 	this.answerChoices = [];
 
 	this.blobRadius = state.radius || 40;
@@ -58,12 +61,15 @@ Blobbers.prototype = {
 		this.createFoods();
 		//draw blob
 		this.createBlob();
+		// draw enemies
+		this.createEnemies();
 		// start first frame
 		requestAnimationFrame(this.tick.bind(this));
 	},
 
 	recordAnswer: function(num) {
 		this.stage.removeChild(this.blobGraphics);
+		this.stage.removeChild(this.blobEyeGraphics);
 		this.world.removeBody(this.blob);
 
 		for (i=0; i < this.foodGraphics.length; i++) {
@@ -75,6 +81,8 @@ Blobbers.prototype = {
 		}
 		this.stage.removeChild(this.questionText);
 
+		this.foodBodies = [];
+		this.foodGraphics = [];
 		this.foodBodies = [];
 		this.foodGraphics = [];
 		this.answerChoices = [];
@@ -98,16 +106,27 @@ Blobbers.prototype = {
 		this.blobGraphics = new PIXI.Graphics();
 
 		// draw the blob's body
-		this.blobGraphics.beginFill(0x20B2F3);
 		this.blobGraphics.moveTo(0,0);
-		this.blobGraphics.drawCircle(0,-3,this.blobRadius);
-		// this.blobGraphics.drawCircle(-2,7,35);
-		// this.blobGraphics.drawCircle(10,3,45);
-		// this.blobGraphics.drawCircle(-18,-2,20);
-		// this.blobGraphics.drawCircle(0,12,40);
+		// this.blobGraphics.beginFill(0x106283);
+		// this.blobGraphics.drawCircle(0,0,this.blobRadius+4);
+		this.blobGraphics.beginFill(0xFFFFFF);
+		this.blobGraphics.drawCircle(0,0,this.blobRadius);
 		this.blobGraphics.endFill();
 
 		this.stage.addChild(this.blobGraphics);
+
+		// this.blobEyeGraphics = new PIXI.Graphics();
+		// this.blobEyeGraphics.moveTo(0,0);
+		// this.blobGraphics.beginFill(0xFFFFFF);
+		// this.blobGraphics.drawCircle(.3*this.blobRadius,0,this.blobRadius/4);
+		// this.blobGraphics.drawCircle(-.3*this.blobRadius,0,this.blobRadius/4);
+		// this.blobGraphics.endFill();
+		// this.blobGraphics.beginFill(0x000000);
+		// this.blobGraphics.drawCircle(.3*this.blobRadius,-3,this.blobRadius/6);
+		// this.blobGraphics.drawCircle(-.3*this.blobRadius,-3,this.blobRadius/6);
+		// this.blobGraphics.endFill();
+
+		// this.stage.addChild(this.blobEyeGraphics);
 
 	},
 
@@ -137,12 +156,12 @@ Blobbers.prototype = {
 
 			// Create the graphics
 			var foodGraphics = new PIXI.Graphics();
-			foodGraphics.beginFill(0xF3801E);
+			foodGraphics.beginFill(0xB6EE65);
 			foodGraphics.drawCircle(0,0,20);
 			foodGraphics.endFill();
 
 
-			var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: "white"});
+			var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0x51771a});
 
 			this.stage.addChild(foodGraphics);
 			this.stage.addChild(answerText);
@@ -154,18 +173,56 @@ Blobbers.prototype = {
 		}
 	},
 
+	createEnemies: function() {
+		for (i = 0; i < this.numEnemies; i++) {
+			var x = Math.round(Math.random() * this._width);
+			var y = Math.round(Math.random() * this._height);	
+			while (Math.sqrt(Math.pow(x - this._width/2, 2) + Math.pow(y - this._height/2, 2)) < this.blobRadius * 2) {
+				x = Math.round(Math.random() * this._width);
+				y = Math.round(Math.random() * this._height);	
+			}
+			var vx = (Math.random() - 0.5) * this.speed/12;
+			var vy = (Math.random() - 0.5) * this.speed/12;
+			var va = (Math.random() - 0.5) * this.speed/100;
+			// create the enemy physics body
+			var enemy = new p2.Body({
+				position: [x,y],
+				mass: 1,
+				damping: 0,
+				angularDamping: 0,
+				velocity: [vx, vy],
+				angularVelocity: va
+			});
+			var enemyShape = new p2.Circle({radius: 10});
+			enemy.addShape(enemyShape);
+			this.world.addBody(enemy);
+
+			// Create the graphics
+			var enemyGraphics = new PIXI.Text("*", {font: "36px Verdana", fill: 0x762E25});
+			this.stage.addChild(enemyGraphics);
+
+			this.enemyBodies.push(enemy);
+			this.enemyGraphics.push(enemyGraphics);
+			
+		}
+	},
+
 	handleKeys: function (key, state) {
 		switch(key) {
 			case 65:
+			case 37:
 			this.keyLeft = state;
 			break;
 			case 68:
+			case 39:
 			this.keyRight = state;
 			break;
 			case 87:
+			case 38:
 			this.keyUp = state;
 			break;
 			case 83:
+			case 40:
 			this.keyDown = state;
 			break;
 		}
@@ -191,9 +248,17 @@ Blobbers.prototype = {
 			this.blob.force[0] -= this.speed;
 		}
 
+		for (i = 0; i < this.enemyBodies.length; i++) {
+			this.enemyBodies[i].force[0] += this.enemyBodies[i].velocity[1];
+			this.enemyBodies[i].force[1] -= this.enemyBodies[i].velocity[0];
+		}
+
 
 		this.blobGraphics.x = this.blob.position[0];
 		this.blobGraphics.y = this.blob.position[1];
+		// console.log(this.blobEyeGraphics.x);
+		// this.blobEyeGraphics.x = this.blob.position[0] + 15;//this.blob.velocity[0]/10;
+		// this.blobEyeGraphics.y = this.blob.position[1] + 15;//this.blob.velocity[1]/10;
 
 		for (i=0; i < this.foodBodies.length; i++) {
 			if (this.getDistance(this.foodBodies[i], this.blob) < this.blobRadius*1.25) {
@@ -233,6 +298,22 @@ Blobbers.prototype = {
 			}
 		}
 
+		// wrap enemies
+		for (i = 0; i < this.enemyBodies.length; i++) {
+			if (this.enemyBodies[i].position[0] > this._width - this.enemyBodies[i].shapes[0].radius) {
+				this.enemyBodies[i].velocity[0] *= -1;
+			}
+			if (this.enemyBodies[i].position[1] > this._height - this.enemyBodies[i].shapes[0].radius) {
+				this.enemyBodies[i].velocity[1] *= -1;
+			}
+			if (this.enemyBodies[i].position[0] < this.enemyBodies[i].shapes[0].radius) {
+				this.enemyBodies[i].velocity[0] *= -1;
+			}
+			if (this.enemyBodies[i].position[1] < this.enemyBodies[i].shapes[0].radius) {
+				this.enemyBodies[i].velocity[1] *= -1;
+			}
+		}
+
 		this.blobGraphics.rotation = this.blob.angle;
 		// update food positions
 		for (var i = 0; i < this.foodBodies.length; i++) {
@@ -242,6 +323,13 @@ Blobbers.prototype = {
 			this.answerChoices[i].x = this.foodBodies[i].position[0]-8;
 			this.answerChoices[i].y = this.foodBodies[i].position[1]-14;
 		}
+
+		// update enemy positions
+		for (var i = 0; i < this.enemyBodies.length; i++) {
+			this.enemyGraphics[i].x = this.enemyBodies[i].position[0];
+			this.enemyGraphics[i].y = this.enemyBodies[i].position[1]-19;
+		}
+
 
 		this.world.step(1/60);
 	},
@@ -253,4 +341,46 @@ Blobbers.prototype = {
 		requestAnimationFrame(this.tick.bind(this));
 		this.updatePhysics();
 	}
+};
+
+var BlobbersMetaGame = function() {
+	/**
+	 * calculates score based on how many we got right and possibly how many we got wrong
+	 */
+	this.calculateScore = function(correct, index) {
+		return 200*correct;
+	};
+	/** 
+	 * returns object of radius and numEnemies based on game progress
+	 */
+	this.getMetaGame = function(correct, index, total) {
+		var incorrect = index - correct;
+		var radius = 40 + 60*(correct/total) - 80*(incorrect/total);
+		radius = Math.max(10, radius);
+		var numEnemies = Math.floor(5*index/total);
+		console.log(correct, index, total);
+		console.log({radius:radius, numEnemies:numEnemies});
+		return {radius:radius, numEnemies:numEnemies};
+	};
+	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {
+		if (state) {
+			var Game = new Blobbers(parent, width, height, num_choices, state, answerFunc);
+			return true;
+		} else {
+			return false;
+		}
+	};
+	this.getTitle = function() {
+		return "Blobbers";
+	};
+	this.getInstructions = function() {
+		return "Use W, A, S, and D (or arrow keys) to move your bubble Up, Left, Down, and Right, respectively. To choose an answer, collide your bubble with the smaller bubble that represents answer.";
+	};
+	return {
+		getMetaGame:this.getMetaGame,
+		calculateScore:this.calculateScore,
+		initializeGame:this.initializeGame,
+		getTitle:getTitle,
+		getInstructions:getInstructions
+	};
 };

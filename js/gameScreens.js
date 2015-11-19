@@ -12,23 +12,16 @@ var Screens = (function() {
 		for(var j, x, i = this.allChoices.length; i; j = Math.floor(Math.random() * i), x = this.allChoices[--i], this.allChoices[i] = this.allChoices[j], this.allChoices[j] = x);
 	}
 
-	function Game(questionList, w, h) {
+	function Game(questionList, metaGame) {
 		this.questions = questionList;
-		this.width = w;
-		this.height = h;
-		this.score = 0;
+		this.numCorrect = 0;
 		this.index = 0;
 		this.mostRecentAnswer = "";
+		this.metaGame = metaGame;
 
-		/**
-		 * Accessor and Mutator for Game.score
-		 */
-		this.setScore = function(newScore) {
-			this.score = newScore;
-		};
 
 		this.getScore = function() {
-			return this.score;
+			return this.metaGame.calculateScore(this.numCorrect, this.questions.length);
 		};
 
 		/**
@@ -46,13 +39,16 @@ var Screens = (function() {
 		 * Returns True if there is a next question or False if no more questions.
 		 * isCorrect is whether the user is True or False for the current question 
 		 */
-		this.isNextQuestion = function(isCorrect) {
-			if (isCorrect){
-				this.score += 200; //Score for a correct answer
-			}
-
+		this.incrementQuestion = function(isCorrect) {
+			this.numCorrect += isCorrect ? 1:0;
 			this.index += 1;
-			return this.index < this.questions.length
+		};
+
+		/**
+		 * Check to see if the next question exists
+		 */
+		this.hasNextQuestion = function() {
+			return this.index < this.questions.length 
 		};
 		/** 
 		 * Returns the current question
@@ -64,38 +60,70 @@ var Screens = (function() {
 		/**
 		 * Returns whether or not the player won the game.
 		 */
-		 this.isWin = function() {
-		 	return this.score >= (this.questions.length * 200 * 0.75)
+		this.isWin = function() {
+			return this.getScore() >= (this.questions.length * 200 * 0.75);
+		};
 
-		 }
-	}
+		/**
+		 * Resets the state of the game
+		 */
+		this.reset = function() {
+			this.numCorrect = 0;
+			this.index = 0;
+			this.mostRecentAnswer = "";		 	
+		};
+
+		/**
+		 * Returns mid-game metagame state data for whatever game is loaded
+		 */
+		this.getMetaGame = function() {
+			return this.metaGame.getMetaGame(this.numCorrect, this.index, this.questions.length);
+		};
+
+		this.getTitle = function() {
+			return this.metaGame.getTitle();
+		}
+
+		this.getInstructions = function() {
+			return this.metaGame.getInstructions();
+		}
+
+		this.initializeGame = function(answer) {
+			this.metaGame.initializeGame(document.getElementById("gameScreen"), 
+								$(".gameScreen").width(),
+								$(".gameScreen").height(),
+								this.getCurrentQuestion().incorrectAnswerTexts.length +1, 
+								this.getMetaGame(),
+								answer);
+		}
+	};
 
 
-	//Mehtods for transition screens
+	//Methods for transition screens
 
 	var setMainTitleScreen = function() {
 		$(".all").hide();
 		
 		$(".screenTitle").show();
-		$(".btnSynopsis").show();
-		$(".btnHowTo").show();
-		$(".centerBtns .btnQuitGame").show();
+		$(".main").show();
+		// $(".btnSynopsis").show();
+		// $(".btnHowTo").show();
+		// $(".centerBtns .btnQuitGame").show();
 
-		$(".screenTitle").text("Blobbers"); //name of game template.
+		$(".screenTitle").text(currentGame.getTitle()); //name of game template.
+		$(".centerText").removeClass("centerBtns");
 	};
 
 	var setHowToScreen = function() {
 		$(".all").hide();
 
 		$(".screenTitle").show();
-		$(".centerText").show();
-		$(".bottomBtns .btnMain").show();
+		$(".howTo").show();
+		// $(".centerText").show();
+		// $(".bottomBtns .btnMain").show();
 
-		
-		var blobberInstructions = "Use W, A, S, and D to move your bubble Up, Left, Down, and Right, respectively. To choose an answer, collide your bubble with the smaller bubble that represents answer."
-		
 		$(".screenTitle").text("How to Play");
-		$(".centerText").text(blobberInstructions);
+		$(".centerText").text(currentGame.getInstructions());
 	};
 
 	var setSynopsisScreen = function() {
@@ -104,9 +132,10 @@ var Screens = (function() {
 		$(".all").hide();
 
 		$(".screenTitle").show();
-		$(".qSet").show();
-		$(".qSetDescr").show();
-		$(".btnNext").show();
+		$(".synopsis").show();
+		// $(".qSet").show();
+		// $(".qSetDescr").show();
+		// $(".btnNext").show();
 		
 
 		$(".screenTitle").text("Synopsis");
@@ -116,9 +145,10 @@ var Screens = (function() {
 		$(".all").hide();
 
 		$(".screenTitle").show();
-		$(".currQuestion").show();
-		$(".answer").show();
-		$(".btnGame").show();
+		$(".questionDisp").show();
+		// $(".currQuestion").show();
+		// $(".answer").show();
+		// $(".btnGame").show();
 
 		var question = currentGame.getCurrentQuestion();
 
@@ -136,35 +166,50 @@ var Screens = (function() {
 		$(".all").hide();
 
 		$(".screenTitle").show();
-		$(".currQuestion").show();
-		$(".answer").show();
-		$(".btnNext").show();
+		$(".answerDisp").show();
+		// $(".currQuestion").show();
+		// $(".answer").show();
+		// $(".btnNext").show();
 		
 		$(".screenTitle").text("Correct!");
-		$(".answer").text("Good job! You got the correct answer: ");
+		$(".answer").text("Good job! You got the correct answer: " + currentGame.questions[currentGame.index-1].answerText + ".");
+
+		$(".questionText").css('position','relative');
+
+		if (!currentGame.hasNextQuestion()) {
+			$(".btnNext").text("Finish");
+		}
 	};
 
 	var setIncorrectScreen = function() {
 		$(".all").hide();
 
 		$(".screenTitle").show();
-		$(".currQuestion").show();
-		$(".answer").show();
-		$(".btnNext").show();
+		$(".answerDisp").show();
+		// $(".currQuestion").show();
+		// $(".answer").show();
+		// $(".btnNext").show();
 		$(".bottomBtns .btnQuitGame").show();
 		
 		$(".screenTitle").text("Incorrect");
-		$(".answer").text("You chose: " + currentGame.mostRecentAnswer + ". The correct answer is " + currentGame.questions[currentGame.index].answerText);
+		$(".answer").text("You chose: " + currentGame.mostRecentAnswer + ". The correct answer is " + currentGame.questions[currentGame.index-1].answerText + ".");
+
+		$(".questionText").css('position','relative');
+
+		if (!currentGame.hasNextQuestion()) {
+			$(".btnNext").text("Finish");
+		}
 	};
 
 	var setDoneScreen = function(gameWon) {
 		$(".all").hide();
 
 		$(".screenTitle").show();
+		$(".done").show();
 		// $(".centerText").show();
-		$(".centerBtns .btnQuitGame").show();
+		// $(".centerBtns .btnQuitGame").show();
 		// $(".btnSummary").show();
-		$(".centerBtns .btnMain").show();
+		// $(".centerBtns .btnMain").show();
 		
 		if (gameWon){
 			$(".screenTitle").text("You won");	
@@ -172,11 +217,19 @@ var Screens = (function() {
 			$(".screenTitle").text("Better luck next time");
 		}
 
+		$(".centerText").text("Your final score is " + currentGame.getScore().toString() + ".");
+		$(".centerText").addClass("centerBtns"); //this is only to make the div center-aligned
+		currentGame.reset();
+		$(".btnNext").text("Next Question");
 	};
 
 
+	/**
+	 * This will be called when the game is over and it will determine whether
+	 * the question was answered correctly or incorrectly.
+	 */
 	var answer = function(num) {
-		//TODO: report progress to database
+		$(".questionText").addClass("questionZoomed");
 		var gameDivChildren = document.getElementById("gameScreen").childNodes;
 		for (i = 0; i < gameDivChildren.length; i++) {
 			if (gameDivChildren[i].nodeName === "CANVAS") {
@@ -188,26 +241,30 @@ var Screens = (function() {
 		//     gameDiv.removeChild(gameDiv.firstChild);
 		// }
 		var wasCorrect = currentGame.checkAnswer(num);
-
-		if (!currentGame.isNextQuestion(wasCorrect)) {
-			setDoneScreen(currentGame.isWin());
-		} else if (wasCorrect) {
+		currentGame.incrementQuestion(wasCorrect);
+		if (wasCorrect) {
 			setCorrectScreen();
 		} else {
 			setIncorrectScreen();
 		}
+
+		//TODO: report progress to database
+
+		// send_data = {student: studentID, gameName: gName, score: currScore, questionIndex: index};		
+		// gameID = "0"
+		// makePutRequest("/api/game_instances/" + gameID, send_data, update, updateFailed) //here to update the score of the current player
+
+
 	}
 
 	var loadGame = function() {
-		var game = new Blobbers(document.getElementById("gameScreen"), 
-								currentGame.width,
-								currentGame.height,
-								currentGame.getCurrentQuestion().incorrectAnswerTexts.length +1, 
-								{
-									radius:40, 
-									numEnemies:0
-								},
-								answer);
+		$(".all").hide();
+		$(".gameScreen").show();
+		// $(".questionText").show();
+		$(".currQuestion").show();
+		$(".answer").show();
+
+		var game = currentGame.initializeGame(answer);
 	};
 
 	var attachHandlers = function() {
@@ -231,7 +288,11 @@ var Screens = (function() {
 			//Increment Question number
 
 			//If question number is the question limit -> setDoneScreen(); else
-			setQuestionScreen(); 
+			if (!currentGame.hasNextQuestion()) {
+				setDoneScreen(currentGame.isWin());
+			} else {
+				setQuestionScreen();
+			}
 		});
 
 		$(".btnGame").click(function() {
@@ -240,46 +301,13 @@ var Screens = (function() {
 			// which game template was chosed for this game.
 			// window.location.href="../public/scripts.testing.html";
 			loadGame();
+			$(".questionText").removeClass("questionZoomed");
 		});
 
 		$(".btnQuitGame").click(function() {
 			window.location.href="index.html";
 		});
 	};
-
-	/**
-	 * This will be called when the game is over and it will determine whether
-	 * the question was answered correctly or incorrectly.
-	 */
-	var levelOver = function() {
-		// until we figure out how we are going to merge the game level in, this 
-		// will not be very robust
-
-		isCorrect = false;
-
-		if (isCorrect) {
-
-			setIncorrectScreen();
-		} else {
-			setCorrectScreen();
-		}
-		currGame.isNextQuestion();
-
-
-
-		var update = function() {
-			console.log("it did it!");
-		}
-		var updateFailed = function() {
-			console.error('update score failed');
-		}
-		send_data = {student: studentID, gameName: gName, score: currScore, questionIndex: index};
-		
-		gameID = "0"
-		
-		makePutRequest("/api/game_instances/" + gameID, send_data, update, updateFailed) //here to update the score of the current player
-	};
-
 
 	var start = function() {
 		//probably initialized in a public method that is called by the screen that chooses the game from the student's game list
@@ -297,6 +325,14 @@ var Screens = (function() {
 		};
 		var gameNotReached = function(){
 			console.error("game load failure");
+
+			//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
+			//not even sure this is the right place
+			var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
+				new Question("The square root of 1600 is 40.", "true", ["false"]),
+				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
+			currentGame = new Game(questionList, BlobbersMetaGame());
+
 		}
 
 		gameID = 0;
@@ -305,15 +341,6 @@ var Screens = (function() {
 
         attachHandlers();
         setMainTitleScreen();
-        // setDoneScreen();
-
-		//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
-		//not even sure this is the right place
-		var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
-			new Question("The square root of 1600 is 40.", "true", ["false"]),
-			new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-		currentGame = new Game(questionList, $(".gameScreen").width(), $(".gameScreen").width()/2);
-        
     };
 
     return {
