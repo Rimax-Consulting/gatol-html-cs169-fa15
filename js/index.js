@@ -136,8 +136,8 @@ var GameAThon = (function() {
                     location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
                 }
             };
-            var onFailure = function() { 
-                console.error('failure to login as trainer');
+            var onFailure = function(data) { 
+                consoleError(data);
             };
             
             url = '/api/sessions'

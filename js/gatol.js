@@ -7,10 +7,24 @@
 /* =========================== Shared Variables =========================== */
 
 // the backend we are using
-var apiUrl = 'https://calm-garden-9078.herokuapp.com' 
+//var apiUrl = 'https://calm-garden-9078.herokuapp.com' 
+var apiUrl = 'https://gatol.herokuapp.com' 
+
+// maps game_template_id to image
+var gameTemplateIdToImage = {1:'images/game_example.png'};
+
+// maps game_template_id to game description
+var gameTemplateIdToDesc = {
+    1: 'Blobbers! Basic game where you are a blob and you have to eat the correct blob!'
+}
+
+// maps game_template_id to game title
+var gameTemplateIdToTitle = {1:'Blobbers'};
+
 
 // determine whether or not we are in development mode. 
 var inDev = false;
+
 
 /* =========================== JSON Request Logic =========================== */
 

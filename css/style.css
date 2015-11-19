@@ -375,10 +375,6 @@ button:active {
     width: 200px;
 }
 
-#preview_play_btn {
-    margin-left: 300px;
-}
-
 #add_csv_btn {
     width: 200px;
     margin-top: 5px;
@@ -474,6 +470,10 @@ button:active {
 
 .margin_left15 {
     margin-left: 15px;
+}
+
+.margin_left30 {
+    margin-left: 30px;
 }
 
 .input {
