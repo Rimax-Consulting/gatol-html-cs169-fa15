@@ -114,6 +114,19 @@ var Screens = (function() {
 		$(".centerText").removeClass("centerBtns");
 	};
 
+	var setLoadingScreen = function() {
+		$(".all").hide();
+		
+		$(".screenTitle").show();
+		// $(".main").show();
+		// $(".btnSynopsis").show();
+		// $(".btnHowTo").show();
+		// $(".centerBtns .btnQuitGame").show();
+
+		$(".screenTitle").text("Loading..."); //name of game template.
+		$(".centerText").removeClass("centerBtns");
+	};
+
 	var setHowToScreen = function() {
 		$(".all").hide();
 
@@ -322,6 +335,7 @@ var Screens = (function() {
 			} else if (data.status == -2) {
 				console.error('student does not have access to this game');
 			}
+			setMainTitleScreen();
 		};
 		var gameNotReached = function(){
 			console.error("game load failure");
@@ -332,7 +346,7 @@ var Screens = (function() {
 				new Question("The square root of 1600 is 40.", "true", ["false"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
 			currentGame = new Game(questionList, BlobbersMetaGame());
-
+			setMainTitleScreen();
 		}
 
 		gameID = 0;
@@ -340,7 +354,7 @@ var Screens = (function() {
 		makeGetRequest("/api/game_instances/" + gameID, setGame, gameNotReached);
 
         attachHandlers();
-        setMainTitleScreen();
+        setLoadingScreen();
     };
 
     return {
