@@ -23,7 +23,7 @@ var gameTemplateIdToTitle = {1:'Blobbers'};
 
 
 // determine whether or not we are in development mode. 
-var inDev = true;
+var inDev = false;
 
 
 /* =========================== JSON Request Logic =========================== */
