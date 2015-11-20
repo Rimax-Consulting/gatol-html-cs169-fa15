@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Game-A-Thon of Learning</title>
+    <link rel="icon" type="image/png" href="images/gamecontroller-icon.png">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/gatol.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script type="text/javascript">
+        // This is a jQuery convention to say that once all the files
+        // load, the function GameAThon.start() should run.
+        // This function is defined in the index.js
+        $(function() {
+            DashBoard.start();
+        });
+    </script>
+  </head>
+
+  <body>
+    <div id="dashboard_header" class="dashboard_header">
+        <img src="images/gamecontroller-icon.png">
+        <header id="dashboard_title">
+            User Dashboard
+        </header>
+
+        <div class="right">
+            <button id="logout" class="white_button">Logout</button>
+            <button id="create" style="visiblity: hidden">create game</button> 
+            <button id="add" style="visibility: hidden">Add Game</button>
+        </div>
+
+        <div class="clear_float">
+        </div>
+    </div>
+
+
+    <div id="dashboard_container" class="dashboard container">
+
+        <div id="dashboard_elements">
+            <div class="inner_title">
+                Ready Games
+            </div>
+
+            <div>
+                <ul id="games_list" class="inner_container">
+                    <li><a href="#sample_game_1" class="game_item">Sample Game 1</a></li>
+                    <div class="fullbar"></div>
+                </ul>
+            </div>
+
+        </div>
+
+        <div id="game_preview">
+
+            <div class="padding_top50 col">
+                <img id="game_preview_img" class="img_med" src="images/game_example.png">
+                <div class="padding_top10 padding_bottom10 inner_title">
+                    CSV file: example.csv
+                </div>
+            </div>
+
+            <div class="padding_top50 col2">
+                <div class="preview_game_desc">
+                    <div class="inner_title">
+                        Quick Game Desc:
+                    </div>
+                    <div id="game_desc" class="inner_desc">
+                        This description here is to describe the test related to the game. Here I am testing a longer string so that I can see how it shows up in the html. Testing is important.
+                    </div>
+                </div>
+
+                <div class="preview_test_desc">
+                    <div class="inner_title">
+                        Test Desc:
+                    </div>
+                    <div id="test_desc" class="inner_desc">
+                        This description here is to describe the test related to the imported csv. Here I am testing a longer string so that I can see how it shows up in the html. Testing is important.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="clear_float"></div>
+
+            <div class="footer">
+                <button id="preview_play_btn" class="med_btn">Play</button>
+                <button id="enroll_btn" class="med_btn margin_left15">Enroll Students</button>
+                <button id="statistics_btn" class="white_button small_btn margin_left30">Statistics</button>
+                <button id="preview_back_btn" class="white_button small_btn margin_left15">Back</button>
+            </div>
+
+        </div>
+
+    </div>
+    
+  </body>
+</html>
+

@@ -8,17 +8,6 @@ var DashBoard = (function() {
 
     // PRIVATE METHODS
 
-    // helps for testing
-    var getGameDetailFromGameList = function(e) {
-        for (var i = 0; i < games_list.length; i++) {
-            currGame = games_list[i];
-            if (gameId = currGame.id) {
-                return currGame;
-            }
-        }
-
-    }
-
     var attachCreateHandler = function(e) {
 
         // initially hide game preview screen
@@ -75,8 +64,15 @@ var DashBoard = (function() {
             dash_header.find('#add').hide();
             
             gameId = $(this).closest('li').id;
+            var gameDetails;
             
-            gameDetails = getGameDetailFromGameList();
+            for (var i = 0; i < games_list.length; i++) {
+                currGame = games_list[i];
+                if (gameId = currGame.id) {
+                    gameDetails = currGame;
+                    break;
+                }
+            }
 
             if (gameDetails == null) {
                 console.log('error getting game details on click');

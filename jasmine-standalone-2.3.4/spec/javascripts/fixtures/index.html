@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Game-A-Thon of Learning</title>
+    <link rel="icon" type="image/png" href="images/gamecontroller-icon.png">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/gatol.js"></script>
+    <script src="js/index.js"></script>
+    <script type="text/javascript">
+        // This is a jQuery convention to say that once all the files
+        // load, the function GameAThon.start() should run.
+        // This function is defined in the index.js
+        $(function() {
+            GameAThon.start();
+        });
+    </script>
+  </head>
+
+  <body>
+
+    <header id="title">
+        Game-A-Thon of Learning
+    </header>
+
+   <div id="login_container" class="wrap container">
+        <div id="login_title" class="h1">
+        </div>
+		<div class="avatar">
+            <img src="images/gamecontroller-icon.png">
+		</div>
+
+        <div id="select_screen">
+            <button id="student_login" class="green_button">Login As Student</button>
+		    <button id="trainer_login" class="green_button other_buttons">Login As Trainer</button>
+		    <button id="register" class="other_buttons white_button">Register As Student</button>
+		    <button id="register_trainer" class="other_buttons white_button">Register As Trainer</button>
+        </div>
+
+        <div id="login_screen">
+           	<input id="user_email" class="first_item" type="text" placeholder="email" required>
+		    <div class="bar">
+			    <i></i>
+		    </div>
+		    <input id="user_password" class="last_item" type="password" placeholder="password" required>
+		    <a href="#" onclick="forgotPassword" id="user_forgot" class="forgot_link">forgot ?</a>
+		    <button id="sign_in">Sign in</button> 
+            <button id="login_back" class="other_buttons white_button">Back</button>
+        </div>
+
+        <div id="trainer_login_screen">
+           	<input id="trainer_email" class="first_item" type="text" placeholder="email" required>
+		    <div class="bar">
+			    <i></i>
+		    </div>
+		    <input id="trainer_password" class="last_item" type="password" placeholder="password" required>
+		    <a href="#" onclick="forgotPassword" id="trainer_forgot" class="forgot_link">forgot ?</a>
+		    <button id="trainer_sign_in">Sign in</button> 
+            <button id="trainer_login_back" class="other_buttons white_button">Back</button>
+        </div>
+
+        <div id="register_screen">
+            <input id="register_email" class="first_item" type="text" placeholder="email" required>
+		    <div class="bar">
+			    <i></i>
+		    </div>
+           	<input id="username" type="text" placeholder="username" required>
+		    <div class="bar">
+			    <i></i>
+		    </div>
+		    <input id="register_password" type="password" placeholder="password" required>
+		    <div class="bar">
+			    <i></i>
+		    </div>
+            <input id="register_confirm_password" class="last_item" type="password" placeholder="confirm password" required>
+
+		    <button id="register_user" class="button_space_top">Register</button> 
+            <button id="register_back" class="other_buttons white_button">Back</button>
+        </div>
+
+        <div id="forgot_screen">
+            <input class="only_item" type="text" placeholder="email" required>
+		    <button id="password_reset" class="button_space_top">Reset Password</button> 
+            <button id="forgot_back" class="other_buttons white_button">Back</button>
+        </div>
+
+        <div id="trainer_forgot_screen">
+            <input class="only_item" type="text" placeholder="email" required>
+		    <button id="trainer_password_reset" class="button_space_top">Reset Password</button> 
+            <button id="trainer_forgot_back" class="other_buttons white_button">Back</button>
+        </div>
+
+        <div id="register_trainer_screen">
+            <input id="register_trainer_email" class="first_item" type="text" placeholder="email" required>
+		    <div class="bar">
+			    <i></i>
+		    </div>
+           	<input id="trainer_username" type="text" placeholder="username" required>
+		    <div class="bar">
+			    <i></i>
+		    </div>
+		    <input id="register_trainer_password" type="password" placeholder="password" required>
+		    <div class="bar">
+			    <i></i>
+		    </div>
+            <input id="register_trainer_confirm_password" class="last_item" type="password" placeholder="confirm password" required>
+
+		    <button id="register_trainer" class="button_space_top">Register</button> 
+            <button id="register_trainer_back" class="other_buttons white_button">Back</button>
+        </div>
+
+	</div>
+    
+  </body>
+</html>
