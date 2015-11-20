@@ -5,3 +5,8 @@
 {Website}[http://allenyu94.github.io/gatol-html/]
 
 {Backend}[https://github.com/occhen11/gatol]
+
+=== Testing Information
+
+Jasmine testing framework, automates ui testing. To run the tests, 
+pull jasmine-standalone-2.3.4 and run SpecRunner.html. 
