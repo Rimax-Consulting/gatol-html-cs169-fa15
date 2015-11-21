@@ -140,6 +140,9 @@ var DashBoard = (function() {
                     var bar = document.createElement('div');
 
                     a.innerHTML = currItem.student_email;
+                    if (!currItem.registered) {
+                        a.innerHTML += ' (not yet registered)';
+                    }
                     bar.setAttribute('class', 'fullbar');
                     li.appendChild(a);
                     li.setAttribute('id', currItem.id);
@@ -161,6 +164,7 @@ var DashBoard = (function() {
         dash_container.on('click', '#enroll_cancel', function(e) {
             dash_container.find('#enroll_container').hide(); 
             dash_container.find('#game_preview').show();
+            $('#enroll_list').empty();
         });
 
         dash_container.on('click', '#enroll_students_btn', function(e) {
@@ -199,6 +203,9 @@ var DashBoard = (function() {
                 var bar = document.createElement('div');
 
                 a.innerHTML = currItem.student_email;
+                if (!data.registered) {
+                    a.innerHTML += ' (not yet registered)';
+                }
                 bar.setAttribute('class', 'fullbar');
                 li.appendChild(a);
                 li.setAttribute('id', data.id);
@@ -232,8 +239,17 @@ var DashBoard = (function() {
                 } 
             }
 
+            if (idToRemove == null) {
+                alert('cannot find student email to unenroll');
+                return;
+            }
+
             var onSuccess = function(data) {
                 console.log(data);
+                liToRemove = $('#' + idToRemove);
+                bar = liToRemove.next('div');
+                $('#' + idToRemove).remove();
+                bar.remove();
             };
 
             var onFailure = function(data) {
@@ -265,6 +281,7 @@ var DashBoard = (function() {
         }
 
         var onSuccess = function(data) {
+            console.log(data);
             games_list = data.games;
             var ul = document.getElementById('games_list');
             for (var i = 0; i < games_list.length; i++) {

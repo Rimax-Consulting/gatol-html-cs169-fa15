@@ -200,6 +200,7 @@ var makeDeleteRequestWithAuthorization = function(url, token, onSuccess, onFailu
     $.ajax({
         type: 'DELETE',
         url: apiUrl + url,
+        headers: {'Authorization': token},
         //data: JSON.stringify(data),
         contentType: "application/json",
         dataType: "JSON",
@@ -212,10 +213,10 @@ var makeDeleteRequestWithAuthorization = function(url, token, onSuccess, onFailu
 
 // Sets the Cookie
 function setCookie(cname, cvalue) {
-    // currently only doing expiration of 1 hour
+    // currently only doing expiration of 4 hours
     var now = new Date();
     var time = now.getTime();
-    time += 3600 * 1000;
+    time += 4 * 3600 * 1000;
     now.setTime(time);
 
     document.cookie= cname + "=" + cvalue +
