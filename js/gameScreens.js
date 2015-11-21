@@ -12,16 +12,17 @@ var Screens = (function() {
 		for(var j, x, i = this.allChoices.length; i; j = Math.floor(Math.random() * i), x = this.allChoices[--i], this.allChoices[i] = this.allChoices[j], this.allChoices[j] = x);
 	}
 
-	function Game(id, questionsID, questionList, metaGame, descr, template) {
+	function Game(id, questionsID, questionList, descr, template) {
+		this.id = id;
 		this.questions = questionList;
 		this.numCorrect = 0;
 		this.index = 0;
 		this.mostRecentAnswer = "";
-		this.metaGame = metaGame; //delete this from the argument list after making sure that templateID is correct
 		this.description = descr;
 		this.templateID = template;
+		this.metaGame = "";
 
-		if (this.templateID == 0){ // make sure this the correct id for Blobbers
+		if (gameTemplateIdToTitle[this.templateID] == "Blobbers"){
 			this.metaGame = BlobbersMetaGame()
 		}
 
@@ -268,8 +269,8 @@ var Screens = (function() {
 
 		//TODO: report progress to database
 
-		// send_data = {student: studentID, gameName: gName, score: currScore, questionIndex: index};		
-		// gameID = "0"
+		send_data = {game_id: currentGame.id, score: currentGame.getScore(), lastQuestion: currentGame.index};		
+		
 		// makePutRequest("/api/game_instances/" + gameID, send_data, update, updateFailed) //here to update the score of the current player
 
 
@@ -334,7 +335,10 @@ var Screens = (function() {
 		qSetID = "";
 		tempID = "";
 
-		var setGame = function(data){
+		token = getCookie("auth_token");
+
+
+		var setGame = function(data){ //edit
 			if (data.status == 1) {
 				//make question set and set current question index
 			} else if (data.status == -1) {
@@ -348,27 +352,27 @@ var Screens = (function() {
 			console.error("game load failure");
 
 			//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
-			//not even sure this is the right place
 			var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
 				new Question("The square root of 1600 is 40.", "true", ["false"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-			currentGame = new Game(-1, -1, questionList, BlobbersMetaGame(), "Assorted Questions", 0);
+			currentGame = new Game(-1, -1, questionList, "Assorted Questions", 1);
 			setMainTitleScreen();
 		};
 
 		var gotGameID = function(data){ //fill in, this should makeGetrequest that has setGame and gameNotReached
+			gameID = data.game_id;
+			descr = data.game_description;
+			qSetID = data.question_set_id;
+			tempID = template_id;
 
+			makeGetRequestWithAuthorization("api/game_instances/" + gameID, token, setGame, gameNotReached);
 		};
 		var gameIDNotReached = function(){ //fill in 
 			console.error("get request failed");
 			gameNotReached();
 		};
-		token = getCookie("auth_token");
-        makePostRequestWithAuthorization("/api/game_instances/", {}, token, gotGameID, gameIDNotReached);
 
-		// gameID = 0;
-		// send_data = {student: studentID, gameName: gName};
-		// makeGetRequest("/api/game_instances/" + gameID, setGame, gameNotReached);
+        makePostRequestWithAuthorization("/api/game_instances/", {}, token, gotGameID, gameIDNotReached);
 
         attachHandlers();
         setLoadingScreen();

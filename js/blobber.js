@@ -374,7 +374,7 @@ var BlobbersMetaGame = function() {
 		return "Blobbers";
 	};
 	this.getInstructions = function() {
-		return "Use W, A, S, and D (or arrow keys) to move your bubble Up, Left, Down, and Right, respectively. To choose an answer, collide your bubble with the smaller bubble that represents answer.";
+		return "Use W, A, S, and D (or arrow keys) to move your bubble Up, Left, Down, and Right, respectively. To choose an answer, collide your bubble with the smaller bubble that represents the answer.";
 	};
 	return {
 		getMetaGame:this.getMetaGame,
