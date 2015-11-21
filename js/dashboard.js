@@ -6,6 +6,9 @@ var DashBoard = (function() {
     var games_list; // list of games returned by DB call. Initially empty to prevent failures
     var trainer; // is this user a trainer?
 
+    var currGame; // holds the current game 
+    var enrolledStudents // holds the enrolled students' emails
+
     // PRIVATE METHODS
 
     // helps for testing
@@ -24,13 +27,12 @@ var DashBoard = (function() {
         // initially hide game preview screen
         dash_container.find('#game_preview').hide();
 
-        dash_header.on('click', '#add', function(e) {
-            if (inDev) {
-                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/input_link.html';
-            } else {
-                location.href = 'http://allenyu94.github.io/gatol-html/input_link'; 
-            }
-        });
+        // initially hide game enrollment screen
+        dash_container.find('#enroll_container').hide();
+
+        // initially hide enroll input screen and unenroll input screen
+        dash_container.find('#enroll_students').hide();
+        dash_container.find('#unenroll_students').hide();
 
         dash_header.on('click', '#create', function(e) {
             if (inDev) {
@@ -72,7 +74,6 @@ var DashBoard = (function() {
             dash_container.find('#dashboard_elements').hide();
             dash_header.find('#logout').hide();
             dash_header.find('#create').hide();
-            dash_header.find('#add').hide();
             
             gameId = $(this).closest('li').id;
             
@@ -97,6 +98,14 @@ var DashBoard = (function() {
 
         });
 
+        dash_container.on('click', '#preview_play_btn', function(e) {
+            if (inDev) {
+                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/game.html';
+            } else {
+                location.href = 'http://allenyu94.github.io/gatol-html/game';
+            } 
+        });
+
         dash_container.on('click', '#preview_back_btn', function(e) {
             // hide game preview elements
             document.getElementById('dashboard_title').innerHTML = "Dashboard";
@@ -111,6 +120,132 @@ var DashBoard = (function() {
 
         });
 
+        dash_container.on('click', '#enroll_btn', function(e) {
+            dash_container.find('#game_preview').hide();
+            dash_container.find('#enroll_container').show(); 
+
+            token = getCookie('auth_token');
+            creds = {};
+
+            var onSuccess = function(data) {
+                console.log(data);
+                enrolledStudents = data.game_enrollments;
+                ul = document.getElementById('enroll_list');
+                for (var i = 0; i < enrolledStudents.length; i++) {
+                    currItem = enrolledStudents[i];
+                    console.log(currItem);
+                    
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    var bar = document.createElement('div');
+
+                    a.innerHTML = currItem.student_email;
+                    bar.setAttribute('class', 'fullbar');
+                    li.appendChild(a);
+                    li.setAttribute('id', currItem.id);
+                    ul.appendChild(li);
+                    ul.appendChild(bar);
+                }
+            };
+
+            var onFailure = function(data) {
+                consoleError(data); 
+            };
+
+            url = '/api/game_enrollments/' + currGame.id;
+            console.log(url);
+            makeGetRequestWithAuthorization(url, token, onSuccess, onFailure);
+
+        });
+
+        dash_container.on('click', '#enroll_cancel', function(e) {
+            dash_container.find('#enroll_container').hide(); 
+            dash_container.find('#game_preview').show();
+        });
+
+        dash_container.on('click', '#enroll_students_btn', function(e) {
+            dash_container.find('#enroll_buttons').hide();
+            dash_container.find('#enroll_students').show();
+        });
+
+        dash_container.on('click', '#enroll_back', function(e) {
+            dash_container.find('#enroll_students').hide();
+            dash_container.find('#enroll_buttons').show();
+        });
+
+        dash_container.on('click', '#unenroll_students_btn', function(e) {
+            dash_container.find('#enroll_buttons').hide();
+            dash_container.find('#unenroll_students').show();
+        });
+
+        dash_container.on('click', '#unenroll_back', function(e) {
+            dash_container.find('#unenroll_students').hide();
+            dash_container.find('#enroll_buttons').show();
+        });
+
+        dash_container.on('click', '#enroll', function(e) {
+            token = getCookie('auth_token');
+
+            creds = {};
+            creds.game_id = currGame.id;
+            creds.student_email = dash_container.find('#enroll_student_email').val();  
+
+            var onSuccess = function(data) {
+                console.log(data);
+                currItem = data;
+                ul = document.getElementById('enroll_list');
+                var li = document.createElement('li');
+                var a = document.createElement('a');
+                var bar = document.createElement('div');
+
+                a.innerHTML = currItem.student_email;
+                bar.setAttribute('class', 'fullbar');
+                li.appendChild(a);
+                li.setAttribute('id', data.id);
+                ul.appendChild(li);
+                ul.appendChild(bar);
+            };
+
+            var onFailure = function(data) {
+                consoleError(data);
+            };
+
+            url = '/api/game_enrollments';
+            makePostRequestWithAuthorization(url, creds, token, onSuccess, onFailure);
+
+        });
+
+        dash_container.on('click', '#unenroll', function(e) {
+            token = getCookie('auth_token'); 
+            console.log('token is: ' + token);
+
+            student_email = dash_container.find('#unenroll_student_email').val();
+
+            ul = document.getElementById('enroll_list');
+            aList = ul.getElementsByTagName('a');
+
+            var idToRemove;
+
+            for (var i = 0; i < aList.length; i++) {
+                if (aList[i].innerHTML == student_email) {
+                    idToRemove = aList[i].closest('li').id; 
+                } 
+            }
+
+            var onSuccess = function(data) {
+                console.log(data);
+            };
+
+            var onFailure = function(data) {
+                consoleError(data);
+            };
+
+            url = '/api/game_enrollments/' + idToRemove;
+            console.log(url);
+            makeDeleteRequestWithAuthorization(url, token, onSuccess, onFailure);
+
+        });
+
     };
 
     // checks the User type and updates the page accordingly.
@@ -121,12 +256,9 @@ var DashBoard = (function() {
         if (trainer == 'true') {
             // signed in as trainer
             document.getElementById('create').style.visibility = 'visible';
-            document.getElementById('add').style.visibility = 'hidden';
-            document.getElementById('add').style.display = 'none';
             url = '/api/games';
         } else {
             // signed in as student
-            document.getElementById('add').style.visibility = 'visible';
             document.getElementById('create').style.visibility = 'hidden';
             document.getElementById('create').style.display = 'none';
             url = '/api/game_instances/active'

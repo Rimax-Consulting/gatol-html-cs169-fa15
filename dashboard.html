@@ -29,7 +29,6 @@
         <div class="right">
             <button id="logout" class="white_button">Logout</button>
             <button id="create" style="visiblity: hidden">create game</button> 
-            <button id="add" style="visibility: hidden">Add Game</button>
         </div>
 
         <div class="clear_float">
@@ -94,8 +93,59 @@
 
         </div>
 
+        <div id="enroll_container">
+
+            <div class="left_col">
+
+                <div id="select_template">
+                    <div class="margin_top10 inner_title">Enrolled Students</div>
+                </div>
+
+                <div>
+                    <ul id="enroll_list" class="small_inner_container">
+                        <li id="1"><a href="#student_1" >Student 1</a></li>
+                        <div class="fullbar"></div>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="enroll_inputs" class="margin_top10 right_col">
+
+                <div id="enroll_buttons">
+                    <button id="enroll_students_btn" class="med_btn margin_top40">Enroll New Student</button>
+                    <button id="unenroll_students_btn" class="med_btn margin_top10">Unenroll a Student</button>
+                    <button id="enroll_cancel" class="med_btn margin_top10 white_button">Back</button>
+                </div>
+
+                <div id="enroll_students">
+                    <div class="margin_top40 input inner_title">
+                        Enroll New Student: 
+                        <input id="enroll_student_email" class="first_item" type="text" placeholder="Input Student Email" required>
+                    </div> 
+
+                    <button id="enroll" class="margin_top10 med_btn">Enroll</button>
+                    <button id="enroll_back" class="margin_left10 margin_top10 small_btn white_button">Back</button>
+                </div>
+
+                <div id="unenroll_students">
+                    <div class="margin_top40 input inner_title">
+                        Delete an Enrolled Student: 
+                        <input id="unenroll_student_email" class="first_item" type="text" placeholder="Input Student Email" required>
+                    </div> 
+
+                    <button id="unenroll" class="margin_top10 med_btn">Un-Enroll</button>
+                    <button id="unenroll_back" class="margin_left10 margin_top10 small_btn white_button">Back</button>
+
+                </div>
+
+            </div>
+
+            <div class="clear_float"></div>
+
+        </div>
+
     </div>
-    
+
   </body>
 </html>
 

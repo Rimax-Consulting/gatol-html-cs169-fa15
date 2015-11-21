@@ -187,6 +187,26 @@ var makeDeleteRequest = function(url, onSuccess, onFailure) {
     });
 };
 
+/**
+ * HTTP DELETE request (with authorization token)
+ * @param  {string}   url       URL path, e.g. "/api/sessions/:id" (id = auth_token)
+ * @param  {Object}   data      JSON data to send in request body
+ * @param  {string}   token     authorization token
+ * @param  {function} onSuccess   callback method to execute upon request success (204 status)
+ * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
+ * @return {None}
+ */
+var makeDeleteRequestWithAuthorization = function(url, token, onSuccess, onFailure) {
+    $.ajax({
+        type: 'DELETE',
+        url: apiUrl + url,
+        //data: JSON.stringify(data),
+        contentType: "application/json",
+        dataType: "JSON",
+        success: onSuccess,
+        error: onFailure
+    });
+};
 
 /* =========================== Cookie Logic =========================== */
 
