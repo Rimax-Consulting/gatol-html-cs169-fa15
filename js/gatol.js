@@ -110,6 +110,7 @@ var makePostRequestWithAuthorization = function(url, data, token, onSuccess, onF
  * HTTP PUT request
  * @param  {string}   url       URL path, e.g. "/api/trainers"
  * @param  {Object}   data      JSON data to send in request body
+ * @param  {string}   token     authorization token
  * @param  {function} onSuccess   callback method to execute upon request success (200 status)
  * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
  * @return {None}
@@ -127,16 +128,20 @@ var makePutRequest = function(url, data, onSuccess, onFailure) {
 };
 
 /**
- * HTTP GET request
+ * HTTP PUT request (with Authorization token)
  * @param  {string}   url       URL path, e.g. "/api/trainers"
+ * @param  {Object}   data      JSON data to send in request body
  * @param  {function} onSuccess   callback method to execute upon request success (200 status)
  * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
  * @return {None}
  */
-var makeGetRequest = function(url, onSuccess, onFailure) {
+var makePutRequestWithAuthorization = function(url, data, token, onSuccess, onFailure) {
     $.ajax({
         type: 'PUT',
         url: apiUrl + url,
+        headers: {'Authorization': token},
+        data: JSON.stringify(data),
+        contentType: "application/json",
         dataType: "JSON",
         success: onSuccess,
         error: onFailure
@@ -187,15 +192,36 @@ var makeDeleteRequest = function(url, onSuccess, onFailure) {
     });
 };
 
+/**
+ * HTTP DELETE request (with authorization token)
+ * @param  {string}   url       URL path, e.g. "/api/sessions/:id" (id = auth_token)
+ * @param  {Object}   data      JSON data to send in request body
+ * @param  {string}   token     authorization token
+ * @param  {function} onSuccess   callback method to execute upon request success (204 status)
+ * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
+ * @return {None}
+ */
+var makeDeleteRequestWithAuthorization = function(url, token, onSuccess, onFailure) {
+    $.ajax({
+        type: 'DELETE',
+        url: apiUrl + url,
+        headers: {'Authorization': token},
+        //data: JSON.stringify(data),
+        contentType: "application/json",
+        dataType: "JSON",
+        success: onSuccess,
+        error: onFailure
+    });
+};
 
 /* =========================== Cookie Logic =========================== */
 
 // Sets the Cookie
 function setCookie(cname, cvalue) {
-    // currently only doing expiration of 1 hour
+    // currently only doing expiration of 4 hours
     var now = new Date();
     var time = now.getTime();
-    time += 3600 * 1000;
+    time += 4 * 3600 * 1000;
     now.setTime(time);
 
     document.cookie= cname + "=" + cvalue +

@@ -269,10 +269,18 @@ var Screens = (function() {
 
 		//TODO: report progress to database
 
-		send_data = {game_id: currentGame.id, score: currentGame.getScore(), lastQuestion: currentGame.index};		
+		var updateSuccess = function(data){
+			console.log("update succeeded");
+		}
+		var updateFailed = function(){
+			console.error("update failed");
+		}
 		
-		// makePutRequest("/api/game_instances/" + gameID, send_data, update, updateFailed) //here to update the score of the current player
+		if (currentGame.id != -1) {
+			send_data = {game_id: currentGame.id, score: currentGame.getScore(), lastQuestion: currentGame.index};
 
+			makePutRequestWithAuthorization("/api/game_instances/" + currentGame.id.toString(), send_data, getCookie("auth_token"), updateSuccess, updateFailed);
+		}
 
 	}
 
