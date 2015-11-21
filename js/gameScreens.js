@@ -12,13 +12,18 @@ var Screens = (function() {
 		for(var j, x, i = this.allChoices.length; i; j = Math.floor(Math.random() * i), x = this.allChoices[--i], this.allChoices[i] = this.allChoices[j], this.allChoices[j] = x);
 	}
 
-	function Game(questionList, metaGame) {
+	function Game(id, questionsID, questionList, metaGame, descr, template) {
 		this.questions = questionList;
 		this.numCorrect = 0;
 		this.index = 0;
 		this.mostRecentAnswer = "";
-		this.metaGame = metaGame;
+		this.metaGame = metaGame; //delete this from the argument list after making sure that templateID is correct
+		this.description = descr;
+		this.templateID = template;
 
+		if (this.templateID == 0){ // make sure this the correct id for Blobbers
+			this.metaGame = BlobbersMetaGame()
+		}
 
 		this.getScore = function() {
 			return this.metaGame.calculateScore(this.numCorrect, this.questions.length);
@@ -146,12 +151,12 @@ var Screens = (function() {
 
 		$(".screenTitle").show();
 		$(".synopsis").show();
-		// $(".qSet").show();
-		// $(".qSetDescr").show();
+		// $(".centerText").show();
 		// $(".btnNext").show();
 		
 
 		$(".screenTitle").text("Synopsis");
+		$(".centerText").text(currentGame.description);
 	};
 
 	var setQuestionScreen = function(){
@@ -324,8 +329,10 @@ var Screens = (function() {
 
 	var start = function() {
 		//probably initialized in a public method that is called by the screen that chooses the game from the student's game list
-		studentID = 0; 
-		gName = "";
+		gameID = ""; 
+		descr = "";
+		qSetID = "";
+		tempID = "";
 
 		var setGame = function(data){
 			if (data.status == 1) {
@@ -345,13 +352,23 @@ var Screens = (function() {
 			var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
 				new Question("The square root of 1600 is 40.", "true", ["false"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-			currentGame = new Game(questionList, BlobbersMetaGame());
+			currentGame = new Game(-1, -1, questionList, BlobbersMetaGame(), "Assorted Questions", 0);
 			setMainTitleScreen();
-		}
+		};
 
-		gameID = 0;
-		send_data = {student: studentID, gameName: gName};
-		makeGetRequest("/api/game_instances/" + gameID, setGame, gameNotReached);
+		var gotGameID = function(data){ //fill in, this should makeGetrequest that has setGame and gameNotReached
+
+		};
+		var gameIDNotReached = function(){ //fill in 
+			console.error("get request failed");
+			gameNotReached();
+		};
+		token = getCookie("auth_token");
+        makePostRequestWithAuthorization("/api/game_instances/", {}, token, gotGameID, gameIDNotReached);
+
+		// gameID = 0;
+		// send_data = {student: studentID, gameName: gName};
+		// makeGetRequest("/api/game_instances/" + gameID, setGame, gameNotReached);
 
         attachHandlers();
         setLoadingScreen();
