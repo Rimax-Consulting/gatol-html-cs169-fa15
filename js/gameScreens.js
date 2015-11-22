@@ -238,7 +238,6 @@ var Screens = (function() {
 
 		$(".centerText").text("Your final score is " + currentGame.getScore().toString() + ".");
 		$(".centerText").addClass("centerBtns"); //this is only to make the div center-aligned
-		currentGame.reset();
 		$(".btnNext").text("Next Question");
 	};
 
@@ -316,6 +315,7 @@ var Screens = (function() {
 		});
 
 		$(".btnMain").click(function() {
+			currentGame.reset();
 			setMainTitleScreen();
 			//if done from HowToScreen this is all that needs to be done
 			//but if done from Done Screen should anything be reset?
@@ -343,7 +343,12 @@ var Screens = (function() {
 			setProgressScreen();
 		});
 
+		$(".btnDone").click(function(){
+			setDoneScreen(currentGame.isWin());
+		});
+
 		$(".btnQuitGame").click(function() {
+			currentGame.reset();
 			window.location.href="index.html";
 		});
 	};
@@ -377,8 +382,8 @@ var Screens = (function() {
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
 			currentGame = new Game(-1, -1, questionList, "Assorted Questions", 1);
 			$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
-			// setMainTitleScreen();
-			setProgressScreen();
+			setMainTitleScreen();
+			// setProgressScreen();
 		};
 
 		var gotGameID = function(data){ //fill in, this should makeGetrequest that has setGame and gameNotReached
