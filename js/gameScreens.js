@@ -21,6 +21,7 @@ var Screens = (function() {
 		this.description = descr;
 		this.templateID = template;
 		this.metaGame = "";
+		this.responses = [];
 
 		if (gameTemplateIdToTitle[this.templateID] == "Blobbers"){
 			this.metaGame = BlobbersMetaGame()
@@ -42,16 +43,17 @@ var Screens = (function() {
 		/**
 		 * Increases the user's score and increments the question number.
 		 * Called whenever the user attempts to answer a question.
-		 * Returns True if there is a next question or False if no more questions.
 		 * isCorrect is whether the user is True or False for the current question 
 		 */
 		this.incrementQuestion = function(isCorrect) {
 			this.numCorrect += isCorrect ? 1:0;
+			this.responses.push(isCorrect);
 			this.index += 1;
 		};
 
 		/**
 		 * Check to see if the next question exists
+		 * Returns True if there is a next question or False if at the end of questinonList.
 		 */
 		this.hasNextQuestion = function() {
 			return this.index < this.questions.length 
@@ -75,6 +77,7 @@ var Screens = (function() {
 		 */
 		this.reset = function() {
 			this.numCorrect = 0;
+			this.responses = [];
 			this.index = 0;
 			this.mostRecentAnswer = "";		 	
 		};
@@ -105,7 +108,7 @@ var Screens = (function() {
 	};
 
 
-	//Methods for transition screens
+	//Methods for  screen transitions
 
 	var setMainTitleScreen = function() {
 		$(".all").hide();
@@ -341,10 +344,26 @@ var Screens = (function() {
 
 		$(".btnProgress").click(function(){
 			setProgressScreen();
+
+			//sets up the Progress Container - This is not yet set up to work if player resumes game from the middle
+			$(".progress_container li").remove();
+			$(".progress_container .fullbar").remove();
+
+			for (i = 0; i < currentGame.responses.length; i++) {
+				if (i != 0) {
+					$(".progress_container").append("<div class='fullbar'></div>");
+				}
+				str = currentGame.responses[i] ? "Correct":"Incorrect"
+				$(".progress_container").append("<li><div class='qInfo'>"+currentGame.questions[i].questionText+"</div><div class='result'>"+str+"</div></li>");
+			}
+
+
 		});
 
 		$(".btnDone").click(function(){
 			setDoneScreen(currentGame.isWin());
+			
+
 		});
 
 		$(".btnQuitGame").click(function() {
@@ -383,7 +402,6 @@ var Screens = (function() {
 			currentGame = new Game(-1, -1, questionList, "Assorted Questions", 1);
 			$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
 			setMainTitleScreen();
-			// setProgressScreen();
 		};
 
 		var gotGameID = function(data){ //fill in, this should makeGetrequest that has setGame and gameNotReached

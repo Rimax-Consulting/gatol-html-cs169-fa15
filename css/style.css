@@ -558,7 +558,7 @@ button:active {
     box-shadow: 0px 2px 6px rgba(208, 223, 226, 0.4), 0px 0px 8px 5px rgba(74, 115, 154, 0.4) inset;
     background: #69A5DC;
     overflow: hidden;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
 }
 
 .progress_container li {
@@ -569,8 +569,6 @@ button:active {
 
     font-weight: bold;
     color: white;
-    letter-spacing: -1pt;
-    word-spacing: 2pt;
     font-size: 15px;
     font-family: verdana, arial, sans-serif;
     line-height: 1;
