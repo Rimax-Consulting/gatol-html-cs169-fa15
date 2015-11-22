@@ -227,7 +227,7 @@ var Screens = (function() {
 		$(".done").show();
 		// $(".centerText").show();
 		// $(".centerBtns .btnQuitGame").show();
-		// $(".btnSummary").show();
+		// $(".btnProgress").show();
 		// $(".centerBtns .btnMain").show();
 		
 		if (gameWon){
@@ -240,6 +240,16 @@ var Screens = (function() {
 		$(".centerText").addClass("centerBtns"); //this is only to make the div center-aligned
 		currentGame.reset();
 		$(".btnNext").text("Next Question");
+	};
+
+	var setProgressScreen = function() {
+		$(".all").hide();
+
+		$(".screenTitle").show();
+		$(".progress").show();
+
+		$(".screenTitle").text("Progress Report");
+
 	};
 
 
@@ -312,9 +322,7 @@ var Screens = (function() {
 		});
 
 		$(".btnNext").click(function() {
-			//Increment Question number
-
-			//If question number is the question limit -> setDoneScreen(); else
+			//If question number is the question limit -> setDoneScreen(); else increment question number
 			if (!currentGame.hasNextQuestion()) {
 				setDoneScreen(currentGame.isWin());
 			} else {
@@ -329,6 +337,10 @@ var Screens = (function() {
 			// window.location.href="../public/scripts.testing.html";
 			loadGame();
 			$(".questionText").removeClass("questionZoomed");
+		});
+
+		$(".btnProgress").click(function(){
+			setProgressScreen();
 		});
 
 		$(".btnQuitGame").click(function() {
@@ -364,7 +376,9 @@ var Screens = (function() {
 				new Question("The square root of 1600 is 40.", "true", ["false"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
 			currentGame = new Game(-1, -1, questionList, "Assorted Questions", 1);
-			setMainTitleScreen();
+			$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
+			// setMainTitleScreen();
+			setProgressScreen();
 		};
 
 		var gotGameID = function(data){ //fill in, this should makeGetrequest that has setGame and gameNotReached

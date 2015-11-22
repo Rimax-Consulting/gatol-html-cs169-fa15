@@ -381,7 +381,7 @@ button:active {
     margin-left: 175px;
 }
 
-#game_link {
+#game_link
     margin-left: 400px;
 }
 
@@ -548,4 +548,36 @@ button:active {
     width: 20%;
     margin-top: 0px;
     font-size: 16px;
+}
+
+.progress_container {
+    padding-left: 0px;
+    border: 1px solid rgba(74, 115, 154, 0.8);
+    border-radius: 5px;
+    box-shadow: 0px 2px 6px rgba(208, 223, 226, 0.4), 0px 0px 8px 5px rgba(74, 115, 154, 0.4) inset;
+    background: #69A5DC;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.progress_container li {
+    display: block;
+    outline: none;
+    width: 100%;
+    margin: auto;
+
+    font-weight: bold;
+    color: white;
+    letter-spacing: -1pt;
+    word-spacing: 2pt;
+    text-align: center;
+    font-size: 15px;
+    font-family: verdana, arial, sans-serif;
+    line-height: 1;
+
+
+    height: 100%;
+    padding: 25px 0px 25px 15px;
+    text-decoration: none;
+    
 }
