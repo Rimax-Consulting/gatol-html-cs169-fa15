@@ -440,7 +440,7 @@ var Screens = (function() {
 
 			makeGetRequestWithAuthorization("api/game_instances/" + gameID, token, gotGame, gameNotReached);
 		};
-		var gameIDNotReached = function(){ 
+		var gameIDNotReached = function(data){ 
 			console.error("get request failed, cant get gameID");
 			gameLoadError();
 		};
