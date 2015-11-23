@@ -34,6 +34,9 @@ var DashBoard = (function() {
         dash_container.find('#enroll_students').hide();
         dash_container.find('#unenroll_students').hide();
 
+        // initially hide stats container
+        dash_container.find('#stats_container').hide();
+
         dash_header.on('click', '#create', function(e) {
             if (inDev) {
                 location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/create_game.html';
@@ -59,8 +62,8 @@ var DashBoard = (function() {
                 }
             };
 
-            var onFailure = function() { 
-                console.error('failure to logout');
+            var onFailure = function(data) { 
+                consoleError(data);
             };
 
             url = '/api/sessions/' + auth_token;
@@ -78,12 +81,18 @@ var DashBoard = (function() {
             gameId = $(this).closest('li').id;
             
             gameDetails = getGameDetailFromGameList();
+            console.log('game details');
+            console.log(gameDetails);
 
             if (gameDetails == null) {
                 console.log('error getting game details on click');
             }
 
-            game_temp_id = gameDetails.game_template_id;
+            if (trainer == 'true') {
+                game_temp_id = gameDetails.game_template_id;
+            } else {
+                game_temp_id = gameDetails.template_id;
+            }
             imgPath = gameTemplateIdToImage[game_temp_id];
 
             console.log('game temp id: ' + game_temp_id);
@@ -262,6 +271,49 @@ var DashBoard = (function() {
 
         });
 
+        dash_container.on('click', '#statistics_btn', function(e) {
+
+            dash_container.find('#game_preview').hide(); 
+            dash_container.find('#stats_container').show(); 
+
+            token = getCookie('auth_token');
+            creds = {};
+            console.log('currGame.id');
+            console.log(currGame.id);
+            creds.game_id = currGame.id;
+
+            var onSuccess = function(data) {
+                console.log(data);
+            };
+
+            var onFailure = function(data) {
+                consoleError(data);
+            };
+
+            url = '/api/game_instances/summary';
+            makeGetRequestWithAuthorizationAndData(url, creds, token, onSuccess, onFailure);
+
+
+            var leaderboardSuccess = function(data) {
+                console.log(data);
+            };
+
+            var leaderboardFailure = function(data) {
+                consoleError(data);
+            };
+
+            leaderboardUrl = '/api/game_instances/leaderboard';
+            makeGetRequestWithAuthorizationAndData(leaderboardUrl, creds, token, leaderboardSuccess, leaderboardFailure);
+
+        });
+
+        dash_container.on('click', '#statistics_back', function(e) {
+            
+            dash_container.find('#stats_container').hide();
+            dash_container.find('#game_preview').show();
+
+        });
+
     };
 
     // checks the User type and updates the page accordingly.
@@ -275,13 +327,16 @@ var DashBoard = (function() {
             url = '/api/games';
         } else {
             // signed in as student
+            dash_container.find('#enroll_btn').hide();
             document.getElementById('create').style.visibility = 'hidden';
             document.getElementById('create').style.display = 'none';
-            url = '/api/game_instances/active'
+            url = '/api/games';
+            //url = '/api/game_enrollments'
         }
 
         var onSuccess = function(data) {
             console.log(data);
+            console.log('trainer: ' + trainer);
             games_list = data.games;
             var ul = document.getElementById('games_list');
             for (var i = 0; i < games_list.length; i++) {
@@ -309,6 +364,23 @@ var DashBoard = (function() {
 
         console.log('url: ' + url);
         makeGetRequestWithAuthorization(url, token, onSuccess, onFailure); 
+    };
+
+    var getGameInstanceFromGameId = function(id) {
+
+        token = getCookie('auth_token');
+        
+        var onSuccess = function(data) {
+            console.log(data);
+        };
+
+        var onFailure = function(data) {
+            consoleError(data);
+        };
+
+        url = '/api/game_instances/' + id;
+        makeGetRequestWithAuthorization(url, token, onSuccess, onFailure);
+
     };
 
     /**
