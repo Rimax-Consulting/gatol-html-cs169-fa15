@@ -130,6 +130,7 @@ var makePostRequestWithAuthorization = function(url, data, token, onSuccess, onF
  * HTTP PUT request
  * @param  {string}   url       URL path, e.g. "/api/trainers"
  * @param  {Object}   data      JSON data to send in request body
+ * @param  {string}   token     authorization token
  * @param  {function} onSuccess   callback method to execute upon request success (200 status)
  * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
  * @return {None}
@@ -147,16 +148,20 @@ var makePutRequest = function(url, data, onSuccess, onFailure) {
 };
 
 /**
- * HTTP GET request
+ * HTTP PUT request (with Authorization token)
  * @param  {string}   url       URL path, e.g. "/api/trainers"
+ * @param  {Object}   data      JSON data to send in request body
  * @param  {function} onSuccess   callback method to execute upon request success (200 status)
  * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
  * @return {None}
  */
-var makeGetRequest = function(url, onSuccess, onFailure) {
+var makePutRequestWithAuthorization = function(url, data, token, onSuccess, onFailure) {
     $.ajax({
         type: 'PUT',
         url: apiUrl + url,
+        headers: {'Authorization': token},
+        data: JSON.stringify(data),
+        contentType: "application/json",
         dataType: "JSON",
         success: onSuccess,
         error: onFailure

@@ -12,13 +12,20 @@ var Screens = (function() {
 		for(var j, x, i = this.allChoices.length; i; j = Math.floor(Math.random() * i), x = this.allChoices[--i], this.allChoices[i] = this.allChoices[j], this.allChoices[j] = x);
 	}
 
-	function Game(questionList, metaGame) {
+	function Game(id, questionsID, questionList, descr, template) {
+		this.id = id;
 		this.questions = questionList;
 		this.numCorrect = 0;
 		this.index = 0;
 		this.mostRecentAnswer = "";
-		this.metaGame = metaGame;
+		this.description = descr;
+		this.templateID = template;
+		this.metaGame = "";
+		this.responses = [];
 
+		if (gameTemplateIdToTitle[this.templateID] == "Blobbers"){
+			this.metaGame = BlobbersMetaGame()
+		}
 
 		this.getScore = function() {
 			return this.metaGame.calculateScore(this.numCorrect, this.questions.length);
@@ -36,16 +43,17 @@ var Screens = (function() {
 		/**
 		 * Increases the user's score and increments the question number.
 		 * Called whenever the user attempts to answer a question.
-		 * Returns True if there is a next question or False if no more questions.
 		 * isCorrect is whether the user is True or False for the current question 
 		 */
 		this.incrementQuestion = function(isCorrect) {
 			this.numCorrect += isCorrect ? 1:0;
+			this.responses.push(isCorrect);
 			this.index += 1;
 		};
 
 		/**
 		 * Check to see if the next question exists
+		 * Returns True if there is a next question or False if at the end of questinonList.
 		 */
 		this.hasNextQuestion = function() {
 			return this.index < this.questions.length 
@@ -69,6 +77,7 @@ var Screens = (function() {
 		 */
 		this.reset = function() {
 			this.numCorrect = 0;
+			this.responses = [];
 			this.index = 0;
 			this.mostRecentAnswer = "";		 	
 		};
@@ -99,7 +108,7 @@ var Screens = (function() {
 	};
 
 
-	//Methods for transition screens
+	//Methods for  screen transitions
 
 	var setMainTitleScreen = function() {
 		$(".all").hide();
@@ -146,12 +155,12 @@ var Screens = (function() {
 
 		$(".screenTitle").show();
 		$(".synopsis").show();
-		// $(".qSet").show();
-		// $(".qSetDescr").show();
+		// $(".centerText").show();
 		// $(".btnNext").show();
 		
 
 		$(".screenTitle").text("Synopsis");
+		$(".centerText").text(currentGame.description);
 	};
 
 	var setQuestionScreen = function(){
@@ -221,7 +230,7 @@ var Screens = (function() {
 		$(".done").show();
 		// $(".centerText").show();
 		// $(".centerBtns .btnQuitGame").show();
-		// $(".btnSummary").show();
+		// $(".btnProgress").show();
 		// $(".centerBtns .btnMain").show();
 		
 		if (gameWon){
@@ -232,8 +241,17 @@ var Screens = (function() {
 
 		$(".centerText").text("Your final score is " + currentGame.getScore().toString() + ".");
 		$(".centerText").addClass("centerBtns"); //this is only to make the div center-aligned
-		currentGame.reset();
 		$(".btnNext").text("Next Question");
+	};
+
+	var setProgressScreen = function() {
+		$(".all").hide();
+
+		$(".screenTitle").show();
+		$(".progress").show();
+
+		$(".screenTitle").text("Progress Report");
+
 	};
 
 
@@ -263,10 +281,18 @@ var Screens = (function() {
 
 		//TODO: report progress to database
 
-		// send_data = {student: studentID, gameName: gName, score: currScore, questionIndex: index};		
-		// gameID = "0"
-		// makePutRequest("/api/game_instances/" + gameID, send_data, update, updateFailed) //here to update the score of the current player
+		var updateSuccess = function(data){
+			console.log("update succeeded");
+		}
+		var updateFailed = function(){
+			console.error("update failed");
+		}
+		
+		if (currentGame.id != -1) {
+			send_data = {game_id: currentGame.id, score: currentGame.getScore(), lastQuestion: currentGame.index};
 
+			makePutRequestWithAuthorization("/api/game_instances/" + currentGame.id.toString(), send_data, getCookie("auth_token"), updateSuccess, updateFailed);
+		}
 
 	}
 
@@ -292,15 +318,14 @@ var Screens = (function() {
 		});
 
 		$(".btnMain").click(function() {
+			currentGame.reset();
 			setMainTitleScreen();
 			//if done from HowToScreen this is all that needs to be done
 			//but if done from Done Screen should anything be reset?
 		});
 
 		$(".btnNext").click(function() {
-			//Increment Question number
-
-			//If question number is the question limit -> setDoneScreen(); else
+			//If question number is the question limit -> setDoneScreen(); else increment question number
 			if (!currentGame.hasNextQuestion()) {
 				setDoneScreen(currentGame.isWin());
 			} else {
@@ -317,17 +342,47 @@ var Screens = (function() {
 			$(".questionText").removeClass("questionZoomed");
 		});
 
+		$(".btnProgress").click(function(){
+			setProgressScreen();
+
+			//sets up the Progress Container - This is not yet set up to work if player resumes game from the middle
+			$(".progress_container li").remove();
+			$(".progress_container .fullbar").remove();
+
+			for (i = 0; i < currentGame.responses.length; i++) {
+				if (i != 0) {
+					$(".progress_container").append("<div class='fullbar'></div>");
+				}
+				str = currentGame.responses[i] ? "Correct":"Incorrect"
+				$(".progress_container").append("<li><div class='qInfo'>"+currentGame.questions[i].questionText+"</div><div class='result'>"+str+"</div></li>");
+			}
+
+
+		});
+
+		$(".btnDone").click(function(){
+			setDoneScreen(currentGame.isWin());
+			
+
+		});
+
 		$(".btnQuitGame").click(function() {
+			currentGame.reset();
 			window.location.href="index.html";
 		});
 	};
 
 	var start = function() {
 		//probably initialized in a public method that is called by the screen that chooses the game from the student's game list
-		studentID = 0; 
-		gName = "";
+		gameID = ""; 
+		descr = "";
+		qSetID = "";
+		tempID = "";
 
-		var setGame = function(data){
+		token = getCookie("auth_token");
+
+
+		var setGame = function(data){ //edit
 			if (data.status == 1) {
 				//make question set and set current question index
 			} else if (data.status == -1) {
@@ -341,17 +396,28 @@ var Screens = (function() {
 			console.error("game load failure");
 
 			//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
-			//not even sure this is the right place
 			var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
 				new Question("The square root of 1600 is 40.", "true", ["false"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-			currentGame = new Game(questionList, BlobbersMetaGame());
+			currentGame = new Game(-1, -1, questionList, "Assorted Questions", 1);
+			$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
 			setMainTitleScreen();
-		}
+		};
 
-		gameID = 0;
-		send_data = {student: studentID, gameName: gName};
-		makeGetRequest("/api/game_instances/" + gameID, setGame, gameNotReached);
+		var gotGameID = function(data){ //fill in, this should makeGetrequest that has setGame and gameNotReached
+			gameID = data.game_id;
+			descr = data.game_description;
+			qSetID = data.question_set_id;
+			tempID = template_id;
+
+			makeGetRequestWithAuthorization("api/game_instances/" + gameID, token, setGame, gameNotReached);
+		};
+		var gameIDNotReached = function(){ //fill in 
+			console.error("get request failed");
+			gameNotReached();
+		};
+
+        makePostRequestWithAuthorization("/api/game_instances/", {}, token, gotGameID, gameIDNotReached);
 
         attachHandlers();
         setLoadingScreen();

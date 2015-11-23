@@ -26,19 +26,33 @@
 <body>
 	<div class="screenTitle all">Screen Title</div>
 
-	<div class="centerText all howTo done"> INFO </div>
+	<div class="centerText all howTo synopsis done"> INFO </div>
 
 	<div class="centerBtns">
 		<button class="btnSynopsis all main">Start</button>
 		<button class="btnHowTo all main">How to Play</button>
 		<button class="btnMain all done">Back to Main Menu</button>
-		<button class="btnSummary all done">Summary</button>
+		<button class="btnProgress all done">Progress Report</button>
 		<button class="btnQuitGame all main done">Quit</button>		
 	</div>
-
-	<div class="qSetText">
-		<div class="qSet all synopsis">Question Set</div>
-		<div class="qSetDescr all synopsis">Question Set Description</div>
+	
+	<div class="progress all" >
+		<div class="dashboard container">
+			<div class="inner_title">Your Results</div>
+			<div>
+				<ul class="progress_container">
+					<li>
+						<div class="qInfo">Question</div> 
+						<div class="result">Correct or Incorrect</div> 
+					</li>
+					<div class="fullbar"></div>
+					<li>
+						<div class="qInfo">Question2 is realy really relaly longggggggggg gggggggg</div> 
+						<div class="result">Good</div> 
+					</li>
+				</ul>
+			</div>
+		</div>
 	</div>
 
 	<div class="bottomBtns">
@@ -46,7 +60,7 @@
 		<button class="btnGame all questionDisp">Play</button>
 		<button class="btnNext all synopsis answerDisp">Next Question</button>
 		<button class="btnQuitGame all">Quit</button>
-		<button class="btnDone all">Back to Win</button>
+		<button class="btnDone progress all">Back</button>
 	</div>
 
 	<div class="questionText questionZoomed">
