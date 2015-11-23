@@ -29,7 +29,7 @@ var Baskets = function(parent, width, height, num_choices, state, answerFunc) {
 	});
 
 	// speed
-	this.speed = 3000;
+	this.speed = state.gravity*10;
 	this.turnSpeed = 5;
 
 	window.addEventListener('keydown', function(event) {
