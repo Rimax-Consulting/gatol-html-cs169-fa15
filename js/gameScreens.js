@@ -424,7 +424,7 @@ var Screens = (function() {
 		}
 
 		var gotGame = function(data){
-			makeGetRequestWithAuthorization("api/question_sets/" + qSetID, token, createGame, questionSetNotReached);
+			makeGetRequestWithAuthorization("/api/question_sets/" + qSetID, token, createGame, questionSetNotReached);
 		}
 
 		var gameNotReached = function(data){
@@ -438,14 +438,14 @@ var Screens = (function() {
 			qSetID = data.question_set_id;
 			tempID = template_id;
 
-			makeGetRequestWithAuthorization("api/game_instances/" + gameID, token, gotGame, gameNotReached);
+			makeGetRequestWithAuthorization("/api/game_instances/" + gameID, token, gotGame, gameNotReached);
 		};
-		var gameIDNotReached = function(){ 
+		var gameIDNotReached = function(data){ 
 			console.error("get request failed, cant get gameID");
 			gameLoadError();
 		};
 
-        makePostRequestWithAuthorization("/api/game_instances/", {}, token, gotGameID, gameIDNotReached);
+        makePostRequestWithAuthorization("/api/game_instances", {}, token, gotGameID, gameIDNotReached);
 
         attachHandlers();
         setLoadingScreen();
