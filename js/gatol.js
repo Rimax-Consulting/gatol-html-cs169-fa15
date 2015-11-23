@@ -65,6 +65,26 @@ var makeGetRequestWithAuthorization = function(url, token, onSuccess, onFailure)
 };
 
 /**
+ * HTTP GET request with Data and authorization
+ * @param  {string}   url       URL path, e.g. "/api/question_sets"
+ * @param  {string}   token     authorization token
+ * @param  {function} onSuccess   callback method to execute upon request success (200 status)
+ * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
+ * @return {None}
+ */
+var makeGetRequestWithAuthorizationAndData = function(url, data, token, onSuccess, onFailure) {
+    $.ajax({
+        type: 'GET',
+        url: apiUrl + url,
+        headers: {'Authorization': token},
+        data: JSON.stringify(data),
+        dataType: "JSON",
+        success: onSuccess,
+        error: onFailure
+    });
+};
+
+/**
  * HTTP POST request
  * @param  {string}   url       URL path, e.g. "/api/trainers"
  * @param  {Object}   data      JSON data to send in request body
