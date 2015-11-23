@@ -16,7 +16,7 @@ var Baskets = function(parent, width, height, num_choices, state, answerFunc) {
 
 	// set up rendering surface
 	this.renderer = new PIXI.CanvasRenderer(this._width, this._height);
-	this.renderer.backgroundColor = 0x448ed3;	
+	this.renderer.backgroundColor = 0x448ed3;
 	this.parent = parent;
 	this.parent.appendChild(this.renderer.view);
 
@@ -25,7 +25,7 @@ var Baskets = function(parent, width, height, num_choices, state, answerFunc) {
 
 	// physics shit
 	this.world = new p2.World({
-		gravity: [0,500]
+		gravity: [0,state.gravity || 500]
 	});
 
 	// speed
@@ -41,8 +41,9 @@ var Baskets = function(parent, width, height, num_choices, state, answerFunc) {
 
 	this.foodBodies = [];
 	this.foodGraphics = [];
-	this.enemyBodies = [];
-	this.enemyGraphics = [];
+	this.answerNumbers = [];
+	// this.enemyBodies = [];
+	// this.enemyGraphics = [];
 	this.answerChoices = [];
 
 	this.basketRadius = 30;
@@ -87,6 +88,7 @@ Baskets.prototype = {
 		this.foodBodies = [];
 		this.foodGraphics = [];
 		this.answerChoices = [];
+		this.answerNumbers = [];
 		this.answerFunc(num);
 		clearInterval(this.foodMaker);
 	},
@@ -118,7 +120,7 @@ Baskets.prototype = {
 	},
 
 	createFoods: function(that) {
-		console.log(that.num_choices);
+		// console.log(that.num_choices);
 		var i = Math.floor(Math.random() * that.num_choices);
 		var x = Math.random() < .5 ? 10 : that._width - 10;
 		var y = Math.round(Math.random() * that._height/4);	
@@ -157,41 +159,9 @@ Baskets.prototype = {
 		that.foodBodies.push(food);
 		that.foodGraphics.push(foodGraphics);
 		that.answerChoices.push(answerText);
+		that.answerNumbers.push(i);
 	},
 
-	createEnemies: function() {
-		for (i = 0; i < this.numEnemies; i++) {
-			var x = Math.round(Math.random() * this._width);
-			var y = Math.round(Math.random() * this._height);	
-			while (Math.sqrt(Math.pow(x - this._width/2, 2) + Math.pow(y - this._height/2, 2)) < this.basketRadius * 2) {
-				x = Math.round(Math.random() * this._width);
-				y = Math.round(Math.random() * this._height);	
-			}
-			var vx = (Math.random() - 0.5) * this.speed/12;
-			var vy = (Math.random() - 0.5) * this.speed/12;
-			var va = (Math.random() - 0.5) * this.speed/100;
-			// create the enemy physics body
-			var enemy = new p2.Body({
-				position: [x,y],
-				mass: 1,
-				damping: 0,
-				angularDamping: 0,
-				velocity: [vx, vy],
-				angularVelocity: va
-			});
-			var enemyShape = new p2.Circle({radius: 10});
-			enemy.addShape(enemyShape);
-			this.world.addBody(enemy);
-
-			// Create the graphics
-			var enemyGraphics = new PIXI.Text("*", {font: "36px Verdana", fill: 0x762E25});
-			this.stage.addChild(enemyGraphics);
-
-			this.enemyBodies.push(enemy);
-			this.enemyGraphics.push(enemyGraphics);
-			
-		}
-	},
 
 	handleKeys: function (key, state) {
 		switch(key) {
@@ -213,12 +183,6 @@ Baskets.prototype = {
 
 	updatePhysics: function () {
 
-		if (this.keyUp) {
-			this.basket.force[1] -= this.speed;
-		}
-		if (this.keyDown) {
-			this.basket.force[1] += this.speed;
-		}
 		if (this.keyRight) {
 			this.basket.force[0] += this.speed;
 		}
@@ -226,10 +190,10 @@ Baskets.prototype = {
 			this.basket.force[0] -= this.speed;
 		}
 
-		for (i = 0; i < this.enemyBodies.length; i++) {
-			this.enemyBodies[i].force[0] += this.enemyBodies[i].velocity[1]*2;
-			this.enemyBodies[i].force[1] -= this.enemyBodies[i].velocity[0]*2;
-		}
+		// for (i = 0; i < this.enemyBodies.length; i++) {
+		// 	this.enemyBodies[i].force[0] += this.enemyBodies[i].velocity[1]*2;
+		// 	this.enemyBodies[i].force[1] -= this.enemyBodies[i].velocity[0]*2;
+		// }
 
 
 		this.basketGraphics.x = this.basket.position[0];
@@ -240,33 +204,29 @@ Baskets.prototype = {
 
 		for (i=0; i < this.foodBodies.length; i++) {
 			if (this.getDistance(this.foodBodies[i], this.basket) < this.basketRadius*1.25) {
-				this.recordAnswer(i);
+				this.recordAnswer(this.answerNumbers[i]);
 			}
 		}
 
-		// wrap to other side of screen
-		// console.log(this.basket);
 		if (this.basket.position[0] > this._width - this.basket.shapes[0].radius) {
-			this.basket.position[0] = this._width - this.basket.shapes[0].radius - 1;
+			this.basket.position[0] = this._width - this.basket.shapes[0].radius - 2;
 		}
 		if (this.basket.position[1] > this._height - this.basket.shapes[0].radius) {
-			this.basket.position[1] = this._height - this.basket.shapes[0].radius - 1;
+			this.basket.position[1] = this._height - this.basket.shapes[0].radius + 2;
 		}
 		if (this.basket.position[0] < this.basket.shapes[0].radius) {
-			this.basket.position[0] = this.basket.shapes[0].radius + 1;
-		}
-		if (this.basket.position[1] < this.basket.shapes[0].radius) {
-			this.basket.position[1] = this.basket.shapes[0].radius + 1;
+			this.basket.position[0] = this.basket.shapes[0].radius + 2;
 		}
 
-
-		// wrap foods
+		// bounce off walls and kill things that fall below the bottom?
+		spliceIndices = [];
 		for (i = 0; i < this.foodBodies.length; i++) {
 			if (this.foodBodies[i].position[0] > this._width - this.foodBodies[i].shapes[0].radius) {
 				this.foodBodies[i].velocity[0] *= -1;
 			}
-			if (this.foodBodies[i].position[1] > this._height - this.foodBodies[i].shapes[0].radius) {
-				this.foodBodies[i].velocity[1] *= -1;
+			if (this.foodBodies[i].position[1] > this._height + this.foodBodies[i].shapes[0].radius+20) { // modifying this to make ball disappear
+				this.foodBodies[i].velocity[1] *= 0;
+				spliceIndices.push(i);
 			}
 			if (this.foodBodies[i].position[0] < this.foodBodies[i].shapes[0].radius) {
 				this.foodBodies[i].velocity[0] *= -1;
@@ -275,22 +235,29 @@ Baskets.prototype = {
 				this.foodBodies[i].velocity[1] *= -1;
 			}
 		}
-
-		// wrap enemies
-		for (i = 0; i < this.enemyBodies.length; i++) {
-			if (this.enemyBodies[i].position[0] > this._width - this.enemyBodies[i].shapes[0].radius) {
-				this.enemyBodies[i].velocity[0] *= -1;
-			}
-			if (this.enemyBodies[i].position[1] > this._height - this.enemyBodies[i].shapes[0].radius) {
-				this.enemyBodies[i].velocity[1] *= -1;
-			}
-			if (this.enemyBodies[i].position[0] < this.enemyBodies[i].shapes[0].radius) {
-				this.enemyBodies[i].velocity[0] *= -1;
-			}
-			if (this.enemyBodies[i].position[1] < this.enemyBodies[i].shapes[0].radius) {
-				this.enemyBodies[i].velocity[1] *= -1;
-			}
+		for (i = 0; i < spliceIndices.length; i++) {
+			this.world.removeBody(this.foodBodies[spliceIndices[i]]);
+			this.stage.removeChild(this.foodGraphics[spliceIndices[i]]);
+			this.foodBodies.splice(spliceIndices[i], 1);
+			this.foodGraphics.splice(spliceIndices[i], 1);
+			this.answerChoices.splice(spliceIndices[i], 1);
+			this.answerNumbers.splice(spliceIndices[i], 1);
 		}
+
+		// for (i = 0; i < this.enemyBodies.length; i++) {
+		// 	if (this.enemyBodies[i].position[0] > this._width - this.enemyBodies[i].shapes[0].radius) {
+		// 		this.enemyBodies[i].velocity[0] *= -1;
+		// 	}
+		// 	if (this.enemyBodies[i].position[1] > this._height - this.enemyBodies[i].shapes[0].radius) {
+		// 		this.enemyBodies[i].velocity[1] *= -1;
+		// 	}
+		// 	if (this.enemyBodies[i].position[0] < this.enemyBodies[i].shapes[0].radius) {
+		// 		this.enemyBodies[i].velocity[0] *= -1;
+		// 	}
+		// 	if (this.enemyBodies[i].position[1] < this.enemyBodies[i].shapes[0].radius) {
+		// 		this.enemyBodies[i].velocity[1] *= -1;
+		// 	}
+		// }
 
 		this.basketGraphics.rotation = this.basket.angle;
 		// update food positions
@@ -302,11 +269,11 @@ Baskets.prototype = {
 			this.answerChoices[i].y = this.foodBodies[i].position[1]-14;
 		}
 
-		// update enemy positions
-		for (var i = 0; i < this.enemyBodies.length; i++) {
-			this.enemyGraphics[i].x = this.enemyBodies[i].position[0];
-			this.enemyGraphics[i].y = this.enemyBodies[i].position[1]-19;
-		}
+		// // update enemy positions
+		// for (var i = 0; i < this.enemyBodies.length; i++) {
+		// 	this.enemyGraphics[i].x = this.enemyBodies[i].position[0];
+		// 	this.enemyGraphics[i].y = this.enemyBodies[i].position[1]-19;
+		// }
 
 
 		this.world.step(1/60);
@@ -333,12 +300,9 @@ var BasketsMetaGame = function() {
 	 */
 	this.getMetaGame = function(correct, index, total) {
 		var incorrect = index - correct;
-		var radius = 40 + 60*(correct/total) - 80*(incorrect/total);
-		radius = Math.max(10, radius);
-		var numEnemies = Math.floor(5*index/total);
-		console.log(correct, index, total);
-		console.log({radius:radius, numEnemies:numEnemies});
-		return {radius:radius, numEnemies:numEnemies};
+		var gravity = 200 + 700*index/total;
+		var interval = 1500 / Math.pow(((total + index)/total), 3);
+		return {gravity:gravity, interval:interval};
 	};
 	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {
 		if (state) {
