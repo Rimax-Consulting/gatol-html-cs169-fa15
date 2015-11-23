@@ -25,6 +25,8 @@ var Screens = (function() {
 
 		if (gameTemplateIdToTitle[this.templateID] == "Blobbers"){
 			this.metaGame = BlobbersMetaGame()
+		} else if (gameTemplateIdToTitle[this.templateID] == "Baskets"){
+			this.metaGame = BasketsMetaGame()
 		}
 
 		this.getScore = function() {
@@ -389,7 +391,7 @@ var Screens = (function() {
 			var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
 				new Question("The square root of 1600 is 40.", "true", ["false"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-			currentGame = new Game(-1, -1, questionList, "Assorted Questions", 1);
+			currentGame = new Game(-1, -1, questionList, "Assorted Questions", 2);
 			$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
 			setMainTitleScreen();
 		};
