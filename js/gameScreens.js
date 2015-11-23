@@ -25,6 +25,8 @@ var Screens = (function() {
 
 		if (gameTemplateIdToTitle[this.templateID] == "Blobbers"){
 			this.metaGame = BlobbersMetaGame()
+		} else if (gameTemplateIdToTitle[this.templateID] == "Baskets"){
+			this.metaGame = BasketsMetaGame()
 		}
 
 		this.getScore = function() {

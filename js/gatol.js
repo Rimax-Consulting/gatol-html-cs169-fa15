@@ -19,7 +19,7 @@ var gameTemplateIdToDesc = {
 }
 
 // maps game_template_id to game title
-var gameTemplateIdToTitle = {1:'Blobbers'};
+var gameTemplateIdToTitle = {1:'Blobbers', 2:'Baskets'};
 
 
 // determine whether or not we are in development mode. 
