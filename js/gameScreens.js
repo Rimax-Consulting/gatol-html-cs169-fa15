@@ -374,7 +374,7 @@ var Screens = (function() {
 
 	var start = function() {
 		//probably initialized in a public method that is called by the screen that chooses the game from the student's game list
-		gameID = ""; 
+		gameInstanceID = ""; 
 		descr = "";
 		qSetID = "";
 		tempID = "";
@@ -413,7 +413,7 @@ var Screens = (function() {
 			};
 
 			//make the Game object
-			currentGame = new Game(gameID, qSetID, qList, descr, tempID);
+			currentGame = new Game(gameInstanceID, qSetID, qList, descr, tempID);
 
 			setMainTitleScreen();
 		};
@@ -428,24 +428,24 @@ var Screens = (function() {
 		}
 
 		var gameNotReached = function(data){
-			console.error("game not acquired, problem with gameID");
+			console.error("game not acquired, problem with gameInstanceID");
 			gameLoadError();
 		}
 
-		var gotGameID = function(data){ 
-			gameID = data.game_id;
+		var gotGameInstanceID = function(data){ 
+			gameInstanceID = data.game_id;
 			descr = data.game_description;
 			qSetID = data.question_set_id;
 			tempID = template_id;
 
-			makeGetRequestWithAuthorization("/api/game_instances/" + gameID, token, gotGame, gameNotReached);
+			makeGetRequestWithAuthorization("/api/game_instances/" + gameInstanceID, token, gotGame, gameNotReached);
 		};
-		var gameIDNotReached = function(data){ 
-			console.error("get request failed, cant get gameID");
+		var gameInstanceIDNotReached = function(data){ 
+			console.error("get request failed, cant get gameInstanceID");
 			gameLoadError();
 		};
 
-        makePostRequestWithAuthorization("/api/game_instances", {}, token, gotGameID, gameIDNotReached);
+        makePostRequestWithAuthorization("/api/game_instances", {}, token, gotGameInstanceID, gameInstanceIDNotReached);
 
         attachHandlers();
         setLoadingScreen();
