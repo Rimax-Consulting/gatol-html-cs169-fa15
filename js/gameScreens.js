@@ -382,17 +382,7 @@ var Screens = (function() {
 		token = getCookie("auth_token");
 
 
-		var setGame = function(data){ //edit
-			if (data.status == 1) {
-				//make question set and set current question index
-			} else if (data.status == -1) {
-				console.error('unrecognized game name');
-			} else if (data.status == -2) {
-				console.error('student does not have access to this game');
-			}
-			setMainTitleScreen();
-		};
-		var gameNotReached = function(){
+		var gameLoadError = function(){
 			console.error("game load failure");
 
 			//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
@@ -404,20 +394,58 @@ var Screens = (function() {
 			setMainTitleScreen();
 		};
 
-		var gotGameID = function(data){ //fill in, this should makeGetrequest that has setGame and gameNotReached
+
+		var createGame = function(data){ //data is the questionSet - make sure the correct api call has this method
+			qList = [];
+			for (var i = 0; i < data.questions.length; i++) {
+				q = data.questions[i]
+
+				wrongAnswers = [q.answerWrong1, q.answerWrong2, q.answerWrong3, q.answerWrong4, q.answerWrong5, q.answerWrong6, q.answerWrong7];
+				
+				//delete all of the nulls from the array
+				for (var i = wrongAnswers.length - 1; i >= 0; i--) {
+					if (wrongAnswers[i] == null) {
+						wrongAnswers.pop();
+					}
+				};
+
+				qList.push(new Question(q.question, q.answerCorrect, wrongAnswers));
+			};
+
+			//make the Game object
+			currentGame = new Game(gameID, qSetID, qList, descr, tempID);
+
+			setMainTitleScreen();
+		};
+
+		var questionSetNotReached = function(data){
+			console.error("question set not acquired");
+			gameLoadError();
+		}
+
+		var gotGame = function(data){
+			makeGetRequestWithAuthorization("/api/question_sets/" + qSetID, token, createGame, questionSetNotReached);
+		}
+
+		var gameNotReached = function(data){
+			console.error("game not acquired, problem with gameID");
+			gameLoadError();
+		}
+
+		var gotGameID = function(data){ 
 			gameID = data.game_id;
 			descr = data.game_description;
 			qSetID = data.question_set_id;
 			tempID = template_id;
 
-			makeGetRequestWithAuthorization("api/game_instances/" + gameID, token, setGame, gameNotReached);
+			makeGetRequestWithAuthorization("/api/game_instances/" + gameID, token, gotGame, gameNotReached);
 		};
-		var gameIDNotReached = function(){ //fill in 
-			console.error("get request failed");
-			gameNotReached();
+		var gameIDNotReached = function(data){ 
+			console.error("get request failed, cant get gameID");
+			gameLoadError();
 		};
 
-        makePostRequestWithAuthorization("/api/game_instances/", {}, token, gotGameID, gameIDNotReached);
+        makePostRequestWithAuthorization("/api/game_instances", {}, token, gotGameID, gameIDNotReached);
 
         attachHandlers();
         setLoadingScreen();
