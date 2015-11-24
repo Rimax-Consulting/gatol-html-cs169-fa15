@@ -286,7 +286,7 @@ var Screens = (function() {
 		var updateSuccess = function(data){
 			console.log("update succeeded");
 		}
-		var updateFailed = function(){
+		var updateFailed = function(data){
 			console.error("update failed");
 		}
 		
