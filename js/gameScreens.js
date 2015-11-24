@@ -368,7 +368,7 @@ var Screens = (function() {
 
 		$(".btnQuitGame").click(function() {
 			currentGame.reset();
-			window.location.href="index.html";
+			window.location.href="dashboard.html";
 		});
 	};
 
