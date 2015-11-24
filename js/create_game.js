@@ -73,7 +73,7 @@ var CreateGame = (function() {
     var setQuestionSets = function(e) {
 
         var onSuccess = function(data) {
-            qsets = JSON.parse(data.question_sets);
+            qsets = data.question_sets;
             var ul = document.getElementById('csv_list');
             for (var i = 0; i < qsets.length; i++) {
                 console.log(qsets[i]);

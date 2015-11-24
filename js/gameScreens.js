@@ -370,6 +370,7 @@ var Screens = (function() {
 
 		$(".btnQuitGame").click(function() {
 			currentGame.reset();
+			deleteCookie("game_id");
 			window.location.href="dashboard.html";
 		});
 	};
