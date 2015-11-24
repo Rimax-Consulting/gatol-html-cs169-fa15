@@ -437,7 +437,7 @@ var Screens = (function() {
 			gameInstanceID = data.game_instance_id;
 			descr = data.game_description;
 			qSetID = data.question_set_id;
-			tempID = template_id;
+			tempID = data.template_id;
 
 			makeGetRequestWithAuthorization("/api/game_instances/" + gameInstanceID, token, gotGame, gameNotReached);
 		};
