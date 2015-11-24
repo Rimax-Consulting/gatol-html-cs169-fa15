@@ -448,7 +448,7 @@ var Screens = (function() {
 
 		isTrainer = getCookie("trainer");
 		gameID = getCookie("game_id"); //set this cookie in dashboard.js
-		// gameID = "1";
+		gameID = "5";
 
 
         makePostRequestWithAuthorization("/api/game_instances?game_id=" + gameID, {}, token, gotGameInstanceID, gameInstanceIDNotReached);
