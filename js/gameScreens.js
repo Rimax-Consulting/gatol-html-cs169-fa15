@@ -12,7 +12,7 @@ var Screens = (function() {
 		for(var j, x, i = this.allChoices.length; i; j = Math.floor(Math.random() * i), x = this.allChoices[--i], this.allChoices[i] = this.allChoices[j], this.allChoices[j] = x);
 	}
 
-	function Game(id, questionsID, questionList, descr, template) {
+	function Game(id, questionList, descr, template) {
 		this.id = id;
 		this.questions = questionList;
 		this.numCorrect = 0;
@@ -378,7 +378,6 @@ var Screens = (function() {
 		//probably initialized in a public method that is called by the screen that chooses the game from the student's game list
 		gameInstanceID = ""; 
 		descr = "";
-		qSetID = "";
 		tempID = "";
 
 		gameID = getCookie("game_id"); //set this cookie in dashboard.js
@@ -394,7 +393,7 @@ var Screens = (function() {
 			var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
 				new Question("The square root of 1600 is 40.", "true", ["false"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-			currentGame = new Game(-1, -1, questionList, "Assorted Questions", 1);
+			currentGame = new Game(-1, questionList, "Assorted Questions", 1);
 			$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
 			setMainTitleScreen();
 		};
@@ -408,8 +407,8 @@ var Screens = (function() {
 				wrongAnswers = [q.answerWrong1, q.answerWrong2, q.answerWrong3, q.answerWrong4, q.answerWrong5, q.answerWrong6, q.answerWrong7];
 				
 				//delete all of the nulls from the array
-				for (var i = wrongAnswers.length - 1; i >= 0; i--) {
-					if (wrongAnswers[i] == null) {
+				for (var j = wrongAnswers.length - 1; j >= 0; j--) {
+					if (wrongAnswers[j] == null) {
 						wrongAnswers.pop();
 					}
 				};
@@ -418,7 +417,7 @@ var Screens = (function() {
 			};
 
 			//make the Game object
-			currentGame = new Game(gameInstanceID, qSetID, qList, descr, tempID);
+			currentGame = new Game(gameInstanceID, qList, descr, tempID);
 
 			setMainTitleScreen();
 		};
@@ -431,7 +430,6 @@ var Screens = (function() {
 		var gotGameInstanceID = function(data){ 
 			gameInstanceID = data.game_instance_id;
 			descr = data.game_description;
-			qSetID = data.question_set_id;
 			tempID = data.template_id;
 			
 			//get /api/games/game_id
