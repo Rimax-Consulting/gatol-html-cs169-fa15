@@ -25,6 +25,8 @@ var Screens = (function() {
 
 		if (gameTemplateIdToTitle[this.templateID] == "Blobbers"){
 			this.metaGame = BlobbersMetaGame()
+		} else if (gameTemplateIdToTitle[this.templateID] == "Baskets"){
+			this.metaGame = BasketsMetaGame()
 		}
 
 		this.getScore = function() {
@@ -374,13 +376,12 @@ var Screens = (function() {
 
 	var start = function() {
 		//probably initialized in a public method that is called by the screen that chooses the game from the student's game list
-		gameID = ""; 
+		gameInstanceID = ""; 
 		descr = "";
 		qSetID = "";
 		tempID = "";
 
 		token = getCookie("auth_token");
-
 
 		var gameLoadError = function(){
 			console.error("game load failure");
@@ -413,7 +414,7 @@ var Screens = (function() {
 			};
 
 			//make the Game object
-			currentGame = new Game(gameID, qSetID, qList, descr, tempID);
+			currentGame = new Game(gameInstanceID, qSetID, qList, descr, tempID);
 
 			setMainTitleScreen();
 		};
@@ -424,28 +425,33 @@ var Screens = (function() {
 		}
 
 		var gotGame = function(data){
-			makeGetRequestWithAuthorization("api/question_sets/" + qSetID, token, createGame, questionSetNotReached);
+			makeGetRequestWithAuthorization("/api/question_sets/" + qSetID, token, createGame, questionSetNotReached);
 		}
 
 		var gameNotReached = function(data){
-			console.error("game not acquired, problem with gameID");
+			console.error("game not acquired, problem with gameInstanceID");
 			gameLoadError();
 		}
 
-		var gotGameID = function(data){ 
-			gameID = data.game_id;
+		var gotGameInstanceID = function(data){ 
+			gameInstanceID = data.game_instance_id;
 			descr = data.game_description;
 			qSetID = data.question_set_id;
-			tempID = template_id;
+			tempID = data.template_id;
 
-			makeGetRequestWithAuthorization("api/game_instances/" + gameID, token, gotGame, gameNotReached);
+			makeGetRequestWithAuthorization("/api/game_instances/" + gameInstanceID, token, gotGame, gameNotReached);
 		};
-		var gameIDNotReached = function(){ 
-			console.error("get request failed, cant get gameID");
+		var gameInstanceIDNotReached = function(data){ 
+			console.error("get request failed, cant get gameInstanceID");
 			gameLoadError();
 		};
 
-        makePostRequestWithAuthorization("/api/game_instances/", {}, token, gotGameID, gameIDNotReached);
+		isTrainer = getCookie("trainer");
+		gameID = getCookie("game_id"); //set this cookie in dashboard.js
+		gameID = "5";
+
+
+        makePostRequestWithAuthorization("/api/game_instances?game_id=" + gameID, {}, token, gotGameInstanceID, gameInstanceIDNotReached);
 
         attachHandlers();
         setLoadingScreen();
