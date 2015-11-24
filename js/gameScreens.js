@@ -381,6 +381,10 @@ var Screens = (function() {
 		qSetID = "";
 		tempID = "";
 
+		gameID = getCookie("game_id"); //set this cookie in dashboard.js
+		gameID = "5";
+
+
 		token = getCookie("auth_token");
 
 		var gameLoadError = function(){
@@ -438,17 +442,18 @@ var Screens = (function() {
 			descr = data.game_description;
 			qSetID = data.question_set_id;
 			tempID = data.template_id;
+			
+			//get /api/games/game_id
+			makeGetRequestWithAuthorization("/api/games/" + gameID, token, gotGame, gameNotReached);
 
-			makeGetRequestWithAuthorization("/api/game_instances/" + gameInstanceID, token, gotGame, gameNotReached);
+			// makeGetRequestWithAuthorization("/api/game_instances/" + gameInstanceID, token, gotGame, gameNotReached);
 		};
 		var gameInstanceIDNotReached = function(data){ 
 			console.error("get request failed, cant get gameInstanceID");
 			gameLoadError();
 		};
 
-		isTrainer = getCookie("trainer");
-		gameID = getCookie("game_id"); //set this cookie in dashboard.js
-		gameID = "5";
+		// isTrainer = getCookie("trainer");
 
 
         makePostRequestWithAuthorization("/api/game_instances?game_id=" + gameID, {}, token, gotGameInstanceID, gameInstanceIDNotReached);
