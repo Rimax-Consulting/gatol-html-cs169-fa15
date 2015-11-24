@@ -190,7 +190,7 @@ var GameAThon = (function() {
         });
 
         // register trainer
-        loginContainer.on('click', '#register_trainer', function(e) {
+        loginContainer.on('click', '#go_register_trainer', function(e) {
             loginContainer.find('#login_title').html('');
             loginContainer.find('#login_title').append('Register As Trainer');
             loginContainer.find('#login_title').show();
@@ -223,8 +223,17 @@ var GameAThon = (function() {
             };
             var onFailure = function(data) { 
                 console.error(data.status);
-                console.error(data.responseText);
-                console.error('failure to register user');
+                errors = JSON.parse(data.responseText).errors;
+                alertMsg = "";
+                if (errors.email != null) {
+                    alertMsg += "email " + errors.email + "\n";
+                }
+
+                if (errors.password != null) {
+                    alertMsg += "password " + errors.password; 
+                }
+
+                alert(alertMsg);
             };
             
             url = '/api/students';
@@ -250,8 +259,17 @@ var GameAThon = (function() {
             };
             var onFailure = function(data) { 
                 console.error(data.status);
-                console.error(data.responseText);
-                console.error('failure to register trainer');
+                errors = JSON.parse(data.responseText).errors;
+                alertMsg = "";
+                if (errors.email != null) {
+                    alertMsg += "email " + errors.email + "\n";
+                }
+
+                if (errors.password != null) {
+                    alertMsg += "password " + errors.password; 
+                }
+
+                alert(alertMsg);
             };
             
             url = '/api/trainers';
