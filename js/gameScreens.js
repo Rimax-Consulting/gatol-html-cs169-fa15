@@ -393,8 +393,12 @@ var Screens = (function() {
 			//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
 			var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
 				new Question("The square root of 1600 is 40.", "true", ["false"]),
+				new Question("Dog goes:", "woof", ["meow", "tweet", "squeak", "moo", "croak", "toot"]),
+				new Question("Cat goes:", "meow", ["woof", "tweet", "squeak", "moo", "croak", "toot"]),
+				new Question("Mouse goes:", "squeak", ["meow", "tweet", "woof", "moo", "croak", "toot"]),
+				new Question("Bird goes:", "tweet", ["meow", "woof", "squeak", "moo", "croak", "toot"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-			currentGame = new Game(-1, questionList, "Assorted Questions", 1);
+			currentGame = new Game(-1, questionList, "Assorted Questions", 2);
 			$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
 			setMainTitleScreen();
 		};
