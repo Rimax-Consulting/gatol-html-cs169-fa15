@@ -108,6 +108,7 @@ var DashBoard = (function() {
         });
 
         dash_container.on('click', '#preview_play_btn', function(e) {
+            setCookie("game_id", current_game_id);
             if (inDev) {
                 location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/game.html';
             } else {
