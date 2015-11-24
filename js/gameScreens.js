@@ -27,6 +27,8 @@ var Screens = (function() {
 			this.metaGame = BlobbersMetaGame()
 		} else if (gameTemplateIdToTitle[this.templateID] == "Baskets"){
 			this.metaGame = BasketsMetaGame()
+		} else if (gameTemplateIdToTitle[this.templateID] == "Shooters"){
+			this.metaGame = ShootersMetaGame()
 		}
 
 		this.getScore = function() {
@@ -398,7 +400,7 @@ var Screens = (function() {
 				new Question("Mouse goes:", "squeak", ["meow", "tweet", "woof", "moo", "croak", "toot"]),
 				new Question("Bird goes:", "tweet", ["meow", "woof", "squeak", "moo", "croak", "toot"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-			currentGame = new Game(-1, questionList, "Assorted Questions", 2);
+			currentGame = new Game(-1, questionList, "Assorted Questions", 3);
 			$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
 			setMainTitleScreen();
 		};
