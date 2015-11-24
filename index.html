@@ -46,6 +46,7 @@
 		    </div>
 		    <input id="user_password" class="last_item" type="password" placeholder="password" required>
 		    <a href="#" onclick="forgotPassword" id="user_forgot" class="forgot_link">forgot ?</a>
+            <div id="login_error" class="error"></div>
 		    <button id="sign_in">Sign in</button> 
             <button id="login_back" class="other_buttons white_button">Back</button>
         </div>
@@ -57,6 +58,7 @@
 		    </div>
 		    <input id="trainer_password" class="last_item" type="password" placeholder="password" required>
 		    <a href="#" onclick="forgotPassword" id="trainer_forgot" class="forgot_link">forgot ?</a>
+            <div class="error"></div>
 		    <button id="trainer_sign_in">Sign in</button> 
             <button id="trainer_login_back" class="other_buttons white_button">Back</button>
         </div>
@@ -75,19 +77,21 @@
 			    <i></i>
 		    </div>
             <input id="register_confirm_password" class="last_item" type="password" placeholder="confirm password" required>
-
+            <div class="error register-error"></div>
 		    <button id="register_user" class="button_space_top">Register</button> 
             <button id="register_back" class="other_buttons white_button">Back</button>
         </div>
 
         <div id="forgot_screen">
             <input class="only_item" type="text" placeholder="email" required>
+            <div class="error"></div>
 		    <button id="password_reset" class="button_space_top">Reset Password</button> 
             <button id="forgot_back" class="other_buttons white_button">Back</button>
         </div>
 
         <div id="trainer_forgot_screen">
             <input class="only_item" type="text" placeholder="email" required>
+            <div class="error"></div>
 		    <button id="trainer_password_reset" class="button_space_top">Reset Password</button> 
             <button id="trainer_forgot_back" class="other_buttons white_button">Back</button>
         </div>
@@ -107,6 +111,7 @@
 		    </div>
             <input id="register_trainer_confirm_password" class="last_item" type="password" placeholder="confirm password" required>
 
+            <div class="error register-error"></div>
 		    <button id="register_trainer" class="button_space_top">Register</button> 
             <button id="register_trainer_back" class="other_buttons white_button">Back</button>
         </div>

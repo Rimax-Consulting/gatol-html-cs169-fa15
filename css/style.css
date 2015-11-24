@@ -594,3 +594,29 @@ button:active {
 .result {
     left: 25%;
 }
+
+footer a {
+    display: block;
+    width: 100px;
+    height: 100%;
+    bottom: 0px;
+    padding: 10px;
+    
+    text-align: center;
+    background-color: #3d4cbe;
+    color:#ebf4fc;
+    text-decoration: none;
+    font-family: 'Lato', sans-serif;
+}
+
+.error {
+    /*display: none;*/
+    font-size: 8pt;
+    color: #d90a0a;
+    margin-bottom: 15px;
+}
+
+.register-error {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}

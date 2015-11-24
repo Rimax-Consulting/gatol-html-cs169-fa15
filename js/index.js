@@ -102,8 +102,10 @@ var GameAThon = (function() {
                     location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
                 }
             };
-            var onFailure = function() { 
+            var onFailure = function(data) { 
                 console.error('failure to login as user');
+                consoleError(data);
+                displayError('Login Failed! Please try again.', '#login_screen');
             };
             
             url = '/api/sessions'
@@ -138,6 +140,7 @@ var GameAThon = (function() {
             };
             var onFailure = function(data) { 
                 consoleError(data);
+                displayError('Login Failed! Please try again.', '#trainer_login_screen')
             };
             
             url = '/api/sessions'
@@ -154,6 +157,7 @@ var GameAThon = (function() {
             loginContainer.find('#login_title').hide();
             loginContainer.find("#login_screen").hide();
             loginContainer.find("#select_screen").show();
+            resetAllErrors();
         });
 
         // trainer login back
@@ -161,6 +165,7 @@ var GameAThon = (function() {
             loginContainer.find('#login_title').hide();
             loginContainer.find("#trainer_login_screen").hide();
             loginContainer.find("#select_screen").show();
+            resetAllErrors();
         });
 
 
@@ -171,6 +176,7 @@ var GameAThon = (function() {
             loginContainer.find('#login_title').show();
             loginContainer.find('#select_screen').hide();   
             loginContainer.find("#trainer_login_screen").show(); 
+            resetAllErrors();
         });
 
         // register 
@@ -180,6 +186,7 @@ var GameAThon = (function() {
             loginContainer.find('#login_title').show();
             loginContainer.find('#select_screen').hide(); 
             loginContainer.find('#register_screen').show();
+            resetAllErrors();
         });
 
         // register back
@@ -187,6 +194,7 @@ var GameAThon = (function() {
             loginContainer.find('#login_title').hide();
             loginContainer.find('#register_screen').hide();
             loginContainer.find('#select_screen').show();
+            resetAllErrors();
         });
 
         // register trainer
@@ -196,6 +204,7 @@ var GameAThon = (function() {
             loginContainer.find('#login_title').show();
             loginContainer.find('#select_screen').hide(); 
             loginContainer.find('#register_trainer_screen').show();
+            resetAllErrors();
         });
 
         // register trainer back
@@ -203,6 +212,7 @@ var GameAThon = (function() {
             loginContainer.find('#login_title').hide();
             loginContainer.find('#register_trainer_screen').hide();
             loginContainer.find('#select_screen').show();
+            resetAllErrors();
         });
 
         loginContainer.on('click', '#register_user', function(e) {
@@ -234,6 +244,7 @@ var GameAThon = (function() {
                 }
 
                 alert(alertMsg);
+                displayError('Register Failed! Please try again.', '#register_screen');
             };
             
             url = '/api/students';
@@ -270,6 +281,7 @@ var GameAThon = (function() {
                 }
 
                 alert(alertMsg);
+                displayError('Register Failed! Please try again.', '#register_trainer_screen')
             };
             
             url = '/api/trainers';
@@ -296,5 +308,15 @@ var GameAThon = (function() {
     };
 
 })();
+
+function displayError(message, parent) {
+    var e = $(parent).find('.error')
+    $(e).text(message);
+    $(e).show();
+}
+
+function resetAllErrors() {
+    $('.error').hide();
+}
 
 
