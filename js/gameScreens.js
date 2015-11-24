@@ -286,7 +286,7 @@ var Screens = (function() {
 		var updateSuccess = function(data){
 			console.log("update succeeded");
 		}
-		var updateFailed = function(){
+		var updateFailed = function(data){
 			console.error("update failed");
 		}
 		
@@ -370,6 +370,7 @@ var Screens = (function() {
 
 		$(".btnQuitGame").click(function() {
 			currentGame.reset();
+			deleteCookie("game_id");
 			window.location.href="dashboard.html";
 		});
 	};
@@ -380,8 +381,8 @@ var Screens = (function() {
 		descr = "";
 		tempID = "";
 
-		gameID = getCookie("game_id"); //set this cookie in dashboard.js
-		gameID = "4";
+		gameID = getCookie("game_id"); //i have set this cookie in dashboard.js
+		// gameID = "4";
 
 
 		token = getCookie("auth_token");

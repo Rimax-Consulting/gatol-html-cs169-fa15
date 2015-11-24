@@ -11,7 +11,7 @@
 var apiUrl = 'https://gatol.herokuapp.com' 
 
 // maps game_template_id to image
-var gameTemplateIdToImage = {1:'images/game_example.png', 2: 'images/baskets_example.png'};
+var gameTemplateIdToImage = {1:'images/blobbers_example.png', 2:'images/baskets_example.png'};
 
 // maps game_template_id to game description
 var gameTemplateIdToDesc = {
@@ -131,7 +131,6 @@ var makePostRequestWithAuthorization = function(url, data, token, onSuccess, onF
  * HTTP PUT request
  * @param  {string}   url       URL path, e.g. "/api/trainers"
  * @param  {Object}   data      JSON data to send in request body
- * @param  {string}   token     authorization token
  * @param  {function} onSuccess   callback method to execute upon request success (200 status)
  * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
  * @return {None}
@@ -152,6 +151,7 @@ var makePutRequest = function(url, data, onSuccess, onFailure) {
  * HTTP PUT request (with Authorization token)
  * @param  {string}   url       URL path, e.g. "/api/trainers"
  * @param  {Object}   data      JSON data to send in request body
+ * @param  {string}   token     authorization token
  * @param  {function} onSuccess   callback method to execute upon request success (200 status)
  * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
  * @return {None}

@@ -300,8 +300,8 @@ var BasketsMetaGame = function() {
 	 */
 	this.getMetaGame = function(correct, index, total) {
 		var incorrect = index - correct;
-		var gravity = 200 + 700*index/total;
-		var interval = 1500 / Math.pow(((total + index)/total), 3);
+		var gravity = 200 + 600*index/total;
+		var interval = 1500 / Math.pow(((total + index)/total), 2.5);
 		return {gravity:gravity, interval:interval};
 	};
 	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {
