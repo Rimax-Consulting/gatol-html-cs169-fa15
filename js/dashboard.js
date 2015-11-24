@@ -6,7 +6,7 @@ var DashBoard = (function() {
     var games_list; // list of games returned by DB call. Initially empty to prevent failures
     var trainer; // is this user a trainer?
 
-    var currGame; // holds the current game 
+    var current_game_id; // holds the current game id
     var enrolledStudents // holds the enrolled students' emails
 
     // PRIVATE METHODS
@@ -15,7 +15,7 @@ var DashBoard = (function() {
     var getGameDetailFromGameList = function(e) {
         for (var i = 0; i < games_list.length; i++) {
             currGame = games_list[i];
-            if (gameId = currGame.id) {
+            if (current_game_id == currGame.id) {
                 return currGame;
             }
         }
@@ -78,7 +78,7 @@ var DashBoard = (function() {
             dash_header.find('#logout').hide();
             dash_header.find('#create').hide();
             
-            gameId = $(this).closest('li').id;
+            current_game_id = parseInt($(this).closest('li').attr('id'));
             
             gameDetails = getGameDetailFromGameList();
             console.log('game details');
@@ -164,7 +164,7 @@ var DashBoard = (function() {
                 consoleError(data); 
             };
 
-            url = '/api/game_enrollments/' + currGame.id;
+            url = '/api/game_enrollments/' + current_game_id;
             console.log(url);
             makeGetRequestWithAuthorization(url, token, onSuccess, onFailure);
 
@@ -200,7 +200,7 @@ var DashBoard = (function() {
             token = getCookie('auth_token');
 
             creds = {};
-            creds.game_id = currGame.id;
+            creds.game_id = current_game_id;
             creds.student_email = dash_container.find('#enroll_student_email').val();  
 
             var onSuccess = function(data) {
@@ -277,8 +277,8 @@ var DashBoard = (function() {
             dash_container.find('#stats_container').show(); 
 
             token = getCookie('auth_token');
-            console.log('currGame.id');
-            console.log(currGame.id);
+            console.log('current_game_id');
+            console.log(current_game_id);
 
             var onSuccess = function(data) {
                 console.log(data);
@@ -302,7 +302,7 @@ var DashBoard = (function() {
                 consoleError(data);
             };
 
-            url = '/api/game_instances/summary?game_id=' + currGame.id;
+            url = '/api/game_instances/summary?game_id=' + current_game_id;
             makeGetRequestWithAuthorization(url, token, onSuccess, onFailure);
 
 
@@ -330,7 +330,7 @@ var DashBoard = (function() {
                 consoleError(data);
             };
 
-            //leaderboardUrl = '/api/game_instances/leaderboard?game_id=' + currGame.id;
+            //leaderboardUrl = '/api/game_instances/leaderboard?game_id=' + current_game_id;
             leaderboardUrl = '/api/game_instances/leaderboard?game_id=5';
             makeGetRequestWithAuthorization(leaderboardUrl, token, leaderboardSuccess, leaderboardFailure);
 
@@ -369,19 +369,19 @@ var DashBoard = (function() {
             games_list = data.games;
             var ul = document.getElementById('games_list');
             for (var i = 0; i < games_list.length; i++) {
-                currGame = games_list[i];
-                console.log(currGame);
+                game = games_list[i];
+                console.log(game);
 
                 var li = document.createElement('li');
                 var a = document.createElement('a');
                 var bar = document.createElement('div');
 
-                a.setAttribute('href', '#' + currGame.description);
+                a.setAttribute('href', '#' + game.description);
                 a.setAttribute('class', 'game_item');
-                a.innerHTML = currGame.name;
+                a.innerHTML = game.name;
                 bar.setAttribute('class', 'fullbar');
                 li.appendChild(a);
-                li.setAttribute('id', currGame.id);
+                li.setAttribute('id', game.id);
                 ul.appendChild(li);
                 ul.appendChild(bar);
             }
