@@ -370,7 +370,7 @@ var Screens = (function() {
 
 		$(".btnQuitGame").click(function() {
 			currentGame.reset();
-			window.location.href="index.html";
+			window.location.href="dashboard.html";
 		});
 	};
 
@@ -382,7 +382,6 @@ var Screens = (function() {
 		tempID = "";
 
 		token = getCookie("auth_token");
-
 
 		var gameLoadError = function(){
 			console.error("game load failure");
@@ -435,7 +434,7 @@ var Screens = (function() {
 		}
 
 		var gotGameInstanceID = function(data){ 
-			gameInstanceID = data.game_id;
+			gameInstanceID = data.game_instance_id;
 			descr = data.game_description;
 			qSetID = data.question_set_id;
 			tempID = template_id;
@@ -447,7 +446,12 @@ var Screens = (function() {
 			gameLoadError();
 		};
 
-        makePostRequestWithAuthorization("/api/game_instances", {}, token, gotGameInstanceID, gameInstanceIDNotReached);
+		isTrainer = getCookie("trainer");
+		gameID = getCookie("game_id"); //set this cookie in dashboard.js
+		// gameID = "1";
+
+
+        makePostRequestWithAuthorization("/api/game_instances?game_id=" + gameID, {}, token, gotGameInstanceID, gameInstanceIDNotReached);
 
         attachHandlers();
         setLoadingScreen();
