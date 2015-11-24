@@ -92,7 +92,7 @@ var GameAThon = (function() {
             creds.password = loginContainer.find('#user_password').val();
 
             var onSuccess = function(data) {
-                alert('successfully logged in as user, auth token is: ' + data.auth_token);
+                //alert('successfully logged in as user, auth token is: ' + data.auth_token);
                 setCookie("auth_token", data.auth_token);
                 setCookie("username", data.username);
                 setCookie("trainer", "false"); // determines whether or not I am a trainer
@@ -126,7 +126,7 @@ var GameAThon = (function() {
             creds.password = loginContainer.find('#trainer_password').val();
 
             var onSuccess = function(data) {
-                alert('successfully logged in as trainer, auth token is: ' + data.auth_token);
+                //alert('successfully logged in as trainer, auth token is: ' + data.auth_token);
                 setCookie("auth_token", data.auth_token);
                 setCookie("username", data.username);
                 setCookie("trainer", "true");

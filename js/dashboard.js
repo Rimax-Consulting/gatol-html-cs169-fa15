@@ -6,7 +6,7 @@ var DashBoard = (function() {
     var games_list; // list of games returned by DB call. Initially empty to prevent failures
     var trainer; // is this user a trainer?
 
-    var currGame; // holds the current game 
+    var current_game_id; // holds the current game id
     var enrolledStudents // holds the enrolled students' emails
 
     // PRIVATE METHODS
@@ -15,7 +15,7 @@ var DashBoard = (function() {
     var getGameDetailFromGameList = function(e) {
         for (var i = 0; i < games_list.length; i++) {
             currGame = games_list[i];
-            if (gameId = currGame.id) {
+            if (current_game_id == currGame.id) {
                 return currGame;
             }
         }
@@ -50,10 +50,10 @@ var DashBoard = (function() {
             var auth_token = getCookie('auth_token');
             
             var onSuccess = function(data) {
-                alert('successfully logged out');
+                //alert('successfully logged out');
                 deleteCookie('auth_token'); 
                 if (getCookie('auth_token') == "") {
-                    alert("successfully removed auth token from cookies");
+                    //alert("successfully removed auth token from cookies");
                     if (inDev) {
                         location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/index.html'
                     } else {
@@ -78,7 +78,7 @@ var DashBoard = (function() {
             dash_header.find('#logout').hide();
             dash_header.find('#create').hide();
             
-            gameId = $(this).closest('li').id;
+            current_game_id = parseInt($(this).closest('li').attr('id'));
             
             gameDetails = getGameDetailFromGameList();
             console.log('game details');
@@ -108,6 +108,7 @@ var DashBoard = (function() {
         });
 
         dash_container.on('click', '#preview_play_btn', function(e) {
+            setCookie("game_id", current_game_id);
             if (inDev) {
                 location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/game.html';
             } else {
@@ -164,7 +165,7 @@ var DashBoard = (function() {
                 consoleError(data); 
             };
 
-            url = '/api/game_enrollments/' + currGame.id;
+            url = '/api/game_enrollments/' + current_game_id;
             console.log(url);
             makeGetRequestWithAuthorization(url, token, onSuccess, onFailure);
 
@@ -200,7 +201,7 @@ var DashBoard = (function() {
             token = getCookie('auth_token');
 
             creds = {};
-            creds.game_id = currGame.id;
+            creds.game_id = current_game_id;
             creds.student_email = dash_container.find('#enroll_student_email').val();  
 
             var onSuccess = function(data) {
@@ -277,33 +278,62 @@ var DashBoard = (function() {
             dash_container.find('#stats_container').show(); 
 
             token = getCookie('auth_token');
-            creds = {};
-            console.log('currGame.id');
-            console.log(currGame.id);
-            creds.game_id = currGame.id;
+            console.log('current_game_id');
+            console.log(current_game_id);
 
             var onSuccess = function(data) {
                 console.log(data);
+                rankings = data.ranking;
+                for (var i = 0; i < rankings.length; i++) {
+                    ul = document.getElementById('stats_list');
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    var bar = document.createElement('div');
+
+                    a.innerHTML = rankings.student_id + " score: " + rankings.score + " date: " + rankings.date;
+                    bar.setAttribute('class', 'fullbar');
+                    li.appendChild(a);
+                    li.setAttribute('id', rankings.student_id);
+                    ul.appendChild(li);
+                    ul.appendChild(bar);
+                }
             };
 
             var onFailure = function(data) {
                 consoleError(data);
             };
 
-            url = '/api/game_instances/summary';
-            makeGetRequestWithAuthorizationAndData(url, creds, token, onSuccess, onFailure);
+            url = '/api/game_instances/summary?game_id=' + current_game_id;
+            makeGetRequestWithAuthorization(url, token, onSuccess, onFailure);
 
 
             var leaderboardSuccess = function(data) {
                 console.log(data);
+                rankings = data.ranking;
+                console.log(rankings);
+                for (var i = 0; i < rankings.length; i++) {
+                    ranking = rankings[i];
+                    ul = document.getElementById('leader_list');
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    var bar = document.createElement('div');
+
+                    a.innerHTML = ranking.email + " score: " + ranking.score;
+                    bar.setAttribute('class', 'fullbar');
+                    li.appendChild(a);
+                    //li.setAttribute('id', rankings.student_id);
+                    ul.appendChild(li);
+                    ul.appendChild(bar);
+                }
             };
 
             var leaderboardFailure = function(data) {
                 consoleError(data);
             };
 
-            leaderboardUrl = '/api/game_instances/leaderboard';
-            makeGetRequestWithAuthorizationAndData(leaderboardUrl, creds, token, leaderboardSuccess, leaderboardFailure);
+            //leaderboardUrl = '/api/game_instances/leaderboard?game_id=' + current_game_id;
+            leaderboardUrl = '/api/game_instances/leaderboard?game_id=5';
+            makeGetRequestWithAuthorization(leaderboardUrl, token, leaderboardSuccess, leaderboardFailure);
 
         });
 
@@ -340,19 +370,19 @@ var DashBoard = (function() {
             games_list = data.games;
             var ul = document.getElementById('games_list');
             for (var i = 0; i < games_list.length; i++) {
-                currGame = games_list[i];
-                console.log(currGame);
+                game = games_list[i];
+                console.log(game);
 
                 var li = document.createElement('li');
                 var a = document.createElement('a');
                 var bar = document.createElement('div');
 
-                a.setAttribute('href', '#' + currGame.description);
+                a.setAttribute('href', '#' + game.description);
                 a.setAttribute('class', 'game_item');
-                a.innerHTML = currGame.description;
+                a.innerHTML = game.name;
                 bar.setAttribute('class', 'fullbar');
                 li.appendChild(a);
-                li.setAttribute('id', currGame.id);
+                li.setAttribute('id', game.id);
                 ul.appendChild(li);
                 ul.appendChild(bar);
             }
