@@ -402,8 +402,8 @@ var Screens = (function() {
 
 		var createGame = function(data){ //data is the questionSet - make sure the correct api call has this method
 			qList = [];
-			for (var i = 0; i < data.questions.length; i++) {
-				q = data.questions[i]
+			for (var i = 0; i < data.game.question_set.questions.length; i++) {
+				q = data.game.question_set.questions[i]
 
 				wrongAnswers = [q.answerWrong1, q.answerWrong2, q.answerWrong3, q.answerWrong4, q.answerWrong5, q.answerWrong6, q.answerWrong7];
 				
@@ -423,15 +423,6 @@ var Screens = (function() {
 			setMainTitleScreen();
 		};
 
-		var questionSetNotReached = function(data){
-			console.error("question set not acquired");
-			gameLoadError();
-		}
-
-		var gotGame = function(data){
-			makeGetRequestWithAuthorization("/api/question_sets/" + qSetID, token, createGame, questionSetNotReached);
-		}
-
 		var gameNotReached = function(data){
 			console.error("game not acquired, problem with gameInstanceID");
 			gameLoadError();
@@ -444,7 +435,7 @@ var Screens = (function() {
 			tempID = data.template_id;
 			
 			//get /api/games/game_id
-			makeGetRequestWithAuthorization("/api/games/" + gameID, token, gotGame, gameNotReached);
+			makeGetRequestWithAuthorization("/api/games/" + gameID, token, createGame, gameNotReached);
 
 			// makeGetRequestWithAuthorization("/api/game_instances/" + gameInstanceID, token, gotGame, gameNotReached);
 		};
