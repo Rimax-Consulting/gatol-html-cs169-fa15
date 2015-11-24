@@ -382,7 +382,7 @@ var Screens = (function() {
 		tempID = "";
 
 		gameID = getCookie("game_id"); //set this cookie in dashboard.js
-		gameID = "5";
+		gameID = "4";
 
 
 		token = getCookie("auth_token");
