@@ -50,10 +50,10 @@ var DashBoard = (function() {
             var auth_token = getCookie('auth_token');
             
             var onSuccess = function(data) {
-                alert('successfully logged out');
+                //alert('successfully logged out');
                 deleteCookie('auth_token'); 
                 if (getCookie('auth_token') == "") {
-                    alert("successfully removed auth token from cookies");
+                    //alert("successfully removed auth token from cookies");
                     if (inDev) {
                         location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/index.html'
                     } else {
@@ -277,33 +277,62 @@ var DashBoard = (function() {
             dash_container.find('#stats_container').show(); 
 
             token = getCookie('auth_token');
-            creds = {};
             console.log('currGame.id');
             console.log(currGame.id);
-            creds.game_id = currGame.id;
 
             var onSuccess = function(data) {
                 console.log(data);
+                rankings = data.ranking;
+                for (var i = 0; i < rankings.length; i++) {
+                    ul = document.getElementById('stats_list');
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    var bar = document.createElement('div');
+
+                    a.innerHTML = rankings.student_id + " score: " + rankings.score + " date: " + rankings.date;
+                    bar.setAttribute('class', 'fullbar');
+                    li.appendChild(a);
+                    li.setAttribute('id', rankings.student_id);
+                    ul.appendChild(li);
+                    ul.appendChild(bar);
+                }
             };
 
             var onFailure = function(data) {
                 consoleError(data);
             };
 
-            url = '/api/game_instances/summary';
-            makeGetRequestWithAuthorizationAndData(url, creds, token, onSuccess, onFailure);
+            url = '/api/game_instances/summary?game_id=' + currGame.id;
+            makeGetRequestWithAuthorization(url, token, onSuccess, onFailure);
 
 
             var leaderboardSuccess = function(data) {
                 console.log(data);
+                rankings = data.ranking;
+                console.log(rankings);
+                for (var i = 0; i < rankings.length; i++) {
+                    ranking = rankings[i];
+                    ul = document.getElementById('leader_list');
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    var bar = document.createElement('div');
+
+                    a.innerHTML = ranking.email + " score: " + ranking.score;
+                    bar.setAttribute('class', 'fullbar');
+                    li.appendChild(a);
+                    //li.setAttribute('id', rankings.student_id);
+                    ul.appendChild(li);
+                    ul.appendChild(bar);
+                }
             };
 
             var leaderboardFailure = function(data) {
                 consoleError(data);
             };
 
-            leaderboardUrl = '/api/game_instances/leaderboard';
-            makeGetRequestWithAuthorizationAndData(leaderboardUrl, creds, token, leaderboardSuccess, leaderboardFailure);
+            //leaderboardUrl = '/api/game_instances/leaderboard?game_id=' + currGame.id;
+            leaderboardUrl = '/api/game_instances/leaderboard?game_id=5';
+            makeGetRequestWithAuthorization(leaderboardUrl, token, leaderboardSuccess, leaderboardFailure);
 
         });
 
@@ -349,7 +378,7 @@ var DashBoard = (function() {
 
                 a.setAttribute('href', '#' + currGame.description);
                 a.setAttribute('class', 'game_item');
-                a.innerHTML = currGame.description;
+                a.innerHTML = currGame.name;
                 bar.setAttribute('class', 'fullbar');
                 li.appendChild(a);
                 li.setAttribute('id', currGame.id);

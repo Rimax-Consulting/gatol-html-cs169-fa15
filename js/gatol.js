@@ -11,11 +11,12 @@
 var apiUrl = 'https://gatol.herokuapp.com' 
 
 // maps game_template_id to image
-var gameTemplateIdToImage = {1:'images/game_example.png'};
+var gameTemplateIdToImage = {1:'images/game_example.png', 2: 'images/baskets_example.png'};
 
 // maps game_template_id to game description
 var gameTemplateIdToDesc = {
-    1: 'Blobbers! Basic game where you are a blob and you have to eat the correct blob!'
+    1: 'Blobbers! Basic game where you are a blob and you have to eat the correct blob!',
+    2: 'Baskets! Basic game where you control a basket and have to catch the correct ball!'
 }
 
 // maps game_template_id to game title

@@ -24,13 +24,13 @@ var CreateGame = (function() {
             finish.question_set_id = qset_li.id;
             finish.game_template_id = template_li.id;
             finish.description = create_container.find('#create_game_description').val();
-            finish.name = create_container.find('#create_game_creator').val();
+            finish.name = create_container.find('#create_game_title').val();
             console.log(finish);
 
             token = getCookie('auth_token');
 
             var onSuccess = function(data) {
-                alert('successfully created game');
+                //alert('successfully created game');
                 if (inDev) {
                     location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
                 } else {
