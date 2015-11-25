@@ -19,17 +19,17 @@ Holds functions and variables that may be relevant to other javascript files.
 
 Important variables:
 
-var **apiUrl (string)** -- backend website that will be used in all ajax calls
+var apiUrl (string) -- backend website that will be used in all ajax calls
 
-var **gameTemplateIdToImage ({integer : string})** -- mapping for {<template_id> : <image.png>}. Used for previewing game by populating the proper image
+var gameTemplateIdToImage ({integer : string}) -- mapping for {<template_id> : <image.png>}. Used for previewing game by populating the proper image
 
-var **gameTemplateIdToDesc ({integer : string})** -- mapping for {<template_id> : <description>}. Used for previewing game by populating the proper test description
+var gameTemplateIdToDesc ({integer : string}) -- mapping for {<template_id> : <description>}. Used for previewing game by populating the proper test description
 
-var **gameTemplateIdToTitle ({integer : string})** -- mapping for {<template_id> : <game_title>}. Used for previewing game by populating the proper game title
+var gameTemplateIdToTitle ({integer : string}) -- mapping for {<template_id> : <game_title>}. Used for previewing game by populating the proper game title
 
-var **devUrl (string)** -- url that defines where local directory of html files for local testing
+var devUrl (string) -- url that defines where local directory of html files for local testing
 
-var **inDev (boolean)** -- defines whether or not we're in dev mode
+var inDev (boolean) -- defines whether or not we're in dev mode
 
 === Index.js
 
