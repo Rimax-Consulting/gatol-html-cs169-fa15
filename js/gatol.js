@@ -23,6 +23,8 @@ var gameTemplateIdToDesc = {
 // maps game_template_id to game title
 var gameTemplateIdToTitle = {1:'Blobbers', 2:'Baskets', 3:'Shooters'};
 
+// url to use when in development mode
+var devUrl = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/';
 
 // determine whether or not we are in development mode. 
 var inDev = false;
