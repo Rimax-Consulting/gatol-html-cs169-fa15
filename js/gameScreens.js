@@ -268,6 +268,7 @@ var Screens = (function() {
 	 * the question was answered correctly or incorrectly.
 	 */
 	var answer = function(num) {
+		// console.log(num);
 		$(".questionText").addClass("questionZoomed");
 		var gameDivChildren = document.getElementById("gameScreen").childNodes;
 		for (i = 0; i < gameDivChildren.length; i++) {

@@ -9,7 +9,6 @@
  		numEnemies: pretty self explanatory
  */
 var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
-	console.log({parent: parent, width:width, height:height, num_choices: num_choices, state:state, answerFunc:answerFunc})
 	// set up scene width and height
 	this._width = width-2;
 	this._height = height-2;
@@ -25,12 +24,8 @@ var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
 
 	// physics shit
 	this.world = new p2.World({
-		gravity: [0,10]
+		gravity: [0,state.gravity || 10]
 	});
-
-	// speed
-	this.speed = state.gravity*10;
-	this.turnSpeed = 5;
 
 	this.foodBodies = [];
 	this.foodGraphics = [];
@@ -40,9 +35,9 @@ var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
 	this.projectileGraphics = [];
 
 	this.shooterRadius = 30;
-	this.interval = state.interval || 1000;
 	this.num_choices = num_choices;
 	this.answerFunc = answerFunc;
+	this.foodCreated = false;
 
 	var that = this;
 	$("body").mousemove(function(e) {
@@ -90,7 +85,6 @@ Shooters.prototype = {
 		this.answerChoices = [];
 		this.answerNumbers = [];
 		this.answerFunc(num);
-		clearInterval(this.foodMaker);
 	},
 
 	createShooter: function() {
@@ -148,12 +142,13 @@ Shooters.prototype = {
 			that.foodGraphics.push(foodGraphics);
 			that.answerChoices.push(answerText);
 			that.answerNumbers.push(i);
+			this.foodCreated = true;
 		}
 	},
 
 	createProjectile: function() {
-		var vx = 500*Math.cos(this.shooterGraphics.rotation-Math.PI/2);
-		var vy = 500*Math.sin(this.shooterGraphics.rotation-Math.PI/2);
+		var vx = 600*Math.cos(this.shooterGraphics.rotation-Math.PI/2);
+		var vy = 600*Math.sin(this.shooterGraphics.rotation-Math.PI/2);
 		var projectile = new p2.Body({
 			position: [this.shooterGraphics.x, this.shooterGraphics.y],
 			mass: 10,
@@ -197,8 +192,10 @@ Shooters.prototype = {
 
 	updatePhysics: function () {
 
-		if (this.foodBodies.length == 0) {
+		if (this.foodCreated && this.foodBodies.length == 0) {
 			this.recordAnswer(-1);
+			this.foodCreated = false;
+			return;
 		}
 
 		// make sure out-of-bounds foods are deleted, end when one food reaches the bottom
@@ -210,6 +207,8 @@ Shooters.prototype = {
 			if (this.foodBodies[i].position[1] > this._height + this.foodBodies[i].shapes[0].radius+20) {
 				this.foodBodies[i].velocity[1] *= 0;
 				this.recordAnswer(this.answerNumbers[i]);
+				this.foodCreated = false;
+				return;
 			}
 			if (this.foodBodies[i].position[0] < -1*this.foodBodies[i].shapes[0].radius) {
 				spliceIndices.push(i);
@@ -274,10 +273,8 @@ var ShootersMetaGame = function() {
 	 * returns object of radius and numEnemies based on game progress
 	 */
 	this.getMetaGame = function(correct, index, total) {
-		var incorrect = index - correct;
-		var gravity = 200 + 600*index/total;
-		var interval = 1500 / Math.pow(((total + index)/total), 2.5);
-		return {gravity:gravity, interval:interval};
+		var gravity = 6 + 16*index/total;
+		return {gravity:gravity};
 	};
 	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {
 		if (state) {

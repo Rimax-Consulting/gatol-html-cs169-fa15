@@ -9,7 +9,6 @@
  		numEnemies: pretty self explanatory
  */
 var Baskets = function(parent, width, height, num_choices, state, answerFunc) {
-	console.log({parent: parent, width:width, height:height, num_choices: num_choices, state:state, answerFunc:answerFunc})
 	// set up scene width and height
 	this._width = width-2;//window.innerWidth - 4;
 	this._height = height-2;//window.innerHeight - 4;
