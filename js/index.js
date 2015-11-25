@@ -79,7 +79,6 @@ var GameAThon = (function () {
         });
 
         loginContainer.on('click', '#sign_in', function (e) {
-            e.preventDefault();
             // do user sign in logic
 
             //if (getCookie("auth_token") != "") {
@@ -93,7 +92,7 @@ var GameAThon = (function () {
             //creds.password = $('#user_password').val();
             
             if (checkLoginValid(creds, false)) {
-
+                e.preventDefault();
                 var onSuccess = function (data) {
                     //alert('successfully logged in as user, auth token is: ' + data.auth_token);
                     setCookie("auth_token", data.auth_token);
@@ -120,7 +119,6 @@ var GameAThon = (function () {
         });
 
         loginContainer.on('click', '#trainer_sign_in', function (e) {
-            e.preventDefault();
             // do trainer sign in logic
 
             //if (getCookie("auth_token") != "") {
@@ -134,7 +132,7 @@ var GameAThon = (function () {
             //creds.password = $('#trainer_password').val();
 
             if (checkLoginValid(creds, true)) {
-
+                e.preventDefault();
                 var onSuccess = function (data) {
                     //alert('successfully logged in as trainer, auth token is: ' + data.auth_token);
                     setCookie("auth_token", data.auth_token);
