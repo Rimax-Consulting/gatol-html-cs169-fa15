@@ -97,7 +97,7 @@ var GameAThon = (function() {
                 setCookie("username", data.username);
                 setCookie("trainer", "false"); // determines whether or not I am a trainer
                 if (inDev) {
-                    location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
+                    location.href = devUrl + 'dashboard.html';
                 } else {
                     location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
                 }
@@ -133,7 +133,7 @@ var GameAThon = (function() {
                 setCookie("username", data.username);
                 setCookie("trainer", "true");
                 if (inDev) {
-                    location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
+                    location.href = devUrl + 'dashboard.html';
                 } else {
                     location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
                 }

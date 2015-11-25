@@ -10,7 +10,7 @@ var InputLink = (function() {
         link_container.on('click', '#link_go', function(e) {
             alert('Starting Link!');
             if (inDev) {
-                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
+                location.href = devUrl + 'dashboard.html';
             } else {
                 location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
             }
@@ -18,7 +18,7 @@ var InputLink = (function() {
 
         link_container.on('click', '#cancel_link', function(e) {
             if (inDev) {
-                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
+                location.href = devUrl + 'dashboard.html';
             } else {
                 location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
             }

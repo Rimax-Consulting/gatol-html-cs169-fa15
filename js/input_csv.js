@@ -36,7 +36,7 @@ var InputCSV = (function() {
                 alert('csv successfully uploaded!');
                 console.log(data);
                 if (inDev) {
-                    location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/create_game.html';
+                    location.href = devUrl + 'create_game.html';
                 } else {
                     location.href = 'http://allenyu94.github.io/gatol-html/create_game';
                 }
@@ -54,7 +54,7 @@ var InputCSV = (function() {
 
         csv_container.on('click', '#cancel_upload', function(e) {
             if (inDev) {
-                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/create_game.html';
+                location.href = devUrl + 'create_game.html';
             } else {
                 location.href = 'http://allenyu94.github.io/gatol-html/create_game';
             }

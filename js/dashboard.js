@@ -39,7 +39,7 @@ var DashBoard = (function() {
 
         dash_header.on('click', '#create', function(e) {
             if (inDev) {
-                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/create_game.html';
+                location.href = devUrl + 'create_game.html';
             } else {
                 location.href = 'http://allenyu94.github.io/gatol-html/create_game';
             }
@@ -55,7 +55,7 @@ var DashBoard = (function() {
                 if (getCookie('auth_token') == "") {
                     //alert("successfully removed auth token from cookies");
                     if (inDev) {
-                        location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/index.html'
+                        location.href = devUrl + 'index.html'
                     } else {
                         location.href = 'http://allenyu94.github.io/gatol-html/';
                     }
@@ -110,7 +110,7 @@ var DashBoard = (function() {
         dash_container.on('click', '#preview_play_btn', function(e) {
             setCookie("game_id", current_game_id);
             if (inDev) {
-                location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/game.html';
+                location.href = devUrl + 'game.html';
             } else {
                 location.href = 'http://allenyu94.github.io/gatol-html/game';
             } 
