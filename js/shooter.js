@@ -35,9 +35,9 @@ var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
 	this.foodBodies = [];
 	this.foodGraphics = [];
 	this.answerNumbers = [];
-	// this.enemyBodies = [];
-	// this.enemyGraphics = [];
 	this.answerChoices = [];
+	this.projectileBodies = [];
+	this.projectileGraphics = [];
 
 	this.shooterRadius = 30;
 	this.interval = state.interval || 1000;
@@ -51,6 +51,7 @@ var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
 
 	$("body").mousedown(function(e) {
 		that.clicked = true;
+		that.createProjectile();
 	});
 
 	// Start running the game.
@@ -127,7 +128,7 @@ Shooters.prototype = {
 				velocity: [vx, vy],
 				angularVelocity: va
 			});
-			var foodShape = new p2.Circle({radius: 2});
+			var foodShape = new p2.Circle({radius: 20});
 			food.addShape(foodShape);
 			that.world.addBody(food);
 
@@ -148,6 +149,31 @@ Shooters.prototype = {
 			that.answerChoices.push(answerText);
 			that.answerNumbers.push(i);
 		}
+	},
+
+	createProjectile: function() {
+		var vx = 500*Math.cos(this.shooterGraphics.rotation-Math.PI/2);
+		var vy = 500*Math.sin(this.shooterGraphics.rotation-Math.PI/2);
+		var projectile = new p2.Body({
+			position: [this.shooterGraphics.x, this.shooterGraphics.y],
+			mass: 10,
+			damping: 0,
+			angularDamping: 0,
+			velocity: [vx,vy],
+			angularVelocity: 0,
+		});
+		var projectileShape = new p2.Circle({radius: 5});
+		projectile.addShape(projectileShape);
+		this.world.addBody(projectile);
+
+		var projectileGraphics = new PIXI.Graphics();
+		projectileGraphics.beginFill(0xFFFFFF);
+		projectileGraphics.drawCircle(0,0,5);
+		projectileGraphics.endFill();
+		this.stage.addChild(projectileGraphics);
+
+		this.projectileBodies.push(projectile);
+		this.projectileGraphics.push(projectileGraphics);
 	},
 
 
@@ -171,22 +197,25 @@ Shooters.prototype = {
 
 	updatePhysics: function () {
 
+		if (this.foodBodies.length == 0) {
+			this.recordAnswer(-1);
+		}
 
 		// make sure out-of-bounds foods are deleted, end when one food reaches the bottom
 		spliceIndices = [];
 		for (i = 0; i < this.foodBodies.length; i++) {
-			if (this.foodBodies[i].position[0] > this._width - this.foodBodies[i].shapes[0].radius) {
-				this.foodBodies[i].velocity[0] *= -1;
+			if (this.foodBodies[i].position[0] > this._width + this.foodBodies[i].shapes[0].radius) {
+				spliceIndices.push(i);
 			}
-			if (this.foodBodies[i].position[1] > this._height + this.foodBodies[i].shapes[0].radius+20) { // modifying this to make ball disappear
+			if (this.foodBodies[i].position[1] > this._height + this.foodBodies[i].shapes[0].radius+20) {
 				this.foodBodies[i].velocity[1] *= 0;
 				this.recordAnswer(this.answerNumbers[i]);
 			}
-			if (this.foodBodies[i].position[0] < this.foodBodies[i].shapes[0].radius) {
-				this.foodBodies[i].velocity[0] *= -1;
+			if (this.foodBodies[i].position[0] < -1*this.foodBodies[i].shapes[0].radius) {
+				spliceIndices.push(i);
 			}
-			if (this.foodBodies[i].position[1] < this.foodBodies[i].shapes[0].radius) {
-				this.foodBodies[i].velocity[1] *= -1;
+			if (this.foodBodies[i].position[1] < -1*this.foodBodies[i].shapes[0].radius - 30) {
+				spliceIndices.push(i);
 			}
 		}
 
@@ -200,9 +229,6 @@ Shooters.prototype = {
 		}
 
 
-		// console.log([this.mouseX, this.mouseY]);
-		// console.log(Math.atan2(this.mouseX - this.shooterGraphics.x, -this.mouseY + this.shooterGraphics.y)*180/Math.PI);
-
 		// update food positions
 		for (var i = 0; i < this.foodBodies.length; i++) {
 			this.foodGraphics[i].x = this.foodBodies[i].position[0];
@@ -210,6 +236,12 @@ Shooters.prototype = {
 
 			this.answerChoices[i].x = this.foodBodies[i].position[0]-8;
 			this.answerChoices[i].y = this.foodBodies[i].position[1]-14;
+		}		
+
+		// update projectile positions
+		for (var i = 0; i < this.projectileBodies.length; i++) {
+			this.projectileGraphics[i].x = this.projectileBodies[i].position[0];
+			this.projectileGraphics[i].y = this.projectileBodies[i].position[1];
 		}
 
 		// // update enemy positions

@@ -40,6 +40,10 @@ var Screens = (function() {
 		 * answer is user's answer from the game
 		 */
 		this.checkAnswer = function(answer) {
+			if (answer < 0) {
+				this.mostRecentAnswer = "nothing";
+				return false;
+			}
 			this.mostRecentAnswer = this.getCurrentQuestion().allChoices[answer];
 			return this.mostRecentAnswer == this.getCurrentQuestion().answerText;
 		};
