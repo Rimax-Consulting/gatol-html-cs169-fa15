@@ -386,7 +386,7 @@ var DashBoard = (function() {
                 var a = document.createElement('a');
                 var bar = document.createElement('div');
 
-                a.setAttribute('href', '#' + game.description);
+                a.setAttribute('href', '#' + game.name);
                 a.setAttribute('class', 'game_item');
                 a.innerHTML = game.name;
                 bar.setAttribute('class', 'fullbar');
