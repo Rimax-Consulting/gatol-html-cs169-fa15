@@ -1,0 +1,46 @@
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lato Regular'), local('Lato-Regular'), url(http://themes.googleusercontent.com/static/fonts/lato/v7/qIIYRU-oROkIk8vfvxw6QvesZW2xOQ-xsNqO47m55DA.woff) format('woff');
+}
+
+@font-face {
+    font-family: CarterOne;
+    src: url('../fonts/Carter_One/CarterOne.ttf');
+}
+
+@font-face {
+    font-family: Chewy;
+    src: url('../fonts/Chewy/Chewy.ttf');
+}
+
+@font-face {
+    font-family: Nobile;
+    src: url('../fonts/Nobile/nobile_bold.ttf');
+}
+
+@font-face {
+    font-family: Ranga;
+    src: url('../fonts/Ranga/Ranga-Bold.ttf');
+}
+
+@font-face {
+    font-family: Slackey;
+    src: url('../fonts/Slackey/Slackey.ttf');
+}
+
+@font-face {
+    font-family: PatuaOne;
+    src: url('../fonts/Patua_One/PatuaOne-Regular.ttf');
+}
+
+@font-face {
+    font-family: Radley;
+    src: url('../fonts/Radley/Radley-Italic.ttf');
+}
+
+@font-face {
+    font-family: Merriweather;
+    src: url('../fonts/Merriweather/Merriweather-Regular.ttf');
+}

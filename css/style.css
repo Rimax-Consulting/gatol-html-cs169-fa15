@@ -1,20 +1,47 @@
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Lato Regular'), local('Lato-Regular'), url(http://themes.googleusercontent.com/static/fonts/lato/v7/qIIYRU-oROkIk8vfvxw6QvesZW2xOQ-xsNqO47m55DA.woff) format('woff');
+html {
+    min-height:100%;/* make sure it is at least as tall as the viewport */
+/*    position:relative;*/
+    -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.6);
+          box-shadow: inset 0 0 100px rgba(0,0,0,.6);
 }
 
-#title {
+header.title {
     font-weight: bold;
     color: #FFFFFF;
     letter-spacing: -1pt;
     word-spacing: 2pt;
-    font-size: 65px;
+    font-size: 50px;
     text-align: center;
     font-family: 'Lato', verdana, arial, sans-serif;
     line-height: 1;
     margin-top: 5%;
+}
+
+.gatol {
+    font-weight: normal;
+    font-family: CarterOne;
+    font-family: PatuaOne;
+/*    font-variant: small-caps;*/
+    text-transform: uppercase;
+     /*    font-family: Nobile;*/
+    /*    font-family: Ranga;*/
+    /*    font-family: Slackey;*/
+    /*    font-family: Chewy;*/
+}
+
+header span {
+    display: block;
+}
+
+header span.gatol {
+    display: block;
+    font-size: 160%;
+    font-weight: normal;
+    clear: both;
+}
+
+header span.of {
+    font-size: 50%;
 }
 
 #dashboard_title {
@@ -221,17 +248,18 @@
 }
 
 #login_container {
-    margin-top: 5%;
+    margin-top: 4%;
 }
 
 #login_title {
     font-weight: bold;
     color: #FFFFFF;
-    letter-spacing: -1pt;
+    letter-spacing: -0.5pt;
     word-spacing: 2pt;
     font-size: 20px;
     text-align: center;
-    font-family: verdana, arial, sans-serif;
+    font-family: Lato, verdana, arial, sans-serif;
+/*    font-variant: small-caps;*/
     line-height: 1;
     margin-top: 15px;
 }
@@ -252,6 +280,7 @@
 body {
 	background: #448ed3 ;
 	font-family: "Lato" ;
+    
 }
 .wrap {
 	width:250px;
