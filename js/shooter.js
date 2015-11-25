@@ -109,9 +109,9 @@ Shooters.prototype = {
 	createFoods: function(that) {
 		for (i = 0; i < this.num_choices; i++) {
 			var x = this._width*((i+.5)/this.num_choices);
-			var y = Math.random()*(-200);
+			var y = 10;
 			var vx = 0;
-			var vy = Math.random()*20 - 6;
+			var vy = 6 + Math.random()*10;
 			var va = 0;//(Math.random() - 0.5) * that.speed/100;
 			// create the food physics body
 			var food = new p2.Body({
@@ -147,8 +147,8 @@ Shooters.prototype = {
 	},
 
 	createProjectile: function() {
-		var vx = 1000*Math.cos(this.shooterGraphics.rotation-Math.PI/2);
-		var vy = 1000*Math.sin(this.shooterGraphics.rotation-Math.PI/2);
+		var vx = 700*Math.cos(this.shooterGraphics.rotation-Math.PI/2);
+		var vy = 700*Math.sin(this.shooterGraphics.rotation-Math.PI/2);
 		var projectile = new p2.Body({
 			position: [this.shooterGraphics.x, this.shooterGraphics.y],
 			mass: 10,
@@ -172,6 +172,20 @@ Shooters.prototype = {
 	},
 
 
+	handleKeys: function (key, state) {
+		switch(key) {
+			case 65:
+			case 37:
+			this.keyLeft = state;
+			break;
+			case 68:
+			case 39:
+			this.keyRight = state;
+			break;
+		}
+	},
+
+
 	getDistance: function(a, b) {
 		return Math.sqrt(Math.pow(a.position[0] - b.position[0], 2) + Math.pow(a.position[1] - b.position[1], 2));
 	},
@@ -184,8 +198,25 @@ Shooters.prototype = {
 			return;
 		}
 
-		this.bouncerGraphics.x = this.bouncer.position[0];
-		this.bouncerGraphics.y = this.bouncer.position[1];
+		// make sure out-of-bounds foods are deleted, end when one food reaches the bottom
+		spliceIndices = [];
+		for (i = 0; i < this.foodBodies.length; i++) {
+			if (this.foodBodies[i].position[0] > this._width + this.foodBodies[i].shapes[0].radius) {
+				spliceIndices.push(i);
+			}
+			if (this.foodBodies[i].position[1] > this._height + this.foodBodies[i].shapes[0].radius+20) {
+				this.foodBodies[i].velocity[1] *= 0;
+				this.recordAnswer(this.answerNumbers[i]);
+				this.foodCreated = false;
+				return;
+			}
+			if (this.foodBodies[i].position[0] < -1*this.foodBodies[i].shapes[0].radius) {
+				spliceIndices.push(i);
+			}
+			if (this.foodBodies[i].position[1] < -1*this.foodBodies[i].shapes[0].radius - 30) {
+				spliceIndices.push(i);
+			}
+		}
 
 		for (i = 0; i < spliceIndices.length; i++) {
 			this.world.removeBody(this.foodBodies[spliceIndices[i]]);
@@ -242,7 +273,7 @@ var ShootersMetaGame = function() {
 	 * returns object of radius and numEnemies based on game progress
 	 */
 	this.getMetaGame = function(correct, index, total) {
-		var gravity = 4 + 10*index/total;
+		var gravity = 6 + 14*index/total;
 		return {gravity:gravity};
 	};
 	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {
