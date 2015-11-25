@@ -288,15 +288,16 @@ var DashBoard = (function() {
                 console.log(data);
                 stats = data.player_summaries;
                 for (var i = 0; i < stats.length; i++) {
+                    stat = stats[i];
                     ul = document.getElementById('stats_list');
                     var li = document.createElement('li');
                     var a = document.createElement('a');
                     var bar = document.createElement('div');
 
-                    a.innerHTML = "Student: " + stats.student_id + ", Average Score: " + stats.avg_score + ", Highest Score: " + stats.highest_score;
+                    a.innerHTML = "Student: " + stat.student_id + ", Average Score: " + stat.avg_score + ", Highest Score: " + stat.highest_score;
                     bar.setAttribute('class', 'fullbar');
                     li.appendChild(a);
-                    li.setAttribute('id', stats.student_id);
+                    li.setAttribute('id', stat.student_id);
                     ul.appendChild(li);
                     ul.appendChild(bar);
                 }
@@ -315,7 +316,7 @@ var DashBoard = (function() {
                 $("#leader_list li").remove();
                 $("#leader_list .fullbar").remove();
 
-                
+
                 console.log(data);
                 rankings = data.ranking;
                 console.log(rankings);
