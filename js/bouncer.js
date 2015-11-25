@@ -24,7 +24,7 @@ var Bouncers = function(parent, width, height, num_choices, state, answerFunc) {
 
 	// physics shit
 	this.world = new p2.World({
-		gravity: [0,200]
+		gravity: [0,-2000]
 	});
 
 	this.foodBodies = [];
@@ -37,14 +37,14 @@ var Bouncers = function(parent, width, height, num_choices, state, answerFunc) {
 	this.answerFunc = answerFunc;
 	this.foodCreated = false;
 
-	var that = this;
-	$("body").mousemove(function(e) {
+	// var that = this;
+	// $("body").mousemove(function(e) {
 
-	});
+	// });
 
-	$("body").mousedown(function(e) {
+	// $("body").mousedown(function(e) {
 
-	});
+	// });
 
 	// Start running the game.
 	this.build();
@@ -112,19 +112,16 @@ Bouncers.prototype = {
 
 	createFoods: function(that) {
 		for (i = 0; i < this.num_choices; i++) {
-			var x = Math.random()*(this._width);
-			var y = Math.random()*(this._height);
-			var vx = 0;
-			var vy = 0;
-			var va = 0;//(Math.random() - 0.5) * that.speed/100;
+			var x = Math.random()*(this._width-30)+15;
+			var y = Math.random()*(this._height-30)+15;
 			// create the food physics body
 			var food = new p2.Body({
 				position: [x,y],
 				mass: 1,
-				damping: 10,
+				damping: .3,
 				angularDamping: 0,
-				velocity: [vx, vy],
-				angularVelocity: va
+				velocity: [0,0],
+				angularVelocity: 0
 			});
 			var foodShape = new p2.Circle({radius: 20});
 			food.addShape(foodShape);
@@ -139,6 +136,11 @@ Bouncers.prototype = {
 
 			var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0x51771a});
 
+			foodGraphics.x = x;
+			foodGraphics.y = y;
+			answerText.x = x-8;
+			answerText.y = y-14;
+
 			that.stage.addChild(foodGraphics);
 			that.stage.addChild(answerText);
 
@@ -147,7 +149,7 @@ Bouncers.prototype = {
 			that.answerChoices.push(answerText);
 			that.answerNumbers.push(i);
 		}
-		this.foodCreated = true;
+		that.foodCreated = true;
 	},
 
 
@@ -157,55 +159,24 @@ Bouncers.prototype = {
 
 	updatePhysics: function () {
 
-		if (this.keyUp) {
-			this.blob.force[1] -= this.speed;
-		}
-		if (this.keyDown) {
-			this.blob.force[1] += this.speed;
-		}
-		if (this.keyRight) {
-			this.blob.force[0] += this.speed;
-		}
-		if (this.keyLeft) {
-			this.blob.force[0] -= this.speed;
-		}
-
-		for (i = 0; i < this.enemyBodies.length; i++) {
-			this.enemyBodies[i].force[0] += this.enemyBodies[i].velocity[1]*2;
-			this.enemyBodies[i].force[1] -= this.enemyBodies[i].velocity[0]*2;
-		}
-
-
-
 		this.bouncerGraphics.x = this.bouncer.position[0];
 		this.bouncerGraphics.y = this.bouncer.position[1];
-		// console.log(this.blobEyeGraphics.x);
-		// this.blobEyeGraphics.x = this.blob.position[0] + 15;//this.blob.velocity[0]/10;
-		// this.blobEyeGraphics.y = this.blob.position[1] + 15;//this.blob.velocity[1]/10;
 
-		for (i=0; i < this.foodBodies.length; i++) {
-			if (this.getDistance(this.foodBodies[i], this.blob) < this.blobRadius*1.25) {
-				this.recordAnswer(i);
-			}
+		if (this.bouncer.position[0] > this._width - this.bouncer.shapes[0].radius) {
+			this.bouncer.velocity[0] *= -1;
 		}
-
-		// wrap to other side of screen
-		// console.log(this.blob);
-		if (this.blob.position[0] > this._width - this.blob.shapes[0].radius) {
-			this.blob.position[0] = this._width - this.blob.shapes[0].radius - 1;
+		if (this.bouncer.position[1] > this._height - this.bouncer.shapes[0].radius) {
+			this.bouncer.velocity[1] *= -1;
 		}
-		if (this.blob.position[1] > this._height - this.blob.shapes[0].radius) {
-			this.blob.position[1] = this._height - this.blob.shapes[0].radius - 1;
+		if (this.bouncer.position[0] < this.bouncer.shapes[0].radius) {
+			this.bouncer.velocity[0] *= -1;
 		}
-		if (this.blob.position[0] < this.blob.shapes[0].radius) {
-			this.blob.position[0] = this.blob.shapes[0].radius + 1;
-		}
-		if (this.blob.position[1] < this.blob.shapes[0].radius) {
-			this.blob.position[1] = this.blob.shapes[0].radius + 1;
+		if (this.bouncer.position[1] < this.bouncer.shapes[0].radius) {
+			this.bouncer.velocity[1] *= -1;
 		}
 
 
-		// wrap foods
+		// bounce foods
 		for (i = 0; i < this.foodBodies.length; i++) {
 			if (this.foodBodies[i].position[0] > this._width - this.foodBodies[i].shapes[0].radius) {
 				this.foodBodies[i].velocity[0] *= -1;
@@ -221,24 +192,6 @@ Bouncers.prototype = {
 			}
 		}
 
-		// wrap enemies
-		for (i = 0; i < this.enemyBodies.length; i++) {
-			if (this.enemyBodies[i].position[0] > this._width - this.enemyBodies[i].shapes[0].radius) {
-				this.enemyBodies[i].velocity[0] *= -1;
-			}
-			if (this.enemyBodies[i].position[1] > this._height - this.enemyBodies[i].shapes[0].radius) {
-				this.enemyBodies[i].velocity[1] *= -1;
-			}
-			if (this.enemyBodies[i].position[0] < this.enemyBodies[i].shapes[0].radius) {
-				this.enemyBodies[i].velocity[0] *= -1;
-			}
-			if (this.enemyBodies[i].position[1] < this.enemyBodies[i].shapes[0].radius) {
-				this.enemyBodies[i].velocity[1] *= -1;
-			}
-		}
-
-		this.blobGraphics.rotation = this.blob.angle;
-		// update food positions
 		for (var i = 0; i < this.foodBodies.length; i++) {
 			this.foodGraphics[i].x = this.foodBodies[i].position[0];
 			this.foodGraphics[i].y = this.foodBodies[i].position[1];
@@ -246,13 +199,6 @@ Bouncers.prototype = {
 			this.answerChoices[i].x = this.foodBodies[i].position[0]-8;
 			this.answerChoices[i].y = this.foodBodies[i].position[1]-14;
 		}
-
-		// update enemy positions
-		for (var i = 0; i < this.enemyBodies.length; i++) {
-			this.enemyGraphics[i].x = this.enemyBodies[i].position[0];
-			this.enemyGraphics[i].y = this.enemyBodies[i].position[1]-19;
-		}
-
 
 		this.world.step(1/60);
 	},
