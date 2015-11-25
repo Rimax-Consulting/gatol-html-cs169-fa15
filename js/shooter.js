@@ -165,6 +165,8 @@ Shooters.prototype = {
 		projectileGraphics.beginFill(0xFFFFFF);
 		projectileGraphics.drawCircle(0,0,5);
 		projectileGraphics.endFill();
+		projectileGraphics.x = this.shooterGraphics.x;
+		projectileGraphics.y = this.shooterGraphics.y;
 		this.stage.addChild(projectileGraphics);
 
 		this.projectileBodies.push(projectile);
