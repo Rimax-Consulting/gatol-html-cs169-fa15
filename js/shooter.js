@@ -25,7 +25,7 @@ var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
 
 	// physics shit
 	this.world = new p2.World({
-		gravity: [0,state.gravity || 500]
+		gravity: [0,10]
 	});
 
 	// speed
@@ -46,13 +46,11 @@ var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
 
 	var that = this;
 	$("body").mousemove(function(e) {
-		that.mouseX = e.pageX;
-		that.mouseY = e.pageY;
+		that.shooterGraphics.rotation = Math.atan2(e.pageX - that.shooterGraphics.x, that.shooterGraphics.y - e.pageY);
 	});
 
 	$("body").mousedown(function(e) {
 		that.clicked = true;
-		console.log([that.mouseX, that.mouseY]);
 	});
 
 	// Start running the game.
@@ -63,8 +61,7 @@ Shooters.prototype = {
 	// Build scene and start animating 
 	build: function() {
 		// create foods
-		var that = this;
-		this.foodMaker = setInterval(this.createFoods, this.interval, that);
+		this.createFoods(this);
 		//draw shooter
 		this.createShooter();
 		// draw enemies
@@ -115,46 +112,42 @@ Shooters.prototype = {
 	},
 
 	createFoods: function(that) {
-		// console.log(that.num_choices);
-		var i = Math.floor(Math.random() * that.num_choices);
-		var x = Math.random() < .5 ? 10 : that._width - 10;
-		var y = Math.round(Math.random() * that._height/4);	
-		while (Math.sqrt(Math.pow(x - that._width/2, 2) + Math.pow(y - that._height/2, 2)) < that.shooterRadius * 2) {
-			x = Math.round(Math.random() * that._width);
-			y = Math.round(Math.random() * that._height);	
+		for (i = 0; i < this.num_choices; i++) {
+			var x = this._width*((i+.5)/this.num_choices);
+			var y = 10;
+			var vx = 0;
+			var vy = 6 + Math.random()*10;
+			var va = 0;//(Math.random() - 0.5) * that.speed/100;
+			// create the food physics body
+			var food = new p2.Body({
+				position: [x,y],
+				mass: 1,
+				damping: 0,
+				angularDamping: 0,
+				velocity: [vx, vy],
+				angularVelocity: va
+			});
+			var foodShape = new p2.Circle({radius: 2});
+			food.addShape(foodShape);
+			that.world.addBody(food);
+
+			// Create the graphics
+			var foodGraphics = new PIXI.Graphics();
+			foodGraphics.beginFill(0xB6EE65);
+			foodGraphics.drawCircle(0,0,20);
+			foodGraphics.endFill();
+
+
+			var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0x51771a});
+
+			that.stage.addChild(foodGraphics);
+			that.stage.addChild(answerText);
+
+			that.foodBodies.push(food);
+			that.foodGraphics.push(foodGraphics);
+			that.answerChoices.push(answerText);
+			that.answerNumbers.push(i);
 		}
-		var vx = x < that._width/2 ? (Math.random()*.8 + .2)*that.speed/6 : (Math.random()*.8 + .2)*that.speed/(-6);
-		var vy = (Math.random() - 0.5) * that.speed/20;
-		var va = 0;//(Math.random() - 0.5) * that.speed/100;
-		// create the food physics body
-		var food = new p2.Body({
-			position: [x,y],
-			mass: 1,
-			damping: 0,
-			angularDamping: 0,
-			velocity: [vx, vy],
-			angularVelocity: va
-		});
-		var foodShape = new p2.Circle({radius: 2});
-		food.addShape(foodShape);
-		that.world.addBody(food);
-
-		// Create the graphics
-		var foodGraphics = new PIXI.Graphics();
-		foodGraphics.beginFill(0xB6EE65);
-		foodGraphics.drawCircle(0,0,20);
-		foodGraphics.endFill();
-
-
-		var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0x51771a});
-
-		that.stage.addChild(foodGraphics);
-		that.stage.addChild(answerText);
-
-		that.foodBodies.push(food);
-		that.foodGraphics.push(foodGraphics);
-		that.answerChoices.push(answerText);
-		that.answerNumbers.push(i);
 	},
 
 
@@ -179,7 +172,7 @@ Shooters.prototype = {
 	updatePhysics: function () {
 
 
-		// bounce off walls and kill things that fall below the bottom?
+		// make sure out-of-bounds foods are deleted, end when one food reaches the bottom
 		spliceIndices = [];
 		for (i = 0; i < this.foodBodies.length; i++) {
 			if (this.foodBodies[i].position[0] > this._width - this.foodBodies[i].shapes[0].radius) {
@@ -187,7 +180,7 @@ Shooters.prototype = {
 			}
 			if (this.foodBodies[i].position[1] > this._height + this.foodBodies[i].shapes[0].radius+20) { // modifying this to make ball disappear
 				this.foodBodies[i].velocity[1] *= 0;
-				spliceIndices.push(i);
+				this.recordAnswer(this.answerNumbers[i]);
 			}
 			if (this.foodBodies[i].position[0] < this.foodBodies[i].shapes[0].radius) {
 				this.foodBodies[i].velocity[0] *= -1;
@@ -196,6 +189,7 @@ Shooters.prototype = {
 				this.foodBodies[i].velocity[1] *= -1;
 			}
 		}
+
 		for (i = 0; i < spliceIndices.length; i++) {
 			this.world.removeBody(this.foodBodies[spliceIndices[i]]);
 			this.stage.removeChild(this.foodGraphics[spliceIndices[i]]);
@@ -208,7 +202,6 @@ Shooters.prototype = {
 
 		// console.log([this.mouseX, this.mouseY]);
 		// console.log(Math.atan2(this.mouseX - this.shooterGraphics.x, -this.mouseY + this.shooterGraphics.y)*180/Math.PI);
-		this.shooterGraphics.rotation = Math.atan2(this.mouseX - this.shooterGraphics.x, -this.mouseY + this.shooterGraphics.y);
 
 		// update food positions
 		for (var i = 0; i < this.foodBodies.length; i++) {
@@ -266,7 +259,7 @@ var ShootersMetaGame = function() {
 		return "Shooters";
 	};
 	this.getInstructions = function() {
-		return "Use A and D (or the left and right arrow keys) to move your shooter Left and Right, respectively. To choose an answer, collect the bubble that corresponds to the correct answer.";
+		return "Use the mouse to aim the gun and click to shoot. Make sure the correct answer lands first by shooting the wrong answers!";
 	};
 	return {
 		getMetaGame:this.getMetaGame,

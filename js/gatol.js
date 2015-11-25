@@ -17,7 +17,7 @@ var gameTemplateIdToImage = {1:'images/blobbers_example.png', 2:'images/baskets_
 var gameTemplateIdToDesc = {
     1: 'Blobbers! Basic game where you are a blob and you have to eat the correct blob!',
     2: 'Baskets! Basic game where you control a basket and have to catch the correct ball!',
-    3: 'Shooters! Basic game where you control a gun and have to shoot the incorrect balls before they land!'
+    3: 'Shooters! Basic game where you control a gun and have to ensure the correct one lands first!'
 }
 
 // maps game_template_id to game title
