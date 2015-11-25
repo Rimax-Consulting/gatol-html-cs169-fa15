@@ -11,8 +11,8 @@
 var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
 	console.log({parent: parent, width:width, height:height, num_choices: num_choices, state:state, answerFunc:answerFunc})
 	// set up scene width and height
-	this._width = width-2;//window.innerWidth - 4;
-	this._height = height-2;//window.innerHeight - 4;
+	this._width = width-2;
+	this._height = height-2;
 
 	// set up rendering surface
 	this.renderer = new PIXI.CanvasRenderer(this._width, this._height);
@@ -32,13 +32,6 @@ var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
 	this.speed = state.gravity*10;
 	this.turnSpeed = 5;
 
-	window.addEventListener('keydown', function(event) {
-		this.handleKeys(event.keyCode, true);
-	}.bind(this), false);	
-	window.addEventListener('keyup', function(event) {
-		this.handleKeys(event.keyCode, false);
-	}.bind(this), false);
-
 	this.foodBodies = [];
 	this.foodGraphics = [];
 	this.answerNumbers = [];
@@ -50,6 +43,17 @@ var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
 	this.interval = state.interval || 1000;
 	this.num_choices = num_choices;
 	this.answerFunc = answerFunc;
+
+	var that = this;
+	$("body").mousemove(function(e) {
+		that.mouseX = e.pageX;
+		that.mouseY = e.pageY;
+	});
+
+	$("body").mousedown(function(e) {
+		that.clicked = true;
+		console.log([that.mouseX, that.mouseY]);
+	});
 
 	// Start running the game.
 	this.build();
@@ -71,8 +75,6 @@ Shooters.prototype = {
 
 	recordAnswer: function(num) {
 		this.stage.removeChild(this.shooterGraphics);
-		this.stage.removeChild(this.shooterEyeGraphics);
-		this.world.removeBody(this.shooter);
 
 		for (i=0; i < this.foodGraphics.length; i++) {
 			this.stage.removeChild(this.foodGraphics[i]);
@@ -94,27 +96,20 @@ Shooters.prototype = {
 	},
 
 	createShooter: function() {
-		// create shooter object
-		this.shooter = new p2.Body({
-			mass: 1,
-			angularVelocity: 0,
-			damping: .99,
-			angularDamping: .5,
-			position:[Math.round(this._width/2),Math.round(this._height + 10)]
-		});
-		this.shooterShape = new p2.Circle({radius:this.shooterRadius});
-		this.shooter.addShape(this.shooterShape);
-		this.world.addBody(this.shooter);
 
 		this.shooterGraphics = new PIXI.Graphics();
 
 		// draw the shooter's body
-		this.shooterGraphics.moveTo(-30,10);
-		this.shooterGraphics.lineStyle(10, 0xFFFFFF, 1);
-		this.shooterGraphics.lineTo(-40,-30);
-		this.shooterGraphics.lineTo(40,-30);
-		this.shooterGraphics.lineTo(30,10);
-		this.shooterGraphics.lineTo(-30,10);
+		this.shooterGraphics.moveTo(0,0);
+		this.shooterGraphics.beginFill(0xFFFFFF);
+		this.shooterGraphics.drawCircle(0,0,60);
+		this.shooterGraphics.drawRect(-20,-75,40,75);
+		this.shooterGraphics.drawRect(-8,-110,16,110);
+		this.shooterGraphics.drawRect(-10,-110,20,15);
+		this.shooterGraphics.endFill();
+
+		this.shooterGraphics.x = this._width/2;
+		this.shooterGraphics.y = this._height;
 
 		this.stage.addChild(this.shooterGraphics);
 	},
@@ -183,40 +178,6 @@ Shooters.prototype = {
 
 	updatePhysics: function () {
 
-		if (this.keyRight) {
-			this.shooter.force[0] += this.speed;
-		}
-		if (this.keyLeft) {
-			this.shooter.force[0] -= this.speed;
-		}
-
-		// for (i = 0; i < this.enemyBodies.length; i++) {
-		// 	this.enemyBodies[i].force[0] += this.enemyBodies[i].velocity[1]*2;
-		// 	this.enemyBodies[i].force[1] -= this.enemyBodies[i].velocity[0]*2;
-		// }
-
-
-		this.shooterGraphics.x = this.shooter.position[0];
-		this.shooterGraphics.y = this.shooter.position[1];
-		// console.log(this.shooterEyeGraphics.x);
-		// this.shooterEyeGraphics.x = this.shooter.position[0] + 15;//this.shooter.velocity[0]/10;
-		// this.shooterEyeGraphics.y = this.shooter.position[1] + 15;//this.shooter.velocity[1]/10;
-
-		for (i=0; i < this.foodBodies.length; i++) {
-			if (this.getDistance(this.foodBodies[i], this.shooter) < this.shooterRadius*1.25) {
-				this.recordAnswer(this.answerNumbers[i]);
-			}
-		}
-
-		if (this.shooter.position[0] > this._width - this.shooter.shapes[0].radius) {
-			this.shooter.position[0] = this._width - this.shooter.shapes[0].radius - 2;
-		}
-		if (this.shooter.position[1] > this._height - this.shooter.shapes[0].radius) {
-			this.shooter.position[1] = this._height - this.shooter.shapes[0].radius + 2;
-		}
-		if (this.shooter.position[0] < this.shooter.shapes[0].radius) {
-			this.shooter.position[0] = this.shooter.shapes[0].radius + 2;
-		}
 
 		// bounce off walls and kill things that fall below the bottom?
 		spliceIndices = [];
@@ -244,22 +205,11 @@ Shooters.prototype = {
 			this.answerNumbers.splice(spliceIndices[i], 1);
 		}
 
-		// for (i = 0; i < this.enemyBodies.length; i++) {
-		// 	if (this.enemyBodies[i].position[0] > this._width - this.enemyBodies[i].shapes[0].radius) {
-		// 		this.enemyBodies[i].velocity[0] *= -1;
-		// 	}
-		// 	if (this.enemyBodies[i].position[1] > this._height - this.enemyBodies[i].shapes[0].radius) {
-		// 		this.enemyBodies[i].velocity[1] *= -1;
-		// 	}
-		// 	if (this.enemyBodies[i].position[0] < this.enemyBodies[i].shapes[0].radius) {
-		// 		this.enemyBodies[i].velocity[0] *= -1;
-		// 	}
-		// 	if (this.enemyBodies[i].position[1] < this.enemyBodies[i].shapes[0].radius) {
-		// 		this.enemyBodies[i].velocity[1] *= -1;
-		// 	}
-		// }
 
-		this.shooterGraphics.rotation = this.shooter.angle;
+		// console.log([this.mouseX, this.mouseY]);
+		// console.log(Math.atan2(this.mouseX - this.shooterGraphics.x, -this.mouseY + this.shooterGraphics.y)*180/Math.PI);
+		this.shooterGraphics.rotation = Math.atan2(this.mouseX - this.shooterGraphics.x, -this.mouseY + this.shooterGraphics.y);
+
 		// update food positions
 		for (var i = 0; i < this.foodBodies.length; i++) {
 			this.foodGraphics[i].x = this.foodBodies[i].position[0];

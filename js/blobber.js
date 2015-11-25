@@ -115,19 +115,6 @@ Blobbers.prototype = {
 
 		this.stage.addChild(this.blobGraphics);
 
-		// this.blobEyeGraphics = new PIXI.Graphics();
-		// this.blobEyeGraphics.moveTo(0,0);
-		// this.blobGraphics.beginFill(0xFFFFFF);
-		// this.blobGraphics.drawCircle(.3*this.blobRadius,0,this.blobRadius/4);
-		// this.blobGraphics.drawCircle(-.3*this.blobRadius,0,this.blobRadius/4);
-		// this.blobGraphics.endFill();
-		// this.blobGraphics.beginFill(0x000000);
-		// this.blobGraphics.drawCircle(.3*this.blobRadius,-3,this.blobRadius/6);
-		// this.blobGraphics.drawCircle(-.3*this.blobRadius,-3,this.blobRadius/6);
-		// this.blobGraphics.endFill();
-
-		// this.stage.addChild(this.blobEyeGraphics);
-
 	},
 
 	createFoods: function() {
