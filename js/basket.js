@@ -9,7 +9,6 @@
  		numEnemies: pretty self explanatory
  */
 var Baskets = function(parent, width, height, num_choices, state, answerFunc) {
-	console.log({parent: parent, width:width, height:height, num_choices: num_choices, state:state, answerFunc:answerFunc})
 	// set up scene width and height
 	this._width = width-2;//window.innerWidth - 4;
 	this._height = height-2;//window.innerHeight - 4;
@@ -124,10 +123,6 @@ Baskets.prototype = {
 		var i = Math.floor(Math.random() * that.num_choices);
 		var x = Math.random() < .5 ? 10 : that._width - 10;
 		var y = Math.round(Math.random() * that._height/4);	
-		while (Math.sqrt(Math.pow(x - that._width/2, 2) + Math.pow(y - that._height/2, 2)) < that.basketRadius * 2) {
-			x = Math.round(Math.random() * that._width);
-			y = Math.round(Math.random() * that._height);	
-		}
 		var vx = x < that._width/2 ? (Math.random()*.8 + .2)*that.speed/6 : (Math.random()*.8 + .2)*that.speed/(-6);
 		var vy = (Math.random() - 0.5) * that.speed/20;
 		var va = 0;//(Math.random() - 0.5) * that.speed/100;

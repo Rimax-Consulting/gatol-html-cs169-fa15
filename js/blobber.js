@@ -9,7 +9,6 @@
  		numEnemies: pretty self explanatory
  */
 var Blobbers = function(parent, width, height, num_choices, state, answerFunc) {
-	console.log({parent: parent, width:width, height:height, num_choices: num_choices, state:state, answerFunc:answerFunc})
 	// set up scene width and height
 	this._width = width-2;//window.innerWidth - 4;
 	this._height = height-2;//window.innerHeight - 4;
@@ -114,19 +113,6 @@ Blobbers.prototype = {
 		this.blobGraphics.endFill();
 
 		this.stage.addChild(this.blobGraphics);
-
-		// this.blobEyeGraphics = new PIXI.Graphics();
-		// this.blobEyeGraphics.moveTo(0,0);
-		// this.blobGraphics.beginFill(0xFFFFFF);
-		// this.blobGraphics.drawCircle(.3*this.blobRadius,0,this.blobRadius/4);
-		// this.blobGraphics.drawCircle(-.3*this.blobRadius,0,this.blobRadius/4);
-		// this.blobGraphics.endFill();
-		// this.blobGraphics.beginFill(0x000000);
-		// this.blobGraphics.drawCircle(.3*this.blobRadius,-3,this.blobRadius/6);
-		// this.blobGraphics.drawCircle(-.3*this.blobRadius,-3,this.blobRadius/6);
-		// this.blobGraphics.endFill();
-
-		// this.stage.addChild(this.blobEyeGraphics);
 
 	},
 

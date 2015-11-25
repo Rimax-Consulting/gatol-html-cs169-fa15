@@ -16,11 +16,12 @@ var gameTemplateIdToImage = {1:'images/blobbers_example.png', 2:'images/baskets_
 // maps game_template_id to game description
 var gameTemplateIdToDesc = {
     1: 'Blobbers! Basic game where you are a blob and you have to eat the correct blob!',
-    2: 'Baskets! Basic game where you control a basket and have to catch the correct ball!'
+    2: 'Baskets! Basic game where you control a basket and have to catch the correct ball!',
+    3: 'Shooters! Basic game where you control a gun and have to ensure the correct one lands first!'
 }
 
 // maps game_template_id to game title
-var gameTemplateIdToTitle = {1:'Blobbers', 2:'Baskets'};
+var gameTemplateIdToTitle = {1:'Blobbers', 2:'Baskets', 3:'Shooters'};
 
 // url to use when in development mode
 var devUrl = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/';

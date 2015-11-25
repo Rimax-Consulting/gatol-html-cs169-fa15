@@ -522,6 +522,8 @@ button:active {
 
 .gameScreen {
     position: relative;
+    margin: 2px;
+    padding: 0px;
 }
 
 .questionText {

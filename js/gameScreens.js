@@ -27,6 +27,8 @@ var Screens = (function() {
 			this.metaGame = BlobbersMetaGame()
 		} else if (gameTemplateIdToTitle[this.templateID] == "Baskets"){
 			this.metaGame = BasketsMetaGame()
+		} else if (gameTemplateIdToTitle[this.templateID] == "Shooters"){
+			this.metaGame = ShootersMetaGame()
 		}
 
 		this.getScore = function() {
@@ -38,6 +40,10 @@ var Screens = (function() {
 		 * answer is user's answer from the game
 		 */
 		this.checkAnswer = function(answer) {
+			if (answer < 0) {
+				this.mostRecentAnswer = "nothing";
+				return false;
+			}
 			this.mostRecentAnswer = this.getCurrentQuestion().allChoices[answer];
 			return this.mostRecentAnswer == this.getCurrentQuestion().answerText;
 		};
@@ -262,6 +268,7 @@ var Screens = (function() {
 	 * the question was answered correctly or incorrectly.
 	 */
 	var answer = function(num) {
+		// console.log(num);
 		$(".questionText").addClass("questionZoomed");
 		var gameDivChildren = document.getElementById("gameScreen").childNodes;
 		for (i = 0; i < gameDivChildren.length; i++) {
@@ -393,8 +400,12 @@ var Screens = (function() {
 			//TEMPORARY QUESTION INITIALIZATION CODE (pretend getRequest actually works)
 			var questionList = [new Question("What is two plus two?", "4", ["1", "2", "3", "potato"]),
 				new Question("The square root of 1600 is 40.", "true", ["false"]),
+				new Question("Dog goes:", "woof", ["meow", "tweet", "squeak", "moo", "croak", "toot"]),
+				new Question("Cat goes:", "meow", ["woof", "tweet", "squeak", "moo", "croak", "toot"]),
+				new Question("Mouse goes:", "squeak", ["meow", "tweet", "woof", "moo", "croak", "toot"]),
+				new Question("Bird goes:", "tweet", ["meow", "woof", "squeak", "moo", "croak", "toot"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-			currentGame = new Game(-1, questionList, "Assorted Questions", 1);
+			currentGame = new Game(-1, questionList, "Assorted Questions", 3);
 			$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
 			setMainTitleScreen();
 		};
