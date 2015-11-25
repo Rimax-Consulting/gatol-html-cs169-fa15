@@ -6,15 +6,18 @@ html {
 }
 
 header.title {
+    margin-top: 3%;
+    text-align: center;
+    
+    font-family: 'Lato', verdana, arial, sans-serif;
     font-weight: bold;
+    font-size: 50px;
     color: #FFFFFF;
     letter-spacing: -1pt;
     word-spacing: 2pt;
-    font-size: 50px;
-    text-align: center;
-    font-family: 'Lato', verdana, arial, sans-serif;
     line-height: 1;
-    margin-top: 3%;
+    
+    text-shadow: 2px 2px rgba(43, 35, 80, 0.30);
 }
 
 .gatol {

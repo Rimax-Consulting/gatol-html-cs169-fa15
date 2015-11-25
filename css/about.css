@@ -100,3 +100,7 @@ header img {
 .center {
     text-align: center;
 }
+.quote em {
+    color: rgba(231, 252, 174, 0.97);
+    font-weight: bold;
+}
