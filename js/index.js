@@ -103,9 +103,10 @@ var GameAThon = (function () {
                 }
             };
             var onFailure = function (data) {
-                console.error('failure to login as user');
+                //console.error('failure to login as user');
                 consoleError(data);
-                displayError('Login Failed! Please try again.', '#login_screen');
+                msg = extractJSONFailMsg(data)
+                displayError('Login Failed! ' + msg +' Please try again.', '#login_screen');
             };
 
             url = '/api/sessions'
@@ -154,18 +155,12 @@ var GameAThon = (function () {
 
         // login back
         loginContainer.on('click', '#login_back', function (e) {
-            loginContainer.find('#login_title').hide();
-            loginContainer.find("#login_screen").hide();
-            loginContainer.find("#select_screen").show();
-            resetAllErrors();
+            backToMain(loginContainer, '#login_screen');
         });
 
         // trainer login back
         loginContainer.on('click', '#trainer_login_back', function (e) {
-            loginContainer.find('#login_title').hide();
-            loginContainer.find("#trainer_login_screen").hide();
-            loginContainer.find("#select_screen").show();
-            resetAllErrors();
+            backToMain(loginContainer, '#trainer_login_screen');
         });
 
 
@@ -191,10 +186,7 @@ var GameAThon = (function () {
 
         // register back
         loginContainer.on('click', '#register_back', function (e) {
-            loginContainer.find('#login_title').hide();
-            loginContainer.find('#register_screen').hide();
-            loginContainer.find('#select_screen').show();
-            resetAllErrors();
+            backToMain(loginContainer, '#register_screen');
         });
 
         // register trainer
@@ -209,17 +201,15 @@ var GameAThon = (function () {
 
         // register trainer back
         loginContainer.on('click', '#register_trainer_back', function (e) {
-            loginContainer.find('#login_title').hide();
-            loginContainer.find('#register_trainer_screen').hide();
-            loginContainer.find('#select_screen').show();
-            resetAllErrors();
+            backToMain(loginContainer, '#register_trainer_screen');
         });
 
         loginContainer.on('click', '#register_user', function (e) {
             var creds = {} // prepare credentials for passing into backend
 
             if (loginContainer.find('#register_password').val() != loginContainer.find('#register_confirm_password').val()) {
-                alert('password does not match');
+                //  alert('password does not match');
+                displayError('Passwords do not match! Please re-enter.', '#register_screen')
                 return;
             }
 
@@ -256,7 +246,8 @@ var GameAThon = (function () {
             var creds = {} // prepare credentials for passing into backend
 
             if (loginContainer.find('#register_trainer_password').val() != loginContainer.find('#register_trainer_confirm_password').val()) {
-                alert('password does not match');
+                //alert('password does not match');
+                displayError('Passwords do not match! Please re-enter.', '#register_screen')
                 return;
             }
 
@@ -317,4 +308,29 @@ function displayError(message, parent) {
 
 function resetAllErrors() {
     $('.error').hide();
+}
+
+
+function showLoginFailMsg(errors) {
+}
+
+function showRegisterFailMsg(errors) {
+    
+}
+
+function extractJSONFailMsg(data) {
+    errors = JSON.parse(data.responseText).errors;
+    msg = ""
+    if (errors != null) {
+        msg += errors[0] + '. '
+    }
+    return msg
+
+}
+
+function backToMain(loginContainer, currentScreen) {
+    loginContainer.find('#login_title').hide();
+    loginContainer.find(currentScreen).hide();
+    loginContainer.find('#select_screen').show();
+    resetAllErrors();
 }
