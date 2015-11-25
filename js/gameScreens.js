@@ -127,6 +127,8 @@ var Screens = (function() {
 		// $(".btnHowTo").show();
 		// $(".centerBtns .btnQuitGame").show();
 
+		$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
+
 		$(".screenTitle").text(currentGame.getTitle()); //name of game template.
 		$(".centerText").removeClass("centerBtns");
 	};
@@ -406,7 +408,7 @@ var Screens = (function() {
 				new Question("Bird goes:", "tweet", ["meow", "woof", "squeak", "moo", "croak", "toot"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
 			currentGame = new Game(-1, questionList, "Assorted Questions", 3);
-			$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
+			
 			setMainTitleScreen();
 		};
 

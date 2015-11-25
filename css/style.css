@@ -544,6 +544,7 @@ button:active {
 }
 
 .centerText, .qSetText {
+    font-family: verdana, arial, sans-serif;
     font-weight: bold;
     color: white;
     letter-spacing: 1pt;
