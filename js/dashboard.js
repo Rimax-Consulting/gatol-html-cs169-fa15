@@ -282,21 +282,26 @@ var DashBoard = (function() {
             console.log(current_game_id);
 
             var onSuccess = function(data) {
+                $("#stats_list li").remove();
+                $("#stats_list .fullbar").remove();
+
                 console.log(data);
-                rankings = data.ranking;
-                for (var i = 0; i < rankings.length; i++) {
+                stats = data.player_summaries;
+                for (var i = 0; i < stats.length; i++) {
+                    stat = stats[i];
                     ul = document.getElementById('stats_list');
                     var li = document.createElement('li');
                     var a = document.createElement('a');
                     var bar = document.createElement('div');
 
-                    a.innerHTML = rankings.student_id + " score: " + rankings.score + " date: " + rankings.date;
+                    a.innerHTML = "Student: " + stat.student_id + ", Average Score: " + stat.avg_score + ", Highest Score: " + stat.highest_score;
                     bar.setAttribute('class', 'fullbar');
                     li.appendChild(a);
-                    li.setAttribute('id', rankings.student_id);
+                    li.setAttribute('id', stat.student_id);
                     ul.appendChild(li);
                     ul.appendChild(bar);
                 }
+                
             };
 
             var onFailure = function(data) {
@@ -308,6 +313,10 @@ var DashBoard = (function() {
 
 
             var leaderboardSuccess = function(data) {
+                $("#leader_list li").remove();
+                $("#leader_list .fullbar").remove();
+
+
                 console.log(data);
                 rankings = data.ranking;
                 console.log(rankings);
