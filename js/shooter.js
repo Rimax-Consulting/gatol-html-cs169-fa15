@@ -147,8 +147,8 @@ Shooters.prototype = {
 	},
 
 	createProjectile: function() {
-		var vx = 600*Math.cos(this.shooterGraphics.rotation-Math.PI/2);
-		var vy = 600*Math.sin(this.shooterGraphics.rotation-Math.PI/2);
+		var vx = 700*Math.cos(this.shooterGraphics.rotation-Math.PI/2);
+		var vy = 700*Math.sin(this.shooterGraphics.rotation-Math.PI/2);
 		var projectile = new p2.Body({
 			position: [this.shooterGraphics.x, this.shooterGraphics.y],
 			mass: 10,
@@ -273,7 +273,7 @@ var ShootersMetaGame = function() {
 	 * returns object of radius and numEnemies based on game progress
 	 */
 	this.getMetaGame = function(correct, index, total) {
-		var gravity = 6 + 16*index/total;
+		var gravity = 6 + 14*index/total;
 		return {gravity:gravity};
 	};
 	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {
