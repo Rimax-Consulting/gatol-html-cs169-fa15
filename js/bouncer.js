@@ -1,14 +1,14 @@
-/** Initializes a shooterber game object
+/** Initializes a bouncer game object
  * @param parent the containing elemnt (like a div or something)
  * @param width element width
  * @param height element height
  * @param num_choices the number of answer choices to choose from
  * @param state object varies for each game
- 	potential state variables for Shooters:
- 		radius: the radius of the shooter
+ 	potential state variables for Bouncers:
+ 		radius: the radius of the bouncer
  		numEnemies: pretty self explanatory
  */
-var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
+var Bouncers = function(parent, width, height, num_choices, state, answerFunc) {
 	// set up scene width and height
 	this._width = width-2;
 	this._height = height-2;
@@ -31,35 +31,32 @@ var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
 	this.foodGraphics = [];
 	this.answerNumbers = [];
 	this.answerChoices = [];
-	this.projectileBodies = [];
-	this.projectileGraphics = [];
 
-	this.shooterRadius = 30;
+	this.bouncerRadius = 30;
 	this.num_choices = num_choices;
 	this.answerFunc = answerFunc;
 	this.foodCreated = false;
 
 	var that = this;
 	$("body").mousemove(function(e) {
-		that.shooterGraphics.rotation = Math.atan2(e.pageX - that.shooterGraphics.x, that.shooterGraphics.y - e.pageY);
+
 	});
 
 	$("body").mousedown(function(e) {
-		that.clicked = true;
-		that.createProjectile();
+
 	});
 
 	// Start running the game.
 	this.build();
 };
 
-Shooters.prototype = {
+Bouncers.prototype = {
 	// Build scene and start animating 
 	build: function() {
+		//draw bouncer
+		this.createBouncer();
 		// create foods
 		this.createFoods(this);
-		//draw shooter
-		this.createShooter();
 		// draw enemies
 		//this.createEnemies();
 		// start first frame
@@ -67,7 +64,7 @@ Shooters.prototype = {
 	},
 
 	recordAnswer: function(num) {
-		this.stage.removeChild(this.shooterGraphics);
+		this.stage.removeChild(this.bouncerGraphics);
 
 		for (i=0; i < this.foodGraphics.length; i++) {
 			this.stage.removeChild(this.foodGraphics[i]);
@@ -87,37 +84,44 @@ Shooters.prototype = {
 		this.answerFunc(num);
 	},
 
-	createShooter: function() {
+	createBouncer: function() {
+		this.bouncer = new p2.Body({
+			mass: 1,
+			angularVelocity: 0,
+			damping: .3,
+			angularDamping: .5,
+			position:[Math.random()*this._width,Math.random()*this._height]
+		});
+		this.bouncerShape = new p2.Circle({radius:20});
+		this.bouncer.addShape(this.bouncerShape);
+		this.world.addBody(this.bouncer);
 
-		this.shooterGraphics = new PIXI.Graphics();
+		this.bouncerGraphics = new PIXI.Graphics();
 
-		// draw the shooter's body
-		this.shooterGraphics.moveTo(0,0);
-		this.shooterGraphics.beginFill(0xFFFFFF);
-		this.shooterGraphics.drawCircle(0,0,60);
-		this.shooterGraphics.drawRect(-20,-75,40,75);
-		this.shooterGraphics.drawRect(-8,-110,16,110);
-		this.shooterGraphics.drawRect(-10,-110,20,15);
-		this.shooterGraphics.endFill();
+		// draw the bouncer's body
+		this.bouncerGraphics.moveTo(0,0);
+		this.bouncerGraphics.beginFill(0xFFFFFF);
+		this.bouncerGraphics.drawCircle(0,0,20);
+		this.bouncerGraphics.endFill();
 
-		this.shooterGraphics.x = this._width/2;
-		this.shooterGraphics.y = this._height;
+		this.bouncerGraphics.x = this.bouncer.position[0];
+		this.bouncerGraphics.y = this.bouncer.position[1];
 
-		this.stage.addChild(this.shooterGraphics);
+		this.stage.addChild(this.bouncerGraphics);
 	},
 
 	createFoods: function(that) {
 		for (i = 0; i < this.num_choices; i++) {
-			var x = this._width*((i+.5)/this.num_choices);
-			var y = Math.random()*(-200);
+			var x = Math.random()*(this._width);
+			var y = Math.random()*(this._height);
 			var vx = 0;
-			var vy = Math.random()*20 - 6;
+			var vy = 0;
 			var va = 0;//(Math.random() - 0.5) * that.speed/100;
 			// create the food physics body
 			var food = new p2.Body({
 				position: [x,y],
 				mass: 1,
-				damping: 0,
+				damping: 10,
 				angularDamping: 0,
 				velocity: [vx, vy],
 				angularVelocity: va
@@ -142,33 +146,8 @@ Shooters.prototype = {
 			that.foodGraphics.push(foodGraphics);
 			that.answerChoices.push(answerText);
 			that.answerNumbers.push(i);
-			this.foodCreated = true;
 		}
-	},
-
-	createProjectile: function() {
-		var vx = 1000*Math.cos(this.shooterGraphics.rotation-Math.PI/2);
-		var vy = 1000*Math.sin(this.shooterGraphics.rotation-Math.PI/2);
-		var projectile = new p2.Body({
-			position: [this.shooterGraphics.x, this.shooterGraphics.y],
-			mass: 10,
-			damping: 0,
-			angularDamping: 0,
-			velocity: [vx,vy],
-			angularVelocity: 0,
-		});
-		var projectileShape = new p2.Circle({radius: 5});
-		projectile.addShape(projectileShape);
-		this.world.addBody(projectile);
-
-		var projectileGraphics = new PIXI.Graphics();
-		projectileGraphics.beginFill(0xFFFFFF);
-		projectileGraphics.drawCircle(0,0,5);
-		projectileGraphics.endFill();
-		this.stage.addChild(projectileGraphics);
-
-		this.projectileBodies.push(projectile);
-		this.projectileGraphics.push(projectileGraphics);
+		this.foodCreated = true;
 	},
 
 
@@ -184,8 +163,25 @@ Shooters.prototype = {
 			return;
 		}
 
-		this.bouncerGraphics.x = this.bouncer.position[0];
-		this.bouncerGraphics.y = this.bouncer.position[1];
+		// make sure out-of-bounds foods are deleted, end when one food reaches the bottom
+		spliceIndices = [];
+		for (i = 0; i < this.foodBodies.length; i++) {
+			if (this.foodBodies[i].position[0] > this._width + this.foodBodies[i].shapes[0].radius) {
+				spliceIndices.push(i);
+			}
+			if (this.foodBodies[i].position[1] > this._height + this.foodBodies[i].shapes[0].radius+20) {
+				this.foodBodies[i].velocity[1] *= 0;
+				this.recordAnswer(this.answerNumbers[i]);
+				this.foodCreated = false;
+				return;
+			}
+			if (this.foodBodies[i].position[0] < -1*this.foodBodies[i].shapes[0].radius) {
+				spliceIndices.push(i);
+			}
+			if (this.foodBodies[i].position[1] < -1*this.foodBodies[i].shapes[0].radius - 200) {
+				spliceIndices.push(i);
+			}
+		}
 
 		for (i = 0; i < spliceIndices.length; i++) {
 			this.world.removeBody(this.foodBodies[spliceIndices[i]]);
@@ -196,6 +192,33 @@ Shooters.prototype = {
 			this.answerNumbers.splice(spliceIndices[i], 1);
 		}
 
+		if (this.bouncer.position[0] > this._width - this.bouncer.shapes[0].radius) {
+			this.bouncer.velocity[0] *= -1;
+		}
+		if (this.bouncer.position[1] > this._height - this.bouncer.shapes[0].radius) {
+			this.bouncer.velocity[1] *= -1;
+		}
+		if (this.bouncer.position[0] < this.bouncer.shapes[0].radius) {
+			this.bouncer.velocity[0] *= -1;
+		}
+		if (this.bouncer.position[1] < this.bouncer.shapes[0].radius) {
+			this.bouncer.velocity[1] *= -1;
+		}
+
+		for (i = 0; i < this.foodBodies.length; i++) {
+			if (this.foodBodies[i].position[0] > this._width - this.foodBodies[i].shapes[0].radius) {
+				this.foodBodies[i].velocity[0] *= -1;
+			}
+			if (this.foodBodies[i].position[1] > this._height - this.foodBodies[i].shapes[0].radius) {
+				this.foodBodies[i].velocity[1] *= -1;
+			}
+			if (this.foodBodies[i].position[0] < this.foodBodies[i].shapes[0].radius) {
+				this.foodBodies[i].velocity[0] *= -1;
+			}
+			if (this.foodBodies[i].position[1] < this.foodBodies[i].shapes[0].radius) {
+				this.foodBodies[i].velocity[1] *= -1;
+			}
+		}
 
 		// update food positions
 		for (var i = 0; i < this.foodBodies.length; i++) {
@@ -205,19 +228,6 @@ Shooters.prototype = {
 			this.answerChoices[i].x = this.foodBodies[i].position[0]-8;
 			this.answerChoices[i].y = this.foodBodies[i].position[1]-14;
 		}		
-
-		// update projectile positions
-		for (var i = 0; i < this.projectileBodies.length; i++) {
-			this.projectileGraphics[i].x = this.projectileBodies[i].position[0];
-			this.projectileGraphics[i].y = this.projectileBodies[i].position[1];
-		}
-
-		// // update enemy positions
-		// for (var i = 0; i < this.enemyBodies.length; i++) {
-		// 	this.enemyGraphics[i].x = this.enemyBodies[i].position[0];
-		// 	this.enemyGraphics[i].y = this.enemyBodies[i].position[1]-19;
-		// }
-
 
 		this.world.step(1/60);
 	},
@@ -231,7 +241,7 @@ Shooters.prototype = {
 	}
 };
 
-var ShootersMetaGame = function() {
+var BouncersMetaGame = function() {
 	/**
 	 * calculates score based on how many we got right and possibly how many we got wrong
 	 */
@@ -247,17 +257,17 @@ var ShootersMetaGame = function() {
 	};
 	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {
 		if (state) {
-			var Game = new Shooters(parent, width, height, num_choices, state, answerFunc);
+			var Game = new Bouncers(parent, width, height, num_choices, state, answerFunc);
 			return true;
 		} else {
 			return false;
 		}
 	};
 	this.getTitle = function() {
-		return "Shooters";
+		return "Bouncers";
 	};
 	this.getInstructions = function() {
-		return "Use the mouse to aim the gun and click to shoot. Make sure the correct answer lands first by shooting the wrong answers!";
+		return "Click and drag the mouse to fire the cue ball. Make sure the correct answer lands in a pocket first!";
 	};
 	return {
 		getMetaGame:this.getMetaGame,
