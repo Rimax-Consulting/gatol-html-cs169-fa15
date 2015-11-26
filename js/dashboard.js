@@ -88,11 +88,7 @@ var DashBoard = (function() {
                 console.log('error getting game details on click');
             }
 
-            if (trainer == 'true') {
-                game_temp_id = gameDetails.game_template_id;
-            } else {
-                game_temp_id = gameDetails.template_id;
-            }
+            game_temp_id = gameDetails.game_template_id;
             imgPath = gameTemplateIdToImage[game_temp_id];
 
             console.log('game temp id: ' + game_temp_id);
@@ -235,9 +231,8 @@ var DashBoard = (function() {
                 creds.student_email = email;
                 url = '/api/game_enrollments';
                 makePostRequestWithAuthorization(url, creds, token, onSuccess, onFailure);
+                $('#enroll_student_email').val("");
             }
-
-
 
         });
 
@@ -278,6 +273,7 @@ var DashBoard = (function() {
             url = '/api/game_enrollments/' + idToRemove;
             console.log(url);
             makeDeleteRequestWithAuthorization(url, token, onSuccess, onFailure);
+            $('#unenroll_student_email').val("");
 
         });
 
@@ -317,6 +313,7 @@ var DashBoard = (function() {
                 consoleError(data);
             };
 
+            //game_instances/stats?game_id=<>
             url = '/api/game_instances/summary?game_id=' + current_game_id;
             makeGetRequestWithAuthorization(url, token, onSuccess, onFailure);
 
