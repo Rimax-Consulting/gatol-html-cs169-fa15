@@ -19,8 +19,12 @@ var CreateGame = (function() {
             var finish = {} // container to hold game data to be created
             qset = create_container.find('.csv_item.selected');
             template = create_container.find('.template_item.selected');
-            template_li = template[0].closest('li');
-            qset_li = qset[0].closest('li');
+            try {
+                template_li = template[0].closest('li');
+                qset_li = qset[0].closest('li');
+            } catch (err) {
+                alert("Please select a csv");
+            }
             finish.question_set_id = qset_li.id;
             finish.game_template_id = template_li.id;
             finish.description = create_container.find('#create_game_description').val();
