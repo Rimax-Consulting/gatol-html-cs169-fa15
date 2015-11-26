@@ -202,7 +202,7 @@ var DashBoard = (function() {
 
             creds = {};
             creds.game_id = current_game_id;
-            creds.student_email = dash_container.find('#enroll_student_email').val();  
+
 
             var onSuccess = function(data) {
                 console.log(data);
@@ -227,8 +227,17 @@ var DashBoard = (function() {
                 consoleError(data);
             };
 
-            url = '/api/game_enrollments';
-            makePostRequestWithAuthorization(url, creds, token, onSuccess, onFailure);
+            var email = $('#enroll_student_email').val();
+            if (email == "") {
+                alert("Please enter a student's email address");
+
+            } else {
+                creds.student_email = email;
+                url = '/api/game_enrollments';
+                makePostRequestWithAuthorization(url, creds, token, onSuccess, onFailure);
+            }
+
+
 
         });
 
@@ -427,6 +436,8 @@ var DashBoard = (function() {
      * @return {None}
      */
     var start = function() {
+        checkIfLoggedIn();
+
         dash_header = $("#dashboard_header");
         dash_container = $("#dashboard_container");
         games_list = [];

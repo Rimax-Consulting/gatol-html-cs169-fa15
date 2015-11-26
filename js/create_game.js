@@ -134,6 +134,8 @@ var CreateGame = (function() {
      * @return {None}
      */
     var start = function() {
+        checkIfLoggedIn();
+        
         create_container = $("#create_game_container");
 
         setQuestionSets();
