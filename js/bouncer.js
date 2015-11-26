@@ -72,8 +72,8 @@ var Bouncers = function(parent, width, height, num_choices, state, answerFunc) {
 		}
 		that.mouseClicked = false;
 		that.inMotion = true;
-		that.bouncer.velocity[0] = (e.pageX-that.mouseStart[0]) * 2;
-		that.bouncer.velocity[1] = (e.pageY-that.mouseStart[1]) * 2;
+		that.bouncer.velocity[0] = (e.pageX-that.mouseStart[0]) * 3;
+		that.bouncer.velocity[1] = (e.pageY-that.mouseStart[1]) * 3;
 		that.stage.removeChild(that.arrow);
 	});
 
@@ -119,7 +119,7 @@ Bouncers.prototype = {
 		this.bouncer = new p2.Body({
 			mass: 1,
 			angularVelocity: 0,
-			damping: .2,
+			damping: .4,
 			angularDamping: .5,
 			position:[Math.random()*(this._width-140)+70,Math.random()*(this._height-140)+70]
 		});
@@ -172,7 +172,7 @@ Bouncers.prototype = {
 			var food = new p2.Body({
 				position: [x,y],
 				mass: 1,
-				damping: .2,
+				damping: .4,
 				angularDamping: 0,
 				velocity: [0,0],
 				angularVelocity: 0
