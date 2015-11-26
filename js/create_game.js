@@ -38,6 +38,7 @@ var CreateGame = (function() {
 
             var delFailed = function(data) {
                 consoleError(data)
+                alert(data.repsonseJSON.length + " games rely on this CSV. You can not delete it.");
             };
 
 
