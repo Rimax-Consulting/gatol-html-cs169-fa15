@@ -112,7 +112,7 @@ var GameAThon = (function () {
                 };
 
                 url = '/api/sessions'
-                console.log(creds);
+                // console.log(creds);
                 makePostRequest(url, creds, onSuccess, onFailure);
             }
 
@@ -146,7 +146,8 @@ var GameAThon = (function () {
                 };
                 var onFailure = function (data) {
                     consoleError(data);
-                    displayError('Login Failed! Please try again.', '#trainer_login_screen')
+                    msg = extractJSONFailMsg(data)
+                    displayError('Login Failed! ' + msg +' Please try again.', '#trainer_login_screen');
                 };
 
                 url = '/api/sessions'
@@ -325,7 +326,9 @@ function showRegisterFailMsg(errors) {
 }
 
 function extractJSONFailMsg(data) {
+    console.log(data);
     errors = JSON.parse(data.responseText).errors;
+    console.log(errors);
     msg = ""
     if (errors != null) {
         msg += errors[0] + '. '
