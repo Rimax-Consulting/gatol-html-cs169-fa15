@@ -328,8 +328,7 @@ var BouncersMetaGame = function() {
 	 * returns object of radius and numEnemies based on game progress
 	 */
 	this.getMetaGame = function(correct, index, total) {
-		var gravity = 4 + 10*index/total;
-		return {gravity:gravity};
+		return {};
 	};
 	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {
 		if (state) {
