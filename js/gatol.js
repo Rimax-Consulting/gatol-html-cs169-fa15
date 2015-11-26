@@ -11,7 +11,7 @@
 var apiUrl = 'https://gatol.herokuapp.com' 
 
 // maps game_template_id to image
-var gameTemplateIdToImage = {1:'images/blobbers_example.png', 2:'images/baskets_example.png'};
+var gameTemplateIdToImage = {1:'images/blobbers_example.png', 2:'images/baskets_example.png', 3:'images/shooters_example.png'};
 
 // maps game_template_id to game description
 var gameTemplateIdToDesc = {
@@ -298,7 +298,7 @@ function consoleError(data) {
 function checkIfLoggedIn() {
     var auth = getCookie("auth_token");
     if (auth == "") {
-        alert("sign-in now");
-        // window.location.href="index.html";
+        // alert("sign-in now");
+        window.location.href="index.html";
     }
 }
