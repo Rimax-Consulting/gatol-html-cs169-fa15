@@ -15,10 +15,10 @@ var gameTemplateIdToImage = {1:'images/blobbers_example.png', 2:'images/baskets_
 
 // maps game_template_id to game description
 var gameTemplateIdToDesc = {
-    1: 'Blobbers! Basic game where you are a blob and you have to eat the correct blob!',
-    2: 'Baskets! Basic game where you control a basket and have to catch the correct ball!',
-    3: 'Shooters! Basic game where you control a gun and have to ensure the correct one lands first!',
-    4: 'Bouncers! Basic game where you use one ball to knock the correct answer into a hole!'
+    1: 'Blobbers! You are a blob and you have to eat the correct blob!',
+    2: 'Baskets! You control a basket and have to catch the correct ball!',
+    3: 'Shooters! You control a gun and have to ensure the correct one lands first!',
+    4: 'Bouncers! You use one ball to knock the correct answer into a hole!'
 }
 
 // maps game_template_id to game title
