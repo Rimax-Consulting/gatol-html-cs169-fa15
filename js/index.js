@@ -331,7 +331,7 @@ function extractJSONFailMsg(data) {
     console.log(errors);
     msg = ""
     if (errors != null) {
-        msg += errors + '. '
+        msg += errors[0] + '. '
     }
     return msg
 
