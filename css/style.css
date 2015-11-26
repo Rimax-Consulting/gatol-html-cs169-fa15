@@ -415,10 +415,13 @@ button:active {
     width: 200px;
 }
 
+.csv_btn {
+    width: 20%
+}
+
 #add_csv_btn {
-    width: 200px;
     margin-top: 5px;
-    margin-left: 175px;
+    margin-left: 30%;
 }
 
 #game_link
