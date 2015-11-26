@@ -427,6 +427,8 @@ var DashBoard = (function() {
      * @return {None}
      */
     var start = function() {
+        checkIfLoggedIn();
+        
         dash_header = $("#dashboard_header");
         dash_container = $("#dashboard_container");
         games_list = [];

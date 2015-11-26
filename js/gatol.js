@@ -295,4 +295,10 @@ function consoleError(data) {
     console.error(data.responseText);
 }
 
-
+function checkIfLoggedIn() {
+    var auth = getCookie("auth_token");
+    if (auth == "") {
+        alert("sign-in now");
+        // window.location.href="index.html";
+    }
+}

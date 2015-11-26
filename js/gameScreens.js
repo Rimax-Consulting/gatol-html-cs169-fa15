@@ -388,14 +388,13 @@ var Screens = (function() {
 
 	var start = function() {
 		//probably initialized in a public method that is called by the screen that chooses the game from the student's game list
+		checkIfLoggedIn();
+		
 		gameInstanceID = ""; 
 		descr = "";
 		tempID = "";
 
-		gameID = getCookie("game_id"); //i have set this cookie in dashboard.js
-		// gameID = "4";
-
-
+		gameID = getCookie("game_id");
 		token = getCookie("auth_token");
 
 		var gameLoadError = function(){
@@ -465,6 +464,7 @@ var Screens = (function() {
 
         attachHandlers();
         setLoadingScreen();
+
     };
 
     return {
