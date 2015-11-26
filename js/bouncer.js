@@ -296,14 +296,20 @@ Bouncers.prototype = {
 			this.answerChoices[i].y = this.foodBodies[i].position[1]-14;
 
 			// console.log(Math.pow(this.foodBodies[i].velocity[0],2) + Math.pow(this.foodBodies[i].velocity[1],2));
-			if (Math.pow(this.foodBodies[i].velocity[0],2) + Math.pow(this.foodBodies[i].velocity[1],2) > 25) {
+			if (Math.pow(this.foodBodies[i].velocity[0],2) + Math.pow(this.foodBodies[i].velocity[1],2) > 35) {
 				// console.log("SUMTHIN STILL MOVIN BITCH");
 				nothingInMotion = false;
 			}
 		}
 
-		if (nothingInMotion && Math.pow(this.bouncer.velocity[0],2) + Math.pow(this.bouncer.velocity[1],2) < 15) {
+		if (nothingInMotion && Math.pow(this.bouncer.velocity[0],2) + Math.pow(this.bouncer.velocity[1],2) < 30) {
 			this.inMotion = false;
+		}
+		if (!this.inMotion) {
+			for (var i = 0; i < this.foodBodies.length; i++) {
+				this.foodBodies.velocity = [0,0];
+			}
+			this.bouncer.velocity = [0,0];
 		}
 
 		this.world.step(1/60);
