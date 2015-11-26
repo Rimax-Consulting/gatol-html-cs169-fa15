@@ -18,7 +18,6 @@ var CreateGame = (function() {
         create_container.on('click', '#delete_csv_btn', function(e) {
             qset = $('.csv_item.selected');
             try {
-                template_li = template[0].closest('li');
                 qset_li = qset[0].closest('li');
             } catch (err) {
                 alert("Please select a csv");
