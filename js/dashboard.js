@@ -322,7 +322,7 @@ var DashBoard = (function() {
                     var a = document.createElement('a');
                     var bar = document.createElement('div');
 
-                    a.innerHTML = "Score: " + stat.score + ", Date: " + stat.date;
+                    a.innerHTML = "Score: " + stat.score + ", Date: " + stat.updated_at.substring(0, 10);
                     bar.setAttribute('class', 'fullbar');
                     li.appendChild(a);
                     ul.appendChild(li);
@@ -335,17 +335,13 @@ var DashBoard = (function() {
                 consoleError(data);
             };
 
-            //game_instances/stats?game_id=<>
-
-            if (trainer) {
+            if (trainer == "true") {
                 url = '/api/game_instances/summary?game_id=' + current_game_id;
                 makeGetRequestWithAuthorization(url, token, trainerStatsSuccess, statsFailure);
             } else {
                 url = '/api/game_instances/stats?game_id=' + current_game_id;
                 makeGetRequestWithAuthorization(url, token, studentStatsSuccess, statsFailure);
             }
-
-            
 
 
             var leaderboardSuccess = function(data) {

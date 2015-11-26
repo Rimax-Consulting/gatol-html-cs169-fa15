@@ -16,6 +16,34 @@ var CreateGame = (function() {
         });
 
         create_container.on('click', '#delete_csv_btn', function(e) {
+            qset = $('.csv_item.selected');
+            try {
+                qset_li = qset[0].closest('li');
+            } catch (err) {
+                alert("Please select a csv");
+                return;
+            }
+            del_id = qset_li.id;
+
+            token = getCookie('auth_token');
+
+
+            var delSuccess = function(data) {
+                console.log(data)
+
+                bar = $('#' + del_id).next('div');
+                $('#' + del_id).remove();
+                bar.remove();
+            };
+
+            var delFailed = function(data) {
+                consoleError(data);
+                alert("You have games that rely on this CSV. You can not delete it.");
+            };
+
+
+            url = '/api/question_sets/';
+            makeDeleteRequestWithAuthorization(url + del_id, token, delSuccess, delFailed)
 
         });
 
@@ -28,6 +56,7 @@ var CreateGame = (function() {
                 qset_li = qset[0].closest('li');
             } catch (err) {
                 alert("Please select a csv");
+                return;
             }
             finish.question_set_id = qset_li.id;
             finish.game_template_id = template_li.id;
