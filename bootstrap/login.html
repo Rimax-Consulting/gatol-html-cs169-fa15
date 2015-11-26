@@ -70,8 +70,7 @@
                         		<div style="color:#888888" class="form-top-left">
                         			<h3>Login to Game-A-Thon</h3>
                             		<p>Choose to login as Student or Trainer</p>
-                                    <p style="font-size:12px; margin-top:-12px;"><a id="create-account" href="#register">Create Account</a>
-                                     or <a id="forgot" href="#forgot">Forgot Password</a></p>
+                                    <p style="font-size:12px; margin-top:-12px;"><a id="create-account" href="#register">Create Account</a></p>
                         		</div>
                         		<div class="form-top-right">
                         			<i class="fa fa-lock"></i>
@@ -96,23 +95,25 @@
                         		<div class="form-top-left">
                         			<h3>Login as a Student</h3>
                             		<p style="color:#888888">Enter your username and password to log on</p>
+                                    <p style="font-size:12px; margin-top:-12px;"><a id="forgot-student" href="#forgot">Forgot Password</a></p>
+                                    <p style="color:red;" class="error"></p>
                         		</div>
                         		<div class="form-top-right">
                         			<i class="fa fa-lock"></i>
                         		</div>
                             </div>
                             <div class="form-bottom">
-			                    <form role="form" action="" method="post" class="login-form">
+			                    <form class="login-form">
 			                    	<div class="form-group">
-			                    		<label class="sr-only" for="form-username">Username</label>
-			                        	<input type="text" name="form-username" placeholder="Email Address..." class="form-username form-control" id="form-username">
+			                    		<label class="sr-only" for="form-username">Email</label>
+			                        	<input id="user-email" type="text" name="form-username" placeholder="Email Address..." class="form-username form-control">
 			                        </div>
 			                        <div class="form-group">
 			                        	<label class="sr-only" for="form-password">Password</label>
-			                        	<input type="password" name="form-password" placeholder="Password..." class="form-password form-control" id="form-password">
+			                        	<input id="user-password" type="password" name="form-password" placeholder="Password..." class="form-password form-control">
 			                        </div>
-			                        <button type="submit" class="btn">Sign in!</button>
 			                    </form>
+                                <button id="student-signin" class="btn">Sign in!</button>
                                 <button id="login-student-back" style="margin-top: 10px"class="btn">Back</button>
 		                    </div>
                         </div>
@@ -122,23 +123,25 @@
                         		<div class="form-top-left">
                         			<h3>Login as a Trainer</h3>
                             		<p style="color:#888888">Enter your username and password to log on</p>
+                                    <p style="font-size:12px; margin-top:-12px;"><a id="forgot-trainer" href="#forgot">Forgot Password</a></p>
+                                    <p style="color:red;" class="error"></p>
                         		</div>
                         		<div class="form-top-right">
                         			<i class="fa fa-lock"></i>
                         		</div>
                             </div>
                             <div class="form-bottom">
-			                    <form role="form" action="" method="post" class="login-form">
+			                    <form class="login-form">
 			                    	<div class="form-group">
-			                    		<label class="sr-only" for="form-username">Username</label>
-			                        	<input type="text" name="form-username" placeholder="Email Address..." class="form-username form-control" id="form-username">
+			                    		<label class="sr-only" for="form-username">Email</label>
+			                        	<input id="trainer-email" type="text" name="form-username" placeholder="Email Address..." class="form-username form-control">
 			                        </div>
 			                        <div class="form-group">
 			                        	<label class="sr-only" for="form-password">Password</label>
-			                        	<input type="password" name="form-password" placeholder="Password..." class="form-password form-control" id="form-password">
+			                        	<input id="trainer-password" type="password" name="form-password" placeholder="Password..." class="form-password form-control">
 			                        </div>
-			                        <button type="submit" class="btn">Sign in!</button>
 			                    </form>
+                                <button id="trainer-signin" class="btn">Sign in!</button>
                                 <button id="login-trainer-back" style="margin-top:10px;" class="btn">Back</button>
 		                    </div>
                         </div>
@@ -148,23 +151,32 @@
                         		<div class="form-top-left">
                         			<h3>Register as a Student</h3>
                             		<p style="color:#888888">Enter valid email, username, and password to register</p>
+                                    <p style="color:red;" class="error"></p>
                         		</div>
                         		<div class="form-top-right">
                         			<i class="fa fa-lock"></i>
                         		</div>
                             </div>
                             <div class="form-bottom">
-			                    <form role="form" action="" method="post" class="login-form">
+			                    <form class="login-form">
+			                    	<div class="form-group">
+			                    		<label class="sr-only" for="form-username">Email</label>
+			                        	<input id="register-email" type="text" name="form-email" placeholder="Email..." class="form-username form-control">
+			                        </div>
 			                    	<div class="form-group">
 			                    		<label class="sr-only" for="form-username">Username</label>
-			                        	<input type="text" name="form-username" placeholder="Username..." class="form-username form-control" id="form-username">
+			                        	<input id="register-username" type="text" name="form-username" placeholder="Username..." class="form-username form-control">
 			                        </div>
 			                        <div class="form-group">
 			                        	<label class="sr-only" for="form-password">Password</label>
-			                        	<input type="password" name="form-password" placeholder="Password..." class="form-password form-control" id="form-password">
+			                        	<input id="register-password" type="password" name="form-password" placeholder="Password..." class="form-password form-control">
 			                        </div>
-			                        <button type="submit" class="btn">Sign in!</button>
+			                    	<div class="form-group">
+			                    		<label class="sr-only" for="form-username">Confirm Password</label>
+			                        	<input id="register-confirm-password" type="password" name="form-confirm-password" placeholder="Confirm Password..." class="form-username form-control">
+			                        </div>
 			                    </form>
+                                <button id="student-registration" class="btn">Register</button>
                                 <button id="register-student-back" style="margin-top:10px;"class="btn">Back</button>
 		                    </div>
                         </div>
@@ -174,28 +186,37 @@
                         		<div class="form-top-left">
                         			<h3>Register as a Trainer</h3>
                             		<p style="color:#888888">Enter valid email, username, and password to register</p>
+                                    <p style="color:red;" class="error"></p>
                         		</div>
                         		<div class="form-top-right">
                         			<i class="fa fa-lock"></i>
                         		</div>
                             </div>
                             <div class="form-bottom">
-			                    <form role="form" action="" method="post" class="login-form">
+			                    <form class="login-form">
+			                    	<div class="form-group">
+			                    		<label class="sr-only" for="form-username">Email</label>
+			                        	<input id="register-trainer-email" type="text" name="form-email" placeholder="Email..." class="form-username form-control">
+			                        </div>
 			                    	<div class="form-group">
 			                    		<label class="sr-only" for="form-username">Username</label>
-			                        	<input type="text" name="form-username" placeholder="Username..." class="form-username form-control" id="form-username">
+			                        	<input id="register-trainer-username" type="text" name="form-username" placeholder="Username..." class="form-username form-control">
 			                        </div>
 			                        <div class="form-group">
 			                        	<label class="sr-only" for="form-password">Password</label>
-			                        	<input type="password" name="form-password" placeholder="Password..." class="form-password form-control" id="form-password">
+			                        	<input id="register-trainer-password" type="password" name="form-password" placeholder="Password..." class="form-password form-control">
 			                        </div>
-			                        <button type="submit" class="btn">Sign in!</button>
+			                        <div class="form-group">
+			                        	<label class="sr-only" for="form-password">Confirm Password</label>
+			                        	<input id="register-trainer-confirm-password" type="password" name="form-confirm-password" placeholder="Confirm Password..." class="form-password form-control">
+			                        </div>
 			                    </form>
+                                <button id="trainer-registration" class="btn">Register</button>
                                 <button id="register-trainer-back" style="margin-top:10px;"class="btn">Back</button>
 		                    </div>
                         </div>
 
-                        <div id="forgot-screen" style="display:none" class="col-sm-6 col-sm-offset-3 form-box">
+                        <div id="forgot-student-screen" style="display:none" class="col-sm-6 col-sm-offset-3 form-box">
                         	<div class="form-top">
                         		<div class="form-top-left">
                         			<h3>Reset Password</h3>
@@ -206,14 +227,36 @@
                         		</div>
                             </div>
                             <div class="form-bottom">
-			                    <form role="form" action="" method="post" class="login-form">
+			                    <form class="login-form">
 			                    	<div class="form-group">
 			                    		<label class="sr-only" for="form-username">Username</label>
 			                        	<input type="text" name="form-username" placeholder="Email Address..." class="form-username form-control" id="form-username">
 			                        </div>
-			                        <button type="submit" style="margin-top:10px;"class="btn">Submit</button>
 			                    </form>
-			                        <button id="forgot-back" style="margin-top:10px;" class="btn">Back</button>
+                                <button class="btn">Submit</button>
+                                <button id="forgot-student-back" style="margin-top:10px;" class="btn">Back</button>
+		                    </div>
+                        </div>
+
+                        <div id="forgot-trainer-screen" style="display:none" class="col-sm-6 col-sm-offset-3 form-box">
+                        	<div class="form-top">
+                        		<div class="form-top-left">
+                        			<h3>Reset Password</h3>
+                            		<p style="color:#888888">Enter email to send reset password request</p>
+                        		</div>
+                        		<div class="form-top-right">
+                        			<i class="fa fa-lock"></i>
+                        		</div>
+                            </div>
+                            <div class="form-bottom">
+			                    <form class="login-form">
+			                    	<div class="form-group">
+			                    		<label class="sr-only" for="form-username">Username</label>
+			                        	<input type="text" name="form-username" placeholder="Email Address..." class="form-username form-control" id="form-username">
+			                        </div>
+			                    </form>
+                                <button class="btn">Submit</button>
+                                <button id="forgot-trainer-back" style="margin-top:10px;" class="btn">Back</button>
 		                    </div>
                         </div>
 

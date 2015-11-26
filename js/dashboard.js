@@ -98,7 +98,8 @@ var DashBoard = (function() {
             console.log('game temp id: ' + game_temp_id);
             console.log('imgPath: ' + imgPath);
 
-            document.getElementById('dashboard_title').innerHTML = gameTemplateIdToTitle[game_temp_id];
+            document.getElementById('dashboard_title').innerHTML = gameDetails.name;
+            //document.getElementById('dashboard_title').innerHTML = TemplateIdToTitle[game_temp_id];
             document.getElementById('game_preview_img').src = imgPath;
             document.getElementById('game_desc').innerHTML = gameTemplateIdToDesc[game_temp_id];
             document.getElementById('test_desc').innerHTML = gameDetails.description;
