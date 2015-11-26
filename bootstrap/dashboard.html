@@ -17,6 +17,20 @@
     <!-- Custom CSS -->
     <link href="css/dashboard.css" rel="stylesheet">
 
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="js/gatol.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            DashBoard.start();
+        });
+    </script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -48,10 +62,10 @@
                         <a>Welcome Awesome Person</a>
                     </li>
                     <li>
-                        <a href="#">Create Game</a>
+                        <a id="create" href="#create">Create Game</a>
                     </li>
                     <li>
-                        <a href="#">Logout</a>
+                        <a id="logout" href="#logout">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -61,22 +75,22 @@
     </nav>
 
     <!-- Page Content -->
-    <div class="container">
+    <div id="dashboard-container" class="container">
+
+        <h1 id="dashboard-title">Dashboard</h1>
+
+        <hr></hr>
 
         <div class="row">
 
-            <div class="col-md-12">
+            <div id="dashboard-elements" class="col-md-12">
                 <p class="lead">Ready Games</p>
-                <div style="text-align: center" class="list-group">
-                    <a href="#" class="list-group-item">Category 1</a>
-                    <a href="#" class="list-group-item">Category 2</a>
-                    <a href="#" class="list-group-item">Category 3</a>
+                <div id="games-list" style="text-align: center" class="list-group">
                 </div>
             </div>
 
             <div style="display:none" id="game-preview" class="col-md-12">
 
-                <h2 id="game-preview-title">BLOBBERS!!!</h2>
                 <div class="col-md-5">
                     <img id="game-preview-img" style="width: 100%; height: 300px;" src="img/blobbers_example.png"></img> 
                 </div>
@@ -84,91 +98,83 @@
                 <div class="col-md-7">
                     <h4>Game Description</h4>
 
-                    <div>
+                    <div id="game-desc">
                         Blobbers! Basic game where you are a blob and you have to eat the correct blob!
                     </div>
 
                     <h4>Test Description</h4>
 
-                    <div>
+                    <div id="test-desc">
                         Here is the test description that trainers can write to give more information to his or her students.
                         Testing the length and how it would show in the front end.
                     </div>
 
                     <div style="margin-top: 40px;">
-                        <button type="button" class="btn">Play</button>
-                        <button type="button" class="btn">Enroll Students</button>
-                        <button type="button" class="btn">Statistics</button>
-                        <button type="button" class="btn">Back</button>
+                        <button id="preview-play-btn" type="button" class="btn">Play</button>
+                        <button id="enroll-btn" type="button" class="btn">Enroll Students</button>
+                        <button id="statistics-btn" type="button" class="btn">Statistics</button>
+                        <button id="preview-back-btn" type="button" class="btn">Back</button>
                     </div>
                 </div>
 
             </div>
 
-            <div style="display:none" id="enroll-students" class="col-md-12">
+            <div style="display:none" id="enroll-container" class="col-md-12">
                 <h2>Student Management</h2>
                 <div class="col-md-6">
-                    <ul style="text-align: center" class="list-group">
-                        <li class="list-group-item">Category 1</li>
-                        <li class="list-group-item">Category 2</li>
-                        <li class="list-group-item">Category 3</li>
+                    <ul id="enroll-list" style="text-align: center" class="list-group">
                     </ul>
                 </div>
 
                 <div class="col-md-6">
                     <div id="enroll-btns">
-                        <button class="btn btn-lg">Enroll a Student</button>
-                        <button class="btn btn-lg">UnEnroll a Student</button>
-                        <button class="btn btn-lg">Back</button>
+                        <button id="enroll-students-btn" class="btn btn-lg">Enroll a Student</button>
+                        <button id="unenroll-students-btn" class="btn btn-lg">UnEnroll a Student</button>
+                        <button id="enroll-cancel" class="btn btn-lg">Back</button>
                     </div>
 
-                    <div id="enroll">
-                        <form role="form" action="" method="post">
+                    <div style="display:none;" id="enroll-students">
+                        <form>
                             <div class="form-group">
                                 <label for="form-title">Student Email</label>
-                                <input type="text" class="form-control" placeholder="Student To Enroll...">
+                                <input id="enroll-student-email" type="text" class="form-control" placeholder="Student To Enroll...">
                             </div>
-                            <button type="submit" class="btn">Enroll</button>
                         </form>
-                        <button style="margin-top:10px;" class="btn">Back</button>
+                        <button id="enroll" class="btn">Enroll</button>
+                        <button id="enroll-back" class="btn">Back</button>
                     </div>
 
-                    <div id="unenroll">
-                        <form role="form" action="" method="post">
+                    <div style="display:none;" id="unenroll-students">
+                        <form>
                             <div class="form-group">
                                 <label for="form-title">Student Email</label>
-                                <input type="text" class="form-control" placeholder="Student To UnEnroll...">
+                                <input id="unenroll-student-email" type="text" class="form-control" placeholder="Student To UnEnroll...">
                             </div>
-                            <button type="submit" class="btn">UnEnroll</button>
                         </form>
-                        <button style="margin-top:10px;"class="btn">Back</button>
+                        <button id="unenroll" class="btn">UnEnroll</button>
+                        <button id="unenroll-back" class="btn">Back</button>
                     </div>
 
                 </div>
 
             </div>
 
-            <div style="display:none" id="statistics" class="col-md-12">
+            <div style="display:none" id="stats-container" class="col-md-12">
                 <div class="col-md-6">
                     <h2>Game Statistics</h2>
-                    <ul style="text-align: center" class="list-group">
-                        <li class="list-group-item">Category 1</li>
-                        <li class="list-group-item">Category 2</li>
-                        <li class="list-group-item">Category 3</li>
+                    <ul id="stats-list" style="text-align: center" class="list-group">
                     </ul>
 
                 </div>
 
                 <div class="col-md-6">
                     <h2>Leaderboards</h2>
-                    <ul style="text-align: center" class="list-group">
-                        <li class="list-group-item">Category 1</li>
-                        <li class="list-group-item">Category 2</li>
-                        <li class="list-group-item">Category 3</li>
-                    </ul>
+                    <ul id="leader-list" style="text-align: center" class="list-group">
                 </div>
 
-                <button class="btn btn-lg">Back</button>
+                <div class="col-md-12">
+                    <button id="statistics-back" class="btn btn-lg">Back</button>
+                </div>
             </div>
 
         </div>
@@ -193,11 +199,7 @@
     </div>
     <!-- /.container -->
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
 
 </body>
 

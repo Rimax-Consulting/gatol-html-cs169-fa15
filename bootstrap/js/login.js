@@ -118,9 +118,10 @@ $('#trainer-signin').on('click', function(e) {
             //alert('successfully logged in as trainer, auth token is: ' + data.auth_token);
             setCookie("auth_token", data.auth_token);
             setCookie("username", data.username);
-            setCookie("trainer", "true");
+            setCookie("trainer", true);
             location.href = 'dashboard.html';
         };
+
         var onFailure = function (data) {
             consoleError(data);
             if (data.status == 422) {

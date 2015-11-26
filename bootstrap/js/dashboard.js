@@ -1,142 +1,105 @@
+var games_list = []; // list of games returned by DB call. Initially empty to prevent failures
+var trainer; // is this user a trainer?
+var current_game_id; // holds the current game id
+var enrolledStudents; // holds the enrolled students' emails
+
+var getGameDetailFromGameList = function(e) {
+    for (var i = 0; i < games_list.length; i++) {
+        currGame = games_list[i];
+        if (current_game_id == currGame.id) {
+            return currGame;
+        }
+    }
+
+}
 
 
+
+$('#logout').on('click', function(e) {
+    var auth_token = getCookie('auth_token');
+    
+    var onSuccess = function(data) {
+        deleteCookie('auth_token'); 
+        if (getCookie('auth_token') == "") {
+            location.href = 'index.html'
+        }
+    };
+
+    var onFailure = function(data) { 
+        consoleError(data);
+    };
+
+    url = '/api/sessions/' + auth_token;
+    //console.log('url is: ' + url);
+    makeDeleteRequest(url, onSuccess, onFailure);    
+});
+
+
+
+$('#preview-play-btn').on('click', function(e) {
+    setCookie('game_id', current_game_id); 
+    location.href = 'game.html';
+});
+
+
+
+$('#').on('click', function(e) {
+    
+});
+
+$('#').on('click', function(e) {
+    
+});
 
 var DashBoard = (function() {
 
-    // PRIVATE VARIABLES
-    var dash_header; // get the dashboard header
-    var dash_container; // holds dashboard objects, value set in the "start" method below
-    var games_list; // list of games returned by DB call. Initially empty to prevent failures
-    var trainer; // is this user a trainer?
-
-    var current_game_id; // holds the current game id
-    var enrolledStudents // holds the enrolled students' emails
-
-    // PRIVATE METHODS
-
-    // helps for testing
-    var getGameDetailFromGameList = function(e) {
-        for (var i = 0; i < games_list.length; i++) {
-            currGame = games_list[i];
-            if (current_game_id == currGame.id) {
-                return currGame;
-            }
-        }
-
-    }
-
     var attachCreateHandler = function(e) {
 
-        // initially hide game preview screen
-        dash_container.find('#game_preview').hide();
+        $('#create').on('click', function(e) {
+            location.href = 'create-game.html'; 
+        });
 
-        // initially hide game enrollment screen
-        dash_container.find('#enroll_container').hide();
-
-        // initially hide enroll input screen and unenroll input screen
-        dash_container.find('#enroll_students').hide();
-        dash_container.find('#unenroll_students').hide();
-
-        // initially hide stats container
-        dash_container.find('#stats_container').hide();
-
-        dash_header.on('click', '#create', function(e) {
-            if (inDev) {
-                location.href = devUrl + 'create_game.html';
-            } else {
-                location.href = 'http://allenyu94.github.io/gatol-html/create_game';
+        $('#preview-back-btn').on('click', function(e) {
+             // hide game preview elements
+            document.getElementById('dashboard-title').innerHTML = "Dashboard";
+            
+            if (trainer) {
+                $('#create').show();
             }
+
+            $('#logout').show();
+            dash_container.find('#game-preview').hide(); 
+            dash_container.find('#dashboard-elements').show();   
         });
 
-        dash_header.on('click', '#logout', function(e) {
-            
-            var auth_token = getCookie('auth_token');
-            
-            var onSuccess = function(data) {
-                //alert('successfully logged out');
-                deleteCookie('auth_token'); 
-                if (getCookie('auth_token') == "") {
-                    //alert("successfully removed auth token from cookies");
-                    if (inDev) {
-                        location.href = devUrl + 'index.html'
-                    } else {
-                        location.href = 'http://allenyu94.github.io/gatol-html/';
-                    }
-                }
-            };
-
-            var onFailure = function(data) { 
-                consoleError(data);
-            };
-
-            url = '/api/sessions/' + auth_token;
-            console.log('url is: ' + url);
-            makeDeleteRequest(url, onSuccess, onFailure);
-
-        });
-
-        dash_container.on('click', '.game_item', function (e) {
+        dash_container.on('click', '.game-item', function(e) {
             // hide dashboard only elements
-            dash_container.find('#dashboard_elements').hide();
-            dash_header.find('#logout').hide();
-            dash_header.find('#create').hide();
+            $('#dashboard-elements').hide();
+            $('#logout').hide();
+            $('#create').hide();
             
-            current_game_id = parseInt($(this).closest('li').attr('id'));
+            current_game_id = parseInt($(this).attr('id'));
             
             gameDetails = getGameDetailFromGameList();
-            console.log('game details');
-            console.log(gameDetails);
 
             if (gameDetails == null) {
                 console.log('error getting game details on click');
             }
 
-            if (trainer == 'true') {
-                game_temp_id = gameDetails.game_template_id;
-            } else {
-                game_temp_id = gameDetails.template_id;
-            }
+            game_temp_id = gameDetails.game_template_id;
             imgPath = gameTemplateIdToImage[game_temp_id];
 
-            console.log('game temp id: ' + game_temp_id);
-            console.log('imgPath: ' + imgPath);
-
-            document.getElementById('dashboard_title').innerHTML = gameDetails.name;
-            //document.getElementById('dashboard_title').innerHTML = TemplateIdToTitle[game_temp_id];
-            document.getElementById('game_preview_img').src = imgPath;
-            document.getElementById('game_desc').innerHTML = gameTemplateIdToDesc[game_temp_id];
-            document.getElementById('test_desc').innerHTML = gameDetails.description;
+            document.getElementById('dashboard-title').innerHTML = gameDetails.name;
+            document.getElementById('game-preview-img').src = imgPath;
+            document.getElementById('game-desc').innerHTML = gameTemplateIdToDesc[game_temp_id];
+            document.getElementById('test-desc').innerHTML = gameDetails.description;
             
-            dash_container.find('#game_preview').show();
-
+            dash_container.find('#game-preview').show();
         });
 
-        dash_container.on('click', '#preview_play_btn', function(e) {
-            setCookie("game_id", current_game_id);
-            if (inDev) {
-                location.href = devUrl + 'game.html';
-            } else {
-                location.href = 'http://allenyu94.github.io/gatol-html/game';
-            } 
-        });
-
-        dash_container.on('click', '#preview_back_btn', function(e) {
-            // hide game preview elements
-            document.getElementById('dashboard_title').innerHTML = "Dashboard";
-            
-            if (trainer) {
-                dash_header.find('#create').show();
-            }
-
-            dash_header.find('#logout').show();
-            dash_container.find('#game_preview').hide(); 
-            dash_container.find('#dashboard_elements').show();
-
-        });
-
-        dash_container.on('click', '#enroll_btn', function(e) {
-            dash_container.find('#game_preview').hide();
-            dash_container.find('#enroll_container').show(); 
+        dash_container.on('click', '#enroll-btn', function(e) {
+            dash_container.find('#game-preview').hide();
+            dash_container.find('#enroll-container').show(); 
 
             token = getCookie('auth_token');
             creds = {};
@@ -144,24 +107,23 @@ var DashBoard = (function() {
             var onSuccess = function(data) {
                 console.log(data);
                 enrolledStudents = data.game_enrollments;
-                ul = document.getElementById('enroll_list');
+                ul = document.getElementById('enroll-list');
+                var firstLi = document.createElement('li');
+                firstLi.setAttribute('class', 'list-group-item');
+                ul.appendChild(firstLi);
                 for (var i = 0; i < enrolledStudents.length; i++) {
                     currItem = enrolledStudents[i];
                     console.log(currItem);
                     
                     var li = document.createElement('li');
-                    var a = document.createElement('a');
-                    var bar = document.createElement('div');
 
-                    a.innerHTML = currItem.student_email;
+                    li.innerHTML = currItem.student_email;
                     if (!currItem.registered) {
-                        a.innerHTML += ' (not yet registered)';
+                        li.innerHTML += ' (not yet registered)';
                     }
-                    bar.setAttribute('class', 'fullbar');
-                    li.appendChild(a);
                     li.setAttribute('id', currItem.id);
+                    li.setAttribute('class', 'list-group-item');
                     ul.appendChild(li);
-                    ul.appendChild(bar);
                 }
             };
 
@@ -175,30 +137,30 @@ var DashBoard = (function() {
 
         });
 
-        dash_container.on('click', '#enroll_cancel', function(e) {
-            dash_container.find('#enroll_container').hide(); 
-            dash_container.find('#game_preview').show();
-            $('#enroll_list').empty();
+        dash_container.on('click', '#enroll-cancel', function(e) {
+            dash_container.find('#enroll-container').hide(); 
+            dash_container.find('#game-preview').show();
+            $('#enroll-list').empty();
         });
 
-        dash_container.on('click', '#enroll_students_btn', function(e) {
-            dash_container.find('#enroll_buttons').hide();
-            dash_container.find('#enroll_students').show();
+        dash_container.on('click', '#enroll-students-btn', function(e) {
+            dash_container.find('#enroll-btns').hide();
+            dash_container.find('#enroll-students').show();
         });
 
-        dash_container.on('click', '#enroll_back', function(e) {
-            dash_container.find('#enroll_students').hide();
-            dash_container.find('#enroll_buttons').show();
+        dash_container.on('click', '#enroll-back', function(e) {
+            dash_container.find('#enroll-students').hide();
+            dash_container.find('#enroll-btns').show();
         });
 
-        dash_container.on('click', '#unenroll_students_btn', function(e) {
-            dash_container.find('#enroll_buttons').hide();
-            dash_container.find('#unenroll_students').show();
+        dash_container.on('click', '#unenroll-students-btn', function(e) {
+            dash_container.find('#enroll-btns').hide();
+            dash_container.find('#unenroll-students').show();
         });
 
-        dash_container.on('click', '#unenroll_back', function(e) {
-            dash_container.find('#unenroll_students').hide();
-            dash_container.find('#enroll_buttons').show();
+        dash_container.on('click', '#unenroll-back', function(e) {
+            dash_container.find('#unenroll-students').hide();
+            dash_container.find('#enroll-btns').show();
         });
 
         dash_container.on('click', '#enroll', function(e) {
@@ -206,25 +168,22 @@ var DashBoard = (function() {
 
             creds = {};
             creds.game_id = current_game_id;
-            creds.student_email = dash_container.find('#enroll_student_email').val();  
+            creds.student_email = dash_container.find('#enroll-student-email').val();  
 
             var onSuccess = function(data) {
                 console.log(data);
                 currItem = data;
-                ul = document.getElementById('enroll_list');
+                ul = document.getElementById('enroll-list');
                 var li = document.createElement('li');
                 var a = document.createElement('a');
-                var bar = document.createElement('div');
 
-                a.innerHTML = currItem.student_email;
+                li.innerHTML = currItem.student_email;
                 if (!data.registered) {
-                    a.innerHTML += ' (not yet registered)';
+                    li.innerHTML += ' (not yet registered)';
                 }
-                bar.setAttribute('class', 'fullbar');
-                li.appendChild(a);
                 li.setAttribute('id', data.id);
+                li.setAttribute('class', 'list-group-item');
                 ul.appendChild(li);
-                ul.appendChild(bar);
             };
 
             var onFailure = function(data) {
@@ -240,16 +199,16 @@ var DashBoard = (function() {
             token = getCookie('auth_token'); 
             console.log('token is: ' + token);
 
-            student_email = dash_container.find('#unenroll_student_email').val();
+            student_email = dash_container.find('#unenroll-student-email').val();
 
-            ul = document.getElementById('enroll_list');
-            aList = ul.getElementsByTagName('a');
+            ul = document.getElementById('enroll-list');
+            aList = ul.getElementsByTagName('li');
 
             var idToRemove;
 
             for (var i = 0; i < aList.length; i++) {
                 if (aList[i].innerHTML == student_email) {
-                    idToRemove = aList[i].closest('li').id; 
+                    idToRemove = aList[i].id; 
                 } 
             }
 
@@ -261,9 +220,7 @@ var DashBoard = (function() {
             var onSuccess = function(data) {
                 console.log(data);
                 liToRemove = $('#' + idToRemove);
-                bar = liToRemove.next('div');
                 $('#' + idToRemove).remove();
-                bar.remove();
             };
 
             var onFailure = function(data) {
@@ -276,34 +233,32 @@ var DashBoard = (function() {
 
         });
 
-        dash_container.on('click', '#statistics_btn', function(e) {
+        dash_container.on('click', '#statistics-btn', function(e) {
 
-            dash_container.find('#game_preview').hide(); 
-            dash_container.find('#stats_container').show(); 
+            dash_container.find('#game-preview').hide(); 
+            dash_container.find('#stats-container').show(); 
 
             token = getCookie('auth_token');
             console.log('current_game_id');
             console.log(current_game_id);
 
             var onSuccess = function(data) {
-                $("#stats_list li").remove();
-                $("#stats_list .fullbar").remove();
+                $("#stats-list li").remove();
 
                 console.log(data);
                 stats = data.player_summaries;
+                ul = document.getElementById('stats-list');
+                var firstLi = document.createElement('li');
+                firstLi.setAttribute('class', 'list-group-item');
+                ul.appendChild(firstLi);
                 for (var i = 0; i < stats.length; i++) {
                     stat = stats[i];
-                    ul = document.getElementById('stats_list');
                     var li = document.createElement('li');
-                    var a = document.createElement('a');
-                    var bar = document.createElement('div');
 
-                    a.innerHTML = "Student: " + stat.student_id + ", Average Score: " + stat.avg_score + ", Highest Score: " + stat.highest_score;
-                    bar.setAttribute('class', 'fullbar');
-                    li.appendChild(a);
+                    li.innerHTML = "Student: " + stat.student_id + ", Average Score: " + stat.avg_score + ", Highest Score: " + stat.highest_score;
                     li.setAttribute('id', stat.student_id);
+                    li.setAttribute('class', 'list-group-item');
                     ul.appendChild(li);
-                    ul.appendChild(bar);
                 }
                 
             };
@@ -317,26 +272,22 @@ var DashBoard = (function() {
 
 
             var leaderboardSuccess = function(data) {
-                $("#leader_list li").remove();
-                $("#leader_list .fullbar").remove();
-
+                $("#leader-list li").remove();
 
                 console.log(data);
                 rankings = data.ranking;
                 console.log(rankings);
+                ul = document.getElementById('leader-list');
+                var firstLi = document.createElement('li');
+                firstLi.setAttribute('class', 'list-group-item');
+                ul.appendChild(firstLi);
                 for (var i = 0; i < rankings.length; i++) {
                     ranking = rankings[i];
-                    ul = document.getElementById('leader_list');
                     var li = document.createElement('li');
-                    var a = document.createElement('a');
-                    var bar = document.createElement('div');
 
-                    a.innerHTML = ranking.email + " score: " + ranking.score;
-                    bar.setAttribute('class', 'fullbar');
-                    li.appendChild(a);
-                    //li.setAttribute('id', rankings.student_id);
+                    li.innerHTML = ranking.email + " score: " + ranking.score;
+                    li.setAttribute('class', 'list-group-item');
                     ul.appendChild(li);
-                    ul.appendChild(bar);
                 }
             };
 
@@ -344,16 +295,16 @@ var DashBoard = (function() {
                 consoleError(data);
             };
 
-            //leaderboardUrl = '/api/game_instances/leaderboard?game_id=' + current_game_id;
-            leaderboardUrl = '/api/game_instances/leaderboard?game_id=5';
+            leaderboardUrl = '/api/game_instances/leaderboard?game_id=' + current_game_id;
+            //leaderboardUrl = '/api/game_instances/leaderboard?game_id=5';
             makeGetRequestWithAuthorization(leaderboardUrl, token, leaderboardSuccess, leaderboardFailure);
 
         });
 
-        dash_container.on('click', '#statistics_back', function(e) {
+        dash_container.on('click', '#statistics-back', function(e) {
             
-            dash_container.find('#stats_container').hide();
-            dash_container.find('#game_preview').show();
+            dash_container.find('#stats-container').hide();
+            dash_container.find('#game-preview').show();
 
         });
 
@@ -364,13 +315,13 @@ var DashBoard = (function() {
         trainer = getCookie('trainer');
         token = getCookie('auth_token');
         console.log("I am a trainer: " + trainer);
-        if (trainer == 'true') {
+        if (trainer) {
             // signed in as trainer
             document.getElementById('create').style.visibility = 'visible';
             url = '/api/games';
         } else {
             // signed in as student
-            dash_container.find('#enroll_btn').hide();
+            dash_container.find('#enroll-btn').hide();
             document.getElementById('create').style.visibility = 'hidden';
             document.getElementById('create').style.display = 'none';
             url = '/api/games';
@@ -381,23 +332,18 @@ var DashBoard = (function() {
             console.log(data);
             console.log('trainer: ' + trainer);
             games_list = data.games;
-            var ul = document.getElementById('games_list');
+            var ul = document.getElementById('games-list');
             for (var i = 0; i < games_list.length; i++) {
                 game = games_list[i];
                 console.log(game);
 
-                var li = document.createElement('li');
                 var a = document.createElement('a');
-                var bar = document.createElement('div');
 
                 a.setAttribute('href', '#' + game.name);
-                a.setAttribute('class', 'game_item');
                 a.innerHTML = game.name;
-                bar.setAttribute('class', 'fullbar');
-                li.appendChild(a);
-                li.setAttribute('id', game.id);
-                ul.appendChild(li);
-                ul.appendChild(bar);
+                a.setAttribute('class', 'list-group-item game-item');
+                a.setAttribute('id', game.id);
+                ul.appendChild(a);
             }
         };
 
@@ -431,8 +377,7 @@ var DashBoard = (function() {
      * @return {None}
      */
     var start = function() {
-        dash_header = $("#dashboard_header");
-        dash_container = $("#dashboard_container");
+        dash_container = $("#dashboard-container");
         games_list = [];
 
         attachCreateHandler();
