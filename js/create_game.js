@@ -31,7 +31,7 @@ var CreateGame = (function() {
             var delSuccess = function(data) {
                 console.log(data)
 
-                bar = qset_li.next('div');
+                bar = $('#' + del_id).next('div');
                 $('#' + del_id).remove();
                 bar.remove();
             };
