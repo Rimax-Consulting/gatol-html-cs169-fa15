@@ -271,6 +271,7 @@ Bouncers.prototype = {
 			if (this.getDistance(0,0,this.foodBodies[i]) < 70 || this.getDistance(0,this._height,this.foodBodies[i]) < 70 
 				|| this.getDistance(this._width,0,this.foodBodies[i]) < 70 || this.getDistance(this._width, this._height,this.foodBodies[i]) < 70) {
 				this.recordAnswer(i);
+				return;
 			}
 			if (this.foodBodies[i].position[0] > this._width - this.foodBodies[i].shapes[0].radius) {
 				this.foodBodies[i].velocity[0] *= -1;
