@@ -25,9 +25,21 @@
         <div class="h1 inner_title">
             Upload CSV
         </div>
+       
+       <div class="inner_desc lite">
+           <p>Upload a CSV (.csv) containing the questions which you would like this game to use. </p> 
+           <p> Your CSV must follow the format of the templates provided below. That is, the CSV must only have 9 columns and the header (first line) of the CSV must be:</p>
+           <p><em>Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong Answer 3,Wrong Answer 4,Wrong Answer 5,Wrong Answer 6,Wrong Answer 7</em></p>
+           <center>
+                <a href="csv/gatol_question_set_template.csv">CSV</a>
+                <a href="csv/gatol_question_set_template.xlsx">Excel</a>
+           </center>
+           <p>Note that if you use the Excel sheet above, you will need to export your spreadsheet as a CSV to upload below.</p>
+       
+       </div>
 
         <div id="csv_inputs">
-            <input id="file_select" type="file"></input>
+            <input id="file_select" type="file" accept=".csv"></input>
 		    <button id="upload" class="margin_top20">Upload</button>
             <button id="cancel_upload" class="other_buttons white_button">Cancel</button>
         </div>
