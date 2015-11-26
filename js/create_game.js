@@ -15,6 +15,10 @@ var CreateGame = (function() {
             }
         });
 
+        create_container.on('click', '#delete_csv_btn', function(e) {
+
+        });
+
         create_container.on('click', '#create_finish', function(e) {
             var finish = {} // container to hold game data to be created
             qset = create_container.find('.csv_item.selected');

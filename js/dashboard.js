@@ -88,11 +88,7 @@ var DashBoard = (function() {
                 console.log('error getting game details on click');
             }
 
-            if (trainer == 'true') {
-                game_temp_id = gameDetails.game_template_id;
-            } else {
-                game_temp_id = gameDetails.template_id;
-            }
+            game_temp_id = gameDetails.game_template_id;
             imgPath = gameTemplateIdToImage[game_temp_id];
 
             console.log('game temp id: ' + game_temp_id);
@@ -235,9 +231,8 @@ var DashBoard = (function() {
                 creds.student_email = email;
                 url = '/api/game_enrollments';
                 makePostRequestWithAuthorization(url, creds, token, onSuccess, onFailure);
+                $('#enroll_student_email').val("");
             }
-
-
 
         });
 
@@ -278,6 +273,7 @@ var DashBoard = (function() {
             url = '/api/game_enrollments/' + idToRemove;
             console.log(url);
             makeDeleteRequestWithAuthorization(url, token, onSuccess, onFailure);
+            $('#unenroll_student_email').val("");
 
         });
 
@@ -290,7 +286,7 @@ var DashBoard = (function() {
             console.log('current_game_id');
             console.log(current_game_id);
 
-            var onSuccess = function(data) {
+            var trainerStatsSuccess = function(data) {
                 $("#stats_list li").remove();
                 $("#stats_list .fullbar").remove();
 
@@ -313,12 +309,43 @@ var DashBoard = (function() {
                 
             };
 
-            var onFailure = function(data) {
+            var studentStatsSuccess = function(data) {
+                $("#stats_list li").remove();
+                $("#stats_list .fullbar").remove();
+
+                console.log(data);
+                stats = data.history;
+                for (var i = 0; i < stats.length; i++) {
+                    stat = stats[i];
+                    ul = document.getElementById('stats_list');
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    var bar = document.createElement('div');
+
+                    a.innerHTML = "Score: " + stat.score + ", Date: " + stat.date;
+                    bar.setAttribute('class', 'fullbar');
+                    li.appendChild(a);
+                    ul.appendChild(li);
+                    ul.appendChild(bar);
+                }
+                
+            };
+
+            var statsFailure = function(data) {
                 consoleError(data);
             };
 
-            url = '/api/game_instances/summary?game_id=' + current_game_id;
-            makeGetRequestWithAuthorization(url, token, onSuccess, onFailure);
+            //game_instances/stats?game_id=<>
+
+            if (trainer) {
+                url = '/api/game_instances/summary?game_id=' + current_game_id;
+                makeGetRequestWithAuthorization(url, token, trainerStatsSuccess, statsFailure);
+            } else {
+                url = '/api/game_instances/stats?game_id=' + current_game_id;
+                makeGetRequestWithAuthorization(url, token, studentStatsSuccess, statsFailure);
+            }
+
+            
 
 
             var leaderboardSuccess = function(data) {
