@@ -24,7 +24,7 @@ var Bouncers = function(parent, width, height, num_choices, state, answerFunc) {
 
 	// physics shit
 	this.world = new p2.World({
-		gravity: [0,-2000]
+		gravity: [0,0]
 	});
 
 	this.foodBodies = [];
@@ -36,15 +36,46 @@ var Bouncers = function(parent, width, height, num_choices, state, answerFunc) {
 	this.num_choices = num_choices;
 	this.answerFunc = answerFunc;
 	this.foodCreated = false;
+	this.inMotion = false;
 
-	// var that = this;
-	// $("body").mousemove(function(e) {
+	var that = this;
+	$("body").mousemove(function(e) {
+		if (that.inMotion || !that.mouseClicked) {
+			return;
+		}
+		try {
+			that.stage.removeChild(that.arrow);
+		} catch (err) {
 
-	// });
+		}
+		that.arrow = new PIXI.Graphics();
+		that.arrow.lineStyle(1, 0xFFFFFF, .7);
+		that.arrow.moveTo(0,0);
+		that.arrow.lineTo(0,Math.pow(Math.pow(e.pageX-that.mouseStart[0],2) + Math.pow(e.pageY-that.mouseStart[1],2), .4));
+		that.arrow.lineTo(3, Math.pow(Math.pow(e.pageX-that.mouseStart[0],2) + Math.pow(e.pageY-that.mouseStart[1],2), .4) - 6);
+		that.arrow.lineTo(-3, Math.pow(Math.pow(e.pageX-that.mouseStart[0],2) + Math.pow(e.pageY-that.mouseStart[1],2), .4) - 6);
+		that.arrow.lineTo(0,Math.pow(Math.pow(e.pageX-that.mouseStart[0],2) + Math.pow(e.pageY-that.mouseStart[1],2), .4));
+		that.arrow.x = that.bouncerGraphics.x;
+		that.arrow.y = that.bouncerGraphics.y;
+		that.arrow.rotation = -1*Math.atan2(e.pageX-that.mouseStart[0], e.pageY-that.mouseStart[1]);
+		that.stage.addChild(that.arrow);
 
-	// $("body").mousedown(function(e) {
+	});
 
-	// });
+	$("body").mousedown(function(e) {
+		that.mouseClicked = true;
+		that.mouseStart = [e.pageX, e.pageY];
+	});
+	$("body").mouseup(function(e) {
+		if (that.inMotion) {
+			return;
+		}
+		that.mouseClicked = false;
+		that.inMotion = true;
+		that.bouncer.velocity[0] = (e.pageX-that.mouseStart[0]) * 2;
+		that.bouncer.velocity[1] = (e.pageY-that.mouseStart[1]) * 2;
+		that.stage.removeChild(that.arrow);
+	});
 
 	// Start running the game.
 	this.build();
@@ -57,8 +88,8 @@ Bouncers.prototype = {
 		this.createBouncer();
 		// create foods
 		this.createFoods(this);
-		// draw enemies
-		//this.createEnemies();
+		// draw goals
+		this.drawGoals();
 		// start first frame
 		requestAnimationFrame(this.tick.bind(this));
 	},
@@ -88,9 +119,9 @@ Bouncers.prototype = {
 		this.bouncer = new p2.Body({
 			mass: 1,
 			angularVelocity: 0,
-			damping: .3,
+			damping: .2,
 			angularDamping: .5,
-			position:[Math.random()*this._width,Math.random()*this._height]
+			position:[Math.random()*(this._width-140)+70,Math.random()*(this._height-140)+70]
 		});
 		this.bouncerShape = new p2.Circle({radius:20});
 		this.bouncer.addShape(this.bouncerShape);
@@ -112,13 +143,36 @@ Bouncers.prototype = {
 
 	createFoods: function(that) {
 		for (i = 0; i < this.num_choices; i++) {
-			var x = Math.random()*(this._width-30)+15;
-			var y = Math.random()*(this._height-30)+15;
+			var x = Math.random()*(this._width-140)+70;
+			var y = Math.random()*(this._height-140)+70;
+			var tooClose = function(x,y,that) {
+				// console.log(x,y);
+				// console.log(that.bouncer.position, that.getDistance(x,y,that.bouncer));
+				if (that.getDistance(x,y,that.bouncer) < 41) {
+					return true;
+				}
+				if (typeof that.foodBodies == undefined) {
+					// console.log("no foodbodies");
+					return false;
+				}
+				for (var i = 0; i < that.foodBodies.length; i++) {
+					// console.log(that.foodBodies[i].position, that.getDistance(x,y,that.foodBodies[i]));
+					if (that.getDistance(x,y,that.foodBodies[i]) < 41) {
+						return true;
+					}
+				}
+				return false;
+			};
+			while (tooClose(x,y,that)) {
+				// console.log(x,y);
+				x = Math.random()*(this._width-140)+70;
+				y = Math.random()*(this._height-140)+70;
+			};
 			// create the food physics body
 			var food = new p2.Body({
 				position: [x,y],
 				mass: 1,
-				damping: .3,
+				damping: .2,
 				angularDamping: 0,
 				velocity: [0,0],
 				angularVelocity: 0
@@ -152,9 +206,45 @@ Bouncers.prototype = {
 		that.foodCreated = true;
 	},
 
+	drawGoals: function() {
+		var xList = [0, this._width, 0, this._width];
+		var yList = [0, 0, this._height, this._height];
+		for (var i = 0; i < 4; i++) {
+			var goal = new PIXI.Graphics();
+			goal.beginFill(0xFFFFFF, .5);
+			goal.drawCircle(0,0,70);
+			goal.endFill();
+			goal.beginFill(this.renderer.backgroundColor);
+			goal.drawCircle(0,0,60);
+			goal.endFill();
+			goal.beginFill(0xFFFFFF, .5);
+			goal.drawCircle(0,0,50);
+			goal.endFill();
+			goal.beginFill(this.renderer.backgroundColor);
+			goal.drawCircle(0,0,40);
+			goal.endFill();
+			goal.beginFill(0xFFFFFF, .5);
+			goal.drawCircle(0,0,30);
+			goal.endFill();
+			goal.beginFill(this.renderer.backgroundColor);
+			goal.drawCircle(0,0,20);
+			goal.endFill();
+			goal.beginFill(0xFFFFFF, .5);
+			goal.drawCircle(0,0,10);
+			goal.endFill();
+			goal.x = xList[i];
+			goal.y = yList[i];
+			this.stage.addChild(goal);
+		}
+	},
+
 
 	getDistance: function(a, b) {
 		return Math.sqrt(Math.pow(a.position[0] - b.position[0], 2) + Math.pow(a.position[1] - b.position[1], 2));
+	},
+
+	getDistance: function(a, b, thing) {
+		return Math.sqrt(Math.pow(a - thing.position[0], 2) + Math.pow(b - thing.position[1], 2));
 	},
 
 	updatePhysics: function () {
@@ -178,6 +268,10 @@ Bouncers.prototype = {
 
 		// bounce foods
 		for (i = 0; i < this.foodBodies.length; i++) {
+			if (this.getDistance(0,0,this.foodBodies[i]) < 70 || this.getDistance(0,this._height,this.foodBodies[i]) < 70 
+				|| this.getDistance(this._width,0,this.foodBodies[i]) < 70 || this.getDistance(this._width, this._height,this.foodBodies[i]) < 70) {
+				this.recordAnswer(i);
+			}
 			if (this.foodBodies[i].position[0] > this._width - this.foodBodies[i].shapes[0].radius) {
 				this.foodBodies[i].velocity[0] *= -1;
 			}
@@ -192,12 +286,23 @@ Bouncers.prototype = {
 			}
 		}
 
+		var nothingInMotion = true;
 		for (var i = 0; i < this.foodBodies.length; i++) {
 			this.foodGraphics[i].x = this.foodBodies[i].position[0];
 			this.foodGraphics[i].y = this.foodBodies[i].position[1];
 
 			this.answerChoices[i].x = this.foodBodies[i].position[0]-8;
 			this.answerChoices[i].y = this.foodBodies[i].position[1]-14;
+
+			// console.log(Math.pow(this.foodBodies[i].velocity[0],2) + Math.pow(this.foodBodies[i].velocity[1],2));
+			if (Math.pow(this.foodBodies[i].velocity[0],2) + Math.pow(this.foodBodies[i].velocity[1],2) > 25) {
+				// console.log("SUMTHIN STILL MOVIN BITCH");
+				nothingInMotion = false;
+			}
+		}
+
+		if (nothingInMotion && Math.pow(this.bouncer.velocity[0],2) + Math.pow(this.bouncer.velocity[1],2) < 15) {
+			this.inMotion = false;
 		}
 
 		this.world.step(1/60);
