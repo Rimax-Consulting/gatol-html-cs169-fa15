@@ -1,8 +1,8 @@
 html {
     min-height:100%;/* make sure it is at least as tall as the viewport */
 /*    position:relative;*/
-    -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.6);
-          box-shadow: inset 0 0 100px rgba(0,0,0,.6);
+    /*-webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.6);
+          box-shadow: inset 0 0 100px rgba(0,0,0,.6);*/
 }
 
 header.title {
@@ -117,6 +117,7 @@ header span.of {
     line-height: 1;
     margin: 15px 0px 20px 0px;
 }
+
 
 #games_list {
     height: 400px;
@@ -654,4 +655,13 @@ footer a {
 .register-error {
     margin-top: 10px;
     margin-bottom: 5px;
+}
+
+.lite {
+    color: #FFFFFF;
+    font-size: 90%;
+}
+
+#csv_container .inner_desc {
+    height: auto;
 }

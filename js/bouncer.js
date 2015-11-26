@@ -24,7 +24,7 @@ var Bouncers = function(parent, width, height, num_choices, state, answerFunc) {
 
 	// physics shit
 	this.world = new p2.World({
-		gravity: [0,state.gravity || 10]
+		gravity: [0,200]
 	});
 
 	this.foodBodies = [];
@@ -157,54 +157,55 @@ Bouncers.prototype = {
 
 	updatePhysics: function () {
 
-		if (this.foodCreated && this.foodBodies.length == 0) {
-			this.recordAnswer(-1);
-			this.foodCreated = false;
-			return;
+		if (this.keyUp) {
+			this.blob.force[1] -= this.speed;
+		}
+		if (this.keyDown) {
+			this.blob.force[1] += this.speed;
+		}
+		if (this.keyRight) {
+			this.blob.force[0] += this.speed;
+		}
+		if (this.keyLeft) {
+			this.blob.force[0] -= this.speed;
 		}
 
-		// make sure out-of-bounds foods are deleted, end when one food reaches the bottom
-		spliceIndices = [];
-		for (i = 0; i < this.foodBodies.length; i++) {
-			if (this.foodBodies[i].position[0] > this._width + this.foodBodies[i].shapes[0].radius) {
-				spliceIndices.push(i);
-			}
-			if (this.foodBodies[i].position[1] > this._height + this.foodBodies[i].shapes[0].radius+20) {
-				this.foodBodies[i].velocity[1] *= 0;
-				this.recordAnswer(this.answerNumbers[i]);
-				this.foodCreated = false;
-				return;
-			}
-			if (this.foodBodies[i].position[0] < -1*this.foodBodies[i].shapes[0].radius) {
-				spliceIndices.push(i);
-			}
-			if (this.foodBodies[i].position[1] < -1*this.foodBodies[i].shapes[0].radius - 200) {
-				spliceIndices.push(i);
+		for (i = 0; i < this.enemyBodies.length; i++) {
+			this.enemyBodies[i].force[0] += this.enemyBodies[i].velocity[1]*2;
+			this.enemyBodies[i].force[1] -= this.enemyBodies[i].velocity[0]*2;
+		}
+
+
+
+		this.bouncerGraphics.x = this.bouncer.position[0];
+		this.bouncerGraphics.y = this.bouncer.position[1];
+		// console.log(this.blobEyeGraphics.x);
+		// this.blobEyeGraphics.x = this.blob.position[0] + 15;//this.blob.velocity[0]/10;
+		// this.blobEyeGraphics.y = this.blob.position[1] + 15;//this.blob.velocity[1]/10;
+
+		for (i=0; i < this.foodBodies.length; i++) {
+			if (this.getDistance(this.foodBodies[i], this.blob) < this.blobRadius*1.25) {
+				this.recordAnswer(i);
 			}
 		}
 
-		for (i = 0; i < spliceIndices.length; i++) {
-			this.world.removeBody(this.foodBodies[spliceIndices[i]]);
-			this.stage.removeChild(this.foodGraphics[spliceIndices[i]]);
-			this.foodBodies.splice(spliceIndices[i], 1);
-			this.foodGraphics.splice(spliceIndices[i], 1);
-			this.answerChoices.splice(spliceIndices[i], 1);
-			this.answerNumbers.splice(spliceIndices[i], 1);
+		// wrap to other side of screen
+		// console.log(this.blob);
+		if (this.blob.position[0] > this._width - this.blob.shapes[0].radius) {
+			this.blob.position[0] = this._width - this.blob.shapes[0].radius - 1;
+		}
+		if (this.blob.position[1] > this._height - this.blob.shapes[0].radius) {
+			this.blob.position[1] = this._height - this.blob.shapes[0].radius - 1;
+		}
+		if (this.blob.position[0] < this.blob.shapes[0].radius) {
+			this.blob.position[0] = this.blob.shapes[0].radius + 1;
+		}
+		if (this.blob.position[1] < this.blob.shapes[0].radius) {
+			this.blob.position[1] = this.blob.shapes[0].radius + 1;
 		}
 
-		if (this.bouncer.position[0] > this._width - this.bouncer.shapes[0].radius) {
-			this.bouncer.velocity[0] *= -1;
-		}
-		if (this.bouncer.position[1] > this._height - this.bouncer.shapes[0].radius) {
-			this.bouncer.velocity[1] *= -1;
-		}
-		if (this.bouncer.position[0] < this.bouncer.shapes[0].radius) {
-			this.bouncer.velocity[0] *= -1;
-		}
-		if (this.bouncer.position[1] < this.bouncer.shapes[0].radius) {
-			this.bouncer.velocity[1] *= -1;
-		}
 
+		// wrap foods
 		for (i = 0; i < this.foodBodies.length; i++) {
 			if (this.foodBodies[i].position[0] > this._width - this.foodBodies[i].shapes[0].radius) {
 				this.foodBodies[i].velocity[0] *= -1;
@@ -220,6 +221,23 @@ Bouncers.prototype = {
 			}
 		}
 
+		// wrap enemies
+		for (i = 0; i < this.enemyBodies.length; i++) {
+			if (this.enemyBodies[i].position[0] > this._width - this.enemyBodies[i].shapes[0].radius) {
+				this.enemyBodies[i].velocity[0] *= -1;
+			}
+			if (this.enemyBodies[i].position[1] > this._height - this.enemyBodies[i].shapes[0].radius) {
+				this.enemyBodies[i].velocity[1] *= -1;
+			}
+			if (this.enemyBodies[i].position[0] < this.enemyBodies[i].shapes[0].radius) {
+				this.enemyBodies[i].velocity[0] *= -1;
+			}
+			if (this.enemyBodies[i].position[1] < this.enemyBodies[i].shapes[0].radius) {
+				this.enemyBodies[i].velocity[1] *= -1;
+			}
+		}
+
+		this.blobGraphics.rotation = this.blob.angle;
 		// update food positions
 		for (var i = 0; i < this.foodBodies.length; i++) {
 			this.foodGraphics[i].x = this.foodBodies[i].position[0];
@@ -227,7 +245,14 @@ Bouncers.prototype = {
 
 			this.answerChoices[i].x = this.foodBodies[i].position[0]-8;
 			this.answerChoices[i].y = this.foodBodies[i].position[1]-14;
-		}		
+		}
+
+		// update enemy positions
+		for (var i = 0; i < this.enemyBodies.length; i++) {
+			this.enemyGraphics[i].x = this.enemyBodies[i].position[0];
+			this.enemyGraphics[i].y = this.enemyBodies[i].position[1]-19;
+		}
+
 
 		this.world.step(1/60);
 	},

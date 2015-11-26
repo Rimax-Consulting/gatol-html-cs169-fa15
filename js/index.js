@@ -355,8 +355,6 @@ function checkLoginValid(creds, is_trainer) {
     }
 
     return valid
-    //if 
-    
 }
 
 function checkRegisterFields() {
