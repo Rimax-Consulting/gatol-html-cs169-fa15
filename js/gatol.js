@@ -298,7 +298,7 @@ function consoleError(data) {
 function checkIfLoggedIn() {
     var auth = getCookie("auth_token");
     if (auth == "") {
-        // alert("sign-in now");
         window.location.href="index.html";
+        alert("Please login");
     }
 }
