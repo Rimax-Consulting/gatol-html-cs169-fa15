@@ -123,7 +123,7 @@ Bouncers.prototype = {
 			angularDamping: .5,
 			position:[Math.random()*(this._width-140)+70,Math.random()*(this._height-140)+70]
 		});
-		this.bouncerShape = new p2.Circle({radius:20});
+		this.bouncerShape = new p2.Circle({radius:30});
 		this.bouncer.addShape(this.bouncerShape);
 		this.world.addBody(this.bouncer);
 
@@ -132,7 +132,7 @@ Bouncers.prototype = {
 		// draw the bouncer's body
 		this.bouncerGraphics.moveTo(0,0);
 		this.bouncerGraphics.beginFill(0xFFFFFF);
-		this.bouncerGraphics.drawCircle(0,0,20);
+		this.bouncerGraphics.drawCircle(0,0,30);
 		this.bouncerGraphics.endFill();
 
 		this.bouncerGraphics.x = this.bouncer.position[0];
@@ -177,14 +177,14 @@ Bouncers.prototype = {
 				velocity: [0,0],
 				angularVelocity: 0
 			});
-			var foodShape = new p2.Circle({radius: 20});
+			var foodShape = new p2.Circle({radius: 30});
 			food.addShape(foodShape);
 			that.world.addBody(food);
 
 			// Create the graphics
 			var foodGraphics = new PIXI.Graphics();
 			foodGraphics.beginFill(0xB6EE65);
-			foodGraphics.drawCircle(0,0,20);
+			foodGraphics.drawCircle(0,0,30);
 			foodGraphics.endFill();
 
 
@@ -268,8 +268,8 @@ Bouncers.prototype = {
 
 		// bounce foods
 		for (i = 0; i < this.foodBodies.length; i++) {
-			if (this.getDistance(0,0,this.foodBodies[i]) < 70 || this.getDistance(0,this._height,this.foodBodies[i]) < 70 
-				|| this.getDistance(this._width,0,this.foodBodies[i]) < 70 || this.getDistance(this._width, this._height,this.foodBodies[i]) < 70) {
+			if (this.getDistance(0,0,this.foodBodies[i]) < 80 || this.getDistance(0,this._height,this.foodBodies[i]) < 80 
+				|| this.getDistance(this._width,0,this.foodBodies[i]) < 80 || this.getDistance(this._width, this._height,this.foodBodies[i]) < 80) {
 				this.recordAnswer(i);
 				return;
 			}
