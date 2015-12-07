@@ -11,20 +11,21 @@
 var apiUrl = 'https://gatol.herokuapp.com' 
 
 // maps game_template_id to image
-var gameTemplateIdToImage = {1:'images/blobbers_example.png', 2:'images/baskets_example.png'};
+var gameTemplateIdToImage = {1:'images/blobbers_example.png', 2:'images/baskets_example.png', 3:'images/shooters_example.png', 4:'images/bouncers_example.png'};
 
 // maps game_template_id to game description
 var gameTemplateIdToDesc = {
-    1: 'Blobbers! Basic game where you are a blob and you have to eat the correct blob!',
-    2: 'Baskets! Basic game where you control a basket and have to catch the correct ball!',
-    3: 'Shooters! Basic game where you control a gun and have to ensure the correct one lands first!'
+    1: 'Blobbers! You are a blob and you have to eat the correct blob!',
+    2: 'Baskets! You control a basket and have to catch the correct ball!',
+    3: 'Shooters! You control a gun and have to ensure the correct one lands first!',
+    4: 'Bouncers! You use one ball to knock the correct answer into a hole!'
 }
 
 // maps game_template_id to game title
-var gameTemplateIdToTitle = {1:'Blobbers', 2:'Baskets', 3:'Shooters'};
+var gameTemplateIdToTitle = {1:'Blobbers', 2:'Baskets', 3:'Shooters', 4:'Bouncers'};
 
 // url to use when in development mode
-var devUrl = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/';
+// var devUrl = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/';
 
 // determine whether or not we are in development mode. 
 var inDev = false;
@@ -294,4 +295,10 @@ function consoleError(data) {
     console.error(data.responseText);
 }
 
-
+function checkIfLoggedIn() {
+    var auth = getCookie("auth_token");
+    if (auth == "") {
+        window.location.href="index.html";
+        // alert("Please login");
+    }
+}

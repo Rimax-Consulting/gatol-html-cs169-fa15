@@ -29,6 +29,8 @@ var Screens = (function() {
 			this.metaGame = BasketsMetaGame()
 		} else if (gameTemplateIdToTitle[this.templateID] == "Shooters"){
 			this.metaGame = ShootersMetaGame()
+		} else if (gameTemplateIdToTitle[this.templateID] == "Bouncers"){
+			this.metaGame = BouncersMetaGame()
 		}
 
 		this.getScore = function() {
@@ -126,6 +128,8 @@ var Screens = (function() {
 		// $(".btnSynopsis").show();
 		// $(".btnHowTo").show();
 		// $(".centerBtns .btnQuitGame").show();
+
+		$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
 
 		$(".screenTitle").text(currentGame.getTitle()); //name of game template.
 		$(".centerText").removeClass("centerBtns");
@@ -384,14 +388,13 @@ var Screens = (function() {
 
 	var start = function() {
 		//probably initialized in a public method that is called by the screen that chooses the game from the student's game list
+		checkIfLoggedIn();
+		
 		gameInstanceID = ""; 
 		descr = "";
 		tempID = "";
 
-		gameID = getCookie("game_id"); //i have set this cookie in dashboard.js
-		// gameID = "4";
-
-
+		gameID = getCookie("game_id");
 		token = getCookie("auth_token");
 
 		var gameLoadError = function(){
@@ -405,8 +408,8 @@ var Screens = (function() {
 				new Question("Mouse goes:", "squeak", ["meow", "tweet", "woof", "moo", "croak", "toot"]),
 				new Question("Bird goes:", "tweet", ["meow", "woof", "squeak", "moo", "croak", "toot"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
-			currentGame = new Game(-1, questionList, "Assorted Questions", 3);
-			$("head title").text("Game-A-Thon of Learning - " + currentGame.getTitle());
+
+			currentGame = new Game(-1, questionList, "Assorted Questions", 4);
 			setMainTitleScreen();
 		};
 
@@ -461,6 +464,7 @@ var Screens = (function() {
 
         attachHandlers();
         setLoadingScreen();
+
     };
 
     return {

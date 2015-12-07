@@ -67,6 +67,8 @@ var InputCSV = (function() {
      * @return {None}
      */
     var start = function() {
+        checkIfLoggedIn();
+        
         csv_container = $("#csv_container");
 
         attachCreateHandler();

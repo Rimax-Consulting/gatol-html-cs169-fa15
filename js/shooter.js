@@ -26,6 +26,7 @@ var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
 	this.world = new p2.World({
 		gravity: [0,state.gravity || 10]
 	});
+	console.log(state.gravity);
 
 	this.foodBodies = [];
 	this.foodGraphics = [];
@@ -73,13 +74,17 @@ Shooters.prototype = {
 			this.stage.removeChild(this.foodGraphics[i]);
 			this.world.removeBody(this.foodBodies[i]);
 		}
+		for (i=0; i < this.projectileGraphics.length; i++) {
+			this.stage.removeChild(this.projectileGraphics[i]);
+			this.world.removeBody(this.projectileBodies[i]);
+		}
 		for (i=0; i < this.answerChoices.length; i++) {
 			this.stage.removeChild(this.answerChoices[i]);
 		}
 		this.stage.removeChild(this.questionText);
 
-		this.foodBodies = [];
-		this.foodGraphics = [];
+		this.projectileBodies = [];
+		this.projectileGraphics = [];
 		this.foodBodies = [];
 		this.foodGraphics = [];
 		this.answerChoices = [];
@@ -165,6 +170,8 @@ Shooters.prototype = {
 		projectileGraphics.beginFill(0xFFFFFF);
 		projectileGraphics.drawCircle(0,0,5);
 		projectileGraphics.endFill();
+		projectileGraphics.x = this.shooterGraphics.x;
+		projectileGraphics.y = this.shooterGraphics.y;
 		this.stage.addChild(projectileGraphics);
 
 		this.projectileBodies.push(projectile);
@@ -273,7 +280,10 @@ var ShootersMetaGame = function() {
 	 * returns object of radius and numEnemies based on game progress
 	 */
 	this.getMetaGame = function(correct, index, total) {
-		var gravity = 6 + 14*index/total;
+		var gravity = 6 + 14*correct/total - 20*(index-correct)/total;
+		if (gravity < 2) {
+			gravity = 2;
+		}
 		return {gravity:gravity};
 	};
 	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {

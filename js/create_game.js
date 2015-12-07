@@ -15,12 +15,54 @@ var CreateGame = (function() {
             }
         });
 
+        create_container.on('click', '#delete_csv_btn', function(e) {
+            qset = $('.csv_item.selected');
+            try {
+                qset_li = qset[0].closest('li');
+            } catch (err) {
+                alert("Please select a csv");
+                return;
+            }
+            del_id = qset_li.id;
+
+            token = getCookie('auth_token');
+
+
+            var delSuccess = function(data) {
+                console.log(data)
+
+                bar = $('#' + del_id).next('div');
+                $('#' + del_id).remove();
+                bar.remove();
+            };
+
+            var delFailed = function(data) {
+                consoleError(data);
+                alert("You have games that rely on this CSV. You can not delete it.");
+            };
+
+
+            url = '/api/question_sets/';
+            makeDeleteRequestWithAuthorization(url + del_id, token, delSuccess, delFailed)
+
+        });
+
         create_container.on('click', '#create_finish', function(e) {
             var finish = {} // container to hold game data to be created
             qset = create_container.find('.csv_item.selected');
             template = create_container.find('.template_item.selected');
-            template_li = template[0].closest('li');
-            qset_li = qset[0].closest('li');
+            try {
+                template_li = template[0].closest('li');
+            } catch (err) {
+                alert("Please select a Game Template");
+                return;
+            }
+            try {
+                qset_li = qset[0].closest('li');
+            } catch (err) {
+                alert("Please select a CSV");
+                return;
+            }
             finish.question_set_id = qset_li.id;
             finish.game_template_id = template_li.id;
             finish.description = create_container.find('#create_game_description').val();
@@ -40,6 +82,14 @@ var CreateGame = (function() {
             };
 
             var onFailure = function(data) {
+                alertMsg = "";
+                errors = JSON.parse(data.responseText).errors;
+
+                for (var i = 0; i < errors.length; i++) {
+                    alertMsg += errors[i] + ". ";
+                };
+                alert(alertMsg);
+
                 consoleError(data);
             };
 
@@ -134,6 +184,8 @@ var CreateGame = (function() {
      * @return {None}
      */
     var start = function() {
+        checkIfLoggedIn();
+        
         create_container = $("#create_game_container");
 
         setQuestionSets();

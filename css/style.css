@@ -1,8 +1,8 @@
 html {
     min-height:100%;/* make sure it is at least as tall as the viewport */
 /*    position:relative;*/
-    -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.6);
-          box-shadow: inset 0 0 100px rgba(0,0,0,.6);
+    /*-webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.6);
+          box-shadow: inset 0 0 100px rgba(0,0,0,.6);*/
 }
 
 header.title {
@@ -118,6 +118,7 @@ header span.of {
     margin: 15px 0px 20px 0px;
 }
 
+
 #games_list {
     height: 400px;
     margin: auto;
@@ -179,7 +180,7 @@ header span.of {
 	margin: auto;
 
     color: white;
-    letter-spacing: -1pt;
+    /*letter-spacing: -1pt;*/
     word-spacing: 2pt;
     text-align: center;
     font-size: 12px;
@@ -414,10 +415,13 @@ button:active {
     width: 200px;
 }
 
+.csv_btn {
+    width: 20%
+}
+
 #add_csv_btn {
-    width: 200px;
     margin-top: 5px;
-    margin-left: 175px;
+    margin-left: 30%;
 }
 
 #game_link
@@ -544,6 +548,7 @@ button:active {
 }
 
 .centerText, .qSetText {
+    font-family: verdana, arial, sans-serif;
     font-weight: bold;
     color: white;
     letter-spacing: 1pt;
@@ -653,4 +658,13 @@ footer a {
 .register-error {
     margin-top: 10px;
     margin-bottom: 5px;
+}
+
+.lite {
+    color: #FFFFFF;
+    font-size: 90%;
+}
+
+#csv_container .inner_desc {
+    height: auto;
 }

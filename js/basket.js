@@ -30,6 +30,18 @@ var Baskets = function(parent, width, height, num_choices, state, answerFunc) {
 	// speed
 	this.speed = state.gravity*10;
 	this.turnSpeed = 5;
+	
+	// create a background texture
+	this.caveWallTexture = PIXI.Texture.fromImage("images/sprites/rock_wall_background.jpg");
+	// create a new background sprite
+	this.caveWallSprite = new PIXI.TilingSprite(this.caveWallTexture, this._width, this._height);
+	this.stage.addChild(this.caveWallSprite);
+	// create a rail texture
+	this.railTexture = PIXI.Texture.fromImage("images/sprites/rail.jpg");
+	// create a new background sprite
+	this.railSprite = new PIXI.TilingSprite(this.railTexture, this._width, 30);
+	this.railSprite.y = this._height-30;
+	this.stage.addChild(this.railSprite);
 
 	window.addEventListener('keydown', function(event) {
 		this.handleKeys(event.keyCode, true);
@@ -89,6 +101,8 @@ Baskets.prototype = {
 		this.answerChoices = [];
 		this.answerNumbers = [];
 		this.answerFunc(num);
+		this.stage.removeChild(this.caveWallSprite);
+		this.stage.removeChild(this.railSprite);
 		clearInterval(this.foodMaker);
 	},
 
@@ -99,21 +113,28 @@ Baskets.prototype = {
 			angularVelocity: 0,
 			damping: .99,
 			angularDamping: .5,
-			position:[Math.round(this._width/2),Math.round(this._height + 10)]
+			position:[Math.round(this._width/2),Math.round(this._height -30)]
 		});
 		this.basketShape = new p2.Circle({radius:this.basketRadius});
 		this.basket.addShape(this.basketShape);
 		this.world.addBody(this.basket);
 
-		this.basketGraphics = new PIXI.Graphics();
+		this.basketGraphics = new PIXI.Sprite.fromImage("images/sprites/minecart2.png");
+		// this.basketGraphics.scale = .5;
+		this.basketGraphics.width = 140;
+		this.basketGraphics.height = 80;
+		this.basketGraphics.x = this.basket.position[0] - this.basketGraphics.width/2;
+		this.basketGraphics.y = this.basket.position[1] - this.basketGraphics.height;
+		// console.log(this.basketGraphics.width, this.basketGraphics.height);
+
 
 		// draw the basket's body
-		this.basketGraphics.moveTo(-30,10);
-		this.basketGraphics.lineStyle(10, 0xFFFFFF, 1);
-		this.basketGraphics.lineTo(-40,-30);
-		this.basketGraphics.lineTo(40,-30);
-		this.basketGraphics.lineTo(30,10);
-		this.basketGraphics.lineTo(-30,10);
+		// this.basketGraphics.moveTo(-30,10);
+		// this.basketGraphics.lineStyle(10, 0xFFFFFF, 1);
+		// this.basketGraphics.lineTo(-40,-30);
+		// this.basketGraphics.lineTo(40,-30);
+		// this.basketGraphics.lineTo(30,10);
+		// this.basketGraphics.lineTo(-30,10);
 
 		this.stage.addChild(this.basketGraphics);
 	},
@@ -140,13 +161,18 @@ Baskets.prototype = {
 		that.world.addBody(food);
 
 		// Create the graphics
-		var foodGraphics = new PIXI.Graphics();
-		foodGraphics.beginFill(0xB6EE65);
-		foodGraphics.drawCircle(0,0,20);
-		foodGraphics.endFill();
+		var foodGraphics = new PIXI.Sprite.fromImage("images/sprites/coin.png");
 
 
-		var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0x51771a});
+		var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0x222222});
+
+		foodGraphics.width = 40;
+		foodGraphics.height = 40;
+		foodGraphics.x = food.position[0] - foodGraphics.width/2;
+		foodGraphics.y = food.position[1] - foodGraphics.height/2;
+
+		answerText.x = food.position[0]-8;
+		answerText.y = food.position[1]-14;
 
 		that.stage.addChild(foodGraphics);
 		that.stage.addChild(answerText);
@@ -179,10 +205,10 @@ Baskets.prototype = {
 	updatePhysics: function () {
 
 		if (this.keyRight) {
-			this.basket.force[0] += this.speed;
+			this.basket.force[0] += this.speed*1.5;
 		}
 		if (this.keyLeft) {
-			this.basket.force[0] -= this.speed;
+			this.basket.force[0] -= this.speed*1.5;
 		}
 
 		// for (i = 0; i < this.enemyBodies.length; i++) {
@@ -191,14 +217,14 @@ Baskets.prototype = {
 		// }
 
 
-		this.basketGraphics.x = this.basket.position[0];
-		this.basketGraphics.y = this.basket.position[1];
+		this.basketGraphics.x = this.basket.position[0] - this.basketGraphics.width/2;
+		this.basketGraphics.y = this.basket.position[1] - this.basketGraphics.height;
 		// console.log(this.basketEyeGraphics.x);
 		// this.basketEyeGraphics.x = this.basket.position[0] + 15;//this.basket.velocity[0]/10;
 		// this.basketEyeGraphics.y = this.basket.position[1] + 15;//this.basket.velocity[1]/10;
 
 		for (i=0; i < this.foodBodies.length; i++) {
-			if (this.getDistance(this.foodBodies[i], this.basket) < this.basketRadius*1.25) {
+			if (Math.abs(this.foodBodies[i].position[0] - this.basket.position[0]) < this.basketGraphics.width/2 && Math.abs(this.foodBodies[i].position[1] - this.basketGraphics.y) < 10) {
 				this.recordAnswer(this.answerNumbers[i]);
 			}
 		}
@@ -239,37 +265,16 @@ Baskets.prototype = {
 			this.answerNumbers.splice(spliceIndices[i], 1);
 		}
 
-		// for (i = 0; i < this.enemyBodies.length; i++) {
-		// 	if (this.enemyBodies[i].position[0] > this._width - this.enemyBodies[i].shapes[0].radius) {
-		// 		this.enemyBodies[i].velocity[0] *= -1;
-		// 	}
-		// 	if (this.enemyBodies[i].position[1] > this._height - this.enemyBodies[i].shapes[0].radius) {
-		// 		this.enemyBodies[i].velocity[1] *= -1;
-		// 	}
-		// 	if (this.enemyBodies[i].position[0] < this.enemyBodies[i].shapes[0].radius) {
-		// 		this.enemyBodies[i].velocity[0] *= -1;
-		// 	}
-		// 	if (this.enemyBodies[i].position[1] < this.enemyBodies[i].shapes[0].radius) {
-		// 		this.enemyBodies[i].velocity[1] *= -1;
-		// 	}
-		// }
-
 		this.basketGraphics.rotation = this.basket.angle;
 		// update food positions
 		for (var i = 0; i < this.foodBodies.length; i++) {
-			this.foodGraphics[i].x = this.foodBodies[i].position[0];
-			this.foodGraphics[i].y = this.foodBodies[i].position[1];
+			this.foodGraphics[i].x = this.foodBodies[i].position[0] - this.foodGraphics[i].width/2;
+			this.foodGraphics[i].y = this.foodBodies[i].position[1] - this.foodGraphics[i].height/2;
+			// console.log(this.foodGraphics.width, this.foodGraphics.height);
 
 			this.answerChoices[i].x = this.foodBodies[i].position[0]-8;
 			this.answerChoices[i].y = this.foodBodies[i].position[1]-14;
 		}
-
-		// // update enemy positions
-		// for (var i = 0; i < this.enemyBodies.length; i++) {
-		// 	this.enemyGraphics[i].x = this.enemyBodies[i].position[0];
-		// 	this.enemyGraphics[i].y = this.enemyBodies[i].position[1]-19;
-		// }
-
 
 		this.world.step(1/60);
 	},
@@ -295,8 +300,8 @@ var BasketsMetaGame = function() {
 	 */
 	this.getMetaGame = function(correct, index, total) {
 		var incorrect = index - correct;
-		var gravity = 200 + 600*index/total;
-		var interval = 1500 / Math.pow(((total + index)/total), 2.5);
+		var gravity = 150 + 300*index/total;
+		var interval = 2500 / Math.pow(((total + index)/total), 2.5);
 		return {gravity:gravity, interval:interval};
 	};
 	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {
