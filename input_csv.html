@@ -6,9 +6,14 @@
     <link rel="icon" type="image/png" href="images/gamecontroller-icon.png">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+      
+      
+    </style>
     <script src="js/jquery.min.js"></script>
     <script src="js/gatol.js"></script>
     <script src="js/input_csv.js"></script>
+    <script src="js/error_handler.js"></script>
     <script type="text/javascript">
         // This is a jQuery convention to say that once all the files
         // load, the function GameAThon.start() should run.
@@ -40,6 +45,7 @@
 
         <div id="csv_inputs">
             <input id="file_select" type="file" accept=".csv"></input>
+        <div id="csv-msg" class="error margin_top10"></div>
 		    <button id="upload" class="margin_top20">Upload</button>
             <button id="cancel_upload" class="other_buttons white_button">Cancel</button>
         </div>

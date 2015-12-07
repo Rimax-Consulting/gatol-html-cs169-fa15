@@ -4,7 +4,7 @@ var InputCSV = (function() {
     var csv_container; // holds link_input container, value set in the "start" method below
 
     // PRIVATE METHODS
-
+                
     var attachCreateHandler = function(e) {
 
         csv_container.on('click', '#upload', function(e) {
@@ -43,8 +43,8 @@ var InputCSV = (function() {
             }
 
             var onFailure = function(data) {
-                console.log('failed to upload csv');
-                consoleError(data);
+                msg = extractJSONFailMsg(data);
+                $('#csv-msg').text('CSV Upload Failed: ' + msg + 'Try again!')
             }
 
             url = '/api/question_sets/import'
