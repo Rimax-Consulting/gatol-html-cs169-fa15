@@ -1,0 +1,38 @@
+button.btn, button.btn:active {
+    background: #475edb !important;
+}
+
+.login-screen-mod {
+    display: none;
+}
+
+.login-form .glyphicon {
+    margin-top: 8px;
+}
+
+.form-top p {
+    color: #888888;
+    margin-bottom: -3px;
+}
+
+.form-top a {
+    font-size: 12px;
+}    
+
+.form-top .alert {
+    font-size: 14px;
+    padding: 3px;
+    padding-left: 10px;
+    width: 100%;
+    margin-bottom: -8px;
+}
+
+.login-form .help-block {
+    margin-top: -4px;
+    padding-left: 2px;
+    font-size: 12px;
+}
+
+.login-bottom-btn {
+    margin-top: 10px !important;
+}
