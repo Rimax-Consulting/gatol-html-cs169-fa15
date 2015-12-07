@@ -323,18 +323,6 @@ function showRegisterFailMsg(errors) {
     
 }
 
-function extractJSONFailMsg(data) {
-    console.log(data);
-    errors = JSON.parse(data.responseText).errors;
-    console.log(errors);
-    msg = ""
-    if (errors != null) {
-        msg += errors[0] + '. '
-    }
-    return msg
-
-}
-
 function backToMain(currentScreen) {
     $('#login_title').hide();
     $(currentScreen).hide();
