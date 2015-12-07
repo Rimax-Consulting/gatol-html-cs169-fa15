@@ -91,7 +91,8 @@ var CreateGame = (function() {
                         alertMsg += " and ";
                     }
                 };
-
+                alert(alertMsg);
+                
                 consoleError(data);
             };
 
