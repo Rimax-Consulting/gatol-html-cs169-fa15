@@ -226,22 +226,21 @@ var GameAThon = (function () {
             creds.confirm_password = $('#register_confirm_password').val();
 
             var onSuccess = function (data) {
-                alert('successfully registered user');
+                alert('Successfully registered user. You should receive a confirmation email from us soon.');
             };
             var onFailure = function (data) {
                 console.error(data.status);
                 errors = JSON.parse(data.responseText).errors;
                 alertMsg = "";
-                if (errors.email != null) {
-                    alertMsg += "email " + errors.email + "\n";
-                }
 
-                if (errors.password != null) {
-                    alertMsg += "password " + errors.password;
-                }
+                for (var i = 0; i < errors.length; i++) {
+                    alertMsg += errors[i];
+                    if (i != errors.length-1) {
+                        alertMsg += " and ";
+                    }
+                };
 
-                alert(alertMsg);
-                displayError('Register Failed! Please try again.', '#register_screen');
+                displayError('Register Failed: ' + alertMsg + '.', '#register_screen');
             };
 
             url = '/api/students';
@@ -254,7 +253,7 @@ var GameAThon = (function () {
 
             if ($('#register_trainer_password').val() != $('#register_trainer_confirm_password').val()) {
                 //alert('password does not match');
-                displayError('Passwords do not match! Please re-enter.', '#register_screen')
+                displayError('Passwords do not match! Please re-enter.', '#register_trainer_screen')
                 return;
             }
 
@@ -264,22 +263,21 @@ var GameAThon = (function () {
             creds.confirm_password = $('#register_trainer_confirm_password').val();
 
             var onSuccess = function (data) {
-                alert('successfully registered trainer');
+                alert('Successfully registered trainer. You should receive a confirmation email from us soon.');
             };
             var onFailure = function (data) {
                 console.error(data.status);
                 errors = JSON.parse(data.responseText).errors;
                 alertMsg = "";
-                if (errors.email != null) {
-                    alertMsg += "email " + errors.email + "\n";
-                }
 
-                if (errors.password != null) {
-                    alertMsg += "password " + errors.password;
-                }
+                for (var i = 0; i < errors.length; i++) {
+                    alertMsg += errors[i];
+                    if (i != errors.length-1) {
+                        alertMsg += " and ";
+                    }
+                };
 
-                alert(alertMsg);
-                displayError('Register Failed! Please try again.', '#register_trainer_screen')
+                displayError('Register Failed: ' + alertMsg + '.', '#register_trainer_screen');
             };
 
             url = '/api/trainers';
