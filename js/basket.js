@@ -30,6 +30,12 @@ var Baskets = function(parent, width, height, num_choices, state, answerFunc) {
 	// speed
 	this.speed = state.gravity*10;
 	this.turnSpeed = 5;
+	
+	// create a background texture
+	var caveWallTexture = PIXI.Texture.fromImage("images/sprites/rock_wall_background.png");
+	// create a new background sprite
+	var caveWallSprite = new PIXI.Sprite(caveWallTexture);
+	this.stage.addChild(caveWallSprite);
 
 	window.addEventListener('keydown', function(event) {
 		this.handleKeys(event.keyCode, true);
@@ -147,6 +153,13 @@ Baskets.prototype = {
 
 
 		var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0x51771a});
+
+
+		foodGraphics.x = food.position[0];
+		foodGraphics.y = food.position[1];
+
+		answerText.x = food.position[0]-8;
+		answerText.y = food.position[1]-14;
 
 		that.stage.addChild(foodGraphics);
 		that.stage.addChild(answerText);
@@ -295,8 +308,8 @@ var BasketsMetaGame = function() {
 	 */
 	this.getMetaGame = function(correct, index, total) {
 		var incorrect = index - correct;
-		var gravity = 200 + 600*index/total;
-		var interval = 1500 / Math.pow(((total + index)/total), 2.5);
+		var gravity = 150 + 330*index/total;
+		var interval = 2500 / Math.pow(((total + index)/total), 2.5);
 		return {gravity:gravity, interval:interval};
 	};
 	this.initializeGame = function(parent, width, height, num_choices, state, answerFunc) {
