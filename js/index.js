@@ -345,7 +345,7 @@ function backToMain(currentScreen) {
 function checkLoginValid(creds, is_trainer) {
     user = 'user'
     if (is_trainer) {
-        // user = 'trainer'
+        user = 'trainer'
         creds.is_trainer = '1';
     } else {
         creds.is_trainer = '0';
