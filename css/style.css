@@ -587,6 +587,14 @@ button:active {
     position: relative;
     top: 20px;
     left: 20px;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
 }
 
 .questionZoomed {
@@ -594,7 +602,13 @@ button:active {
     font-family: 'Lato', verdana, arial, sans-serif;
     /*font-weight: bold;*/
     font-size: 25px;
-    padding-right: 20px
+    padding-right: 20px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .gameScreen {
