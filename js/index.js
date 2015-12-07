@@ -226,7 +226,7 @@ var GameAThon = (function () {
             creds.confirm_password = $('#register_confirm_password').val();
 
             var onSuccess = function (data) {
-                alert('successfully registered user');
+                alert('Successfully registered user. You should receive a confirmation email from us soon.');
             };
             var onFailure = function (data) {
                 console.error(data.status);
@@ -263,7 +263,7 @@ var GameAThon = (function () {
             creds.confirm_password = $('#register_trainer_confirm_password').val();
 
             var onSuccess = function (data) {
-                alert('successfully registered trainer');
+                alert('Successfully registered trainer. You should receive a confirmation email from us soon.');
             };
             var onFailure = function (data) {
                 console.error(data.status);
