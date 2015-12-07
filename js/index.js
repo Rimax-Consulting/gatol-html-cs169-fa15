@@ -131,8 +131,6 @@ var GameAThon = (function () {
             //creds.email = $('#trainer_email').val();
             //creds.password = $('#trainer_password').val();
 
-            alert(checkLoginValid(creds, false));
-
             if (checkLoginValid(creds, true)) {
                 e.preventDefault();
                 var onSuccess = function (data) {
