@@ -25,6 +25,25 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/creative.css" type="text/css">
 
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/p2.min.js"></script>
+    <script type="text/javascript" src="js/pixi.min.js"></script>
+    <script type="text/javascript" src="js/question.js"></script>
+    <script type="text/javascript" src="js/blobber.js"></script>
+    <script type="text/javascript" src="js/basket.js"></script>
+    <script type="text/javascript" src="js/shooter.js"></script>
+    <script type="text/javascript" src="js/gatol.js"></script>
+    <script type="text/javascript" src="js/gameScreens.js"></script>
+    <script type="text/javascript">
+            // This is a jQuery convention to say that once all the files
+            // load, the function Smile.start() should run.
+            // This function is defined in the smiles.js
+            $(function() {
+                Screens.start();
+            });
+    </script>
+
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -60,74 +79,55 @@
         <!-- /.container-fluid -->
     </nav>
 
-    <header>
+    <header id="header">
         <div class="header-content centerBtns">
             <div class="header-content-inner">
-                <h1>Screen Title</h1>
+                <h1 class="screenTitle">Screen Title</h1>
                 <hr>
-                <p>Start being more productive and engaged with your required tasks by turning them into fun games!</p>
                 <p></p>
                 <a href="#about" class="btn btn-primary btnSynopsis all btn-xl main">Start</a>
                 <a href="#about" class="btn btn-primary btnHowTo all btn-xl main">How to Play</a>
                 <a href="#about" class="btn btn-primary btnMain all btn-xl done">Back to Main Menu</a>
                 <a href="#about" class="btn btn-primary btnProgress all btn-xl done">Progress Report</a>
-                <a href="#about" class="btn btn-primary btnQuitGame all btn-xl done">Quit</a>
+                <a href="#about" class="btn btn-primary btnQuitGame all main btn-xl done">Quit</a>
+
+                <div class="centerText all howTo synopsis done"> INFO </div>
+                <p></p>
 
                 <a href="#about" class="btn btn-primary btnMain all btn-xl howTo">Back to Main Menu</a>
                 <a href="#about" class="btn btn-primary btnGame all btn-xl questionDisp">Play</a>
-                <a href="#about" class="btn btn-primary btnNext all btn-xl answerDisp">Next Question</a>
+                <a href="#about" class="btn btn-primary btnNext all btn-xl synopsis answerDisp">Next Question</a>
                 <a href="#about" class="btn btn-primary btnQuitGame all btn-xl">Quit</a>
                 <a href="#about" class="btn btn-primary btnDone all btn-xl">Back</a>
 
-        <div class="screenTitle all">Screen Title</div>
-
-        <div class="centerText all howTo synopsis done"> INFO </div>
-
-        <div class="centerBtns">
-            <button class="btnSynopsis all main">Start</button>
-            <button class="btnHowTo all main">How to Play</button>
-            <button class="btnMain all done">Back to Main Menu</button>
-            <button class="btnProgress all done">Progress Report</button>
-            <button class="btnQuitGame all main done">Quit</button>		
-        </div>
-        
-        <div class="progress all" >
-            <div class="dashboard container">
-                <div class="inner_title">Your Results</div>
-                <div>
-                    <ul class="progress_container">
-                        <li>
-                            <div class="qInfo">Question</div> 
-                            <div class="result">Correct or Incorrect</div> 
-                        </li>
-                        <div class="fullbar"></div>
-                        <li>
-                            <div class="qInfo">Question2 is realy really relaly longggggggggg gggggggg</div> 
-                            <div class="result">Good</div> 
-                        </li>
-                    </ul>
+                <div class="progress all" >
+                    <div class="dashboard container">
+                        <div class="inner_title">Your Results</div>
+                        <div>
+                            <ul class="progress_container">
+                                <li>
+                                    <div class="qInfo">Question</div> 
+                                    <div class="result">Correct or Incorrect</div> 
+                                </li>
+                                <div class="fullbar"></div>
+                                <li>
+                                    <div class="qInfo">Question2 is realy really relaly longggggggggg gggggggg</div> 
+                                    <div class="result">Good</div> 
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="bottomBtns">
-            <button class="btnMain all howTo">Back to Main Menu</button>
-            <button class="btnGame all questionDisp">Play</button>
-            <button class="btnNext all synopsis answerDisp">Next Question</button>
-            <button class="btnQuitGame all">Quit</button>
-            <button class="btnDone progress all">Back</button>
-        </div>
+                <div class="questionText questionZoomed">
+                    <div class="currQuestion all questionDisp answerDisp">Current Question</div>
+                    <div class="answer all questionDisp answerDisp">Choose between the following:</div>
+                </div>
 
-        <div class="questionText questionZoomed">
-            <div class="currQuestion all questionDisp answerDisp">Current Question</div>
-            <div class="answer all questionDisp answerDisp">Choose between the following:</div>
-        </div>
-        <div class="gameScreen" id="gameScreen">
-        </div>
+                <div style="{margin:5px; padding:5px; height: 100% !important; display:block;}"class="gameScreen" id="gameScreen"></div>
 
             </div>
         </div>
-
 
 
     </header>
