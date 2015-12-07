@@ -138,11 +138,7 @@ var GameAThon = (function () {
                     setCookie("auth_token", data.auth_token);
                     setCookie("username", data.username);
                     setCookie("trainer", "true");
-                    if (inDev) {
-                        location.href = devUrl + 'dashboard.html';
-                    } else {
-                        location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
-                    }
+                    location.href = 'dashboard.html';
                 };
                 var onFailure = function (data) {
                     consoleError(data);
