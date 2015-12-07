@@ -82,6 +82,14 @@ var CreateGame = (function() {
             };
 
             var onFailure = function(data) {
+                alertMsg = "";
+                errors = JSON.parse(data.responseText).errors;
+
+                for (var i = 0; i < errors.length; i++) {
+                    alertMsg += errors[i] + ". ";
+                };
+                alert(alertMsg);
+
                 consoleError(data);
             };
 
