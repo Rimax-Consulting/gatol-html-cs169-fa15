@@ -267,9 +267,7 @@ function checkLoginValid(creds, is_trainer) {
         creds.password = password.val();
     }
 
-    return valid
-    //if 
-    
+    return valid   
 }
 
 function checkRegisterFields() {
