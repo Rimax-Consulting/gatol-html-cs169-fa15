@@ -388,7 +388,7 @@ var Screens = (function() {
 
 	var start = function() {
 		//probably initialized in a public method that is called by the screen that chooses the game from the student's game list
-		checkIfLoggedIn();
+		// checkIfLoggedIn();
 		
 		gameInstanceID = ""; 
 		descr = "";
