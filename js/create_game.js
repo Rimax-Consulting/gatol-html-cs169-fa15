@@ -86,10 +86,7 @@ var CreateGame = (function() {
                 errors = JSON.parse(data.responseText).errors;
 
                 for (var i = 0; i < errors.length; i++) {
-                    alertMsg += errors[i];
-                    if (i != errors.length-1) {
-                        alertMsg += ". ";
-                    }
+                    alertMsg += errors[i] + ". ";
                 };
                 alert(alertMsg);
 
