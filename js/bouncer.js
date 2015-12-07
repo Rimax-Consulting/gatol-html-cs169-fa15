@@ -38,6 +38,13 @@ var Bouncers = function(parent, width, height, num_choices, state, answerFunc) {
 	this.foodCreated = false;
 	this.inMotion = false;
 
+
+	// create a background texture
+	this.feltTexture = PIXI.Texture.fromImage("images/sprites/lawn_pool.png");
+	// create a new background sprite
+	this.feltSprite = new PIXI.TilingSprite(this.feltTexture, this._width, this._height);
+	this.stage.addChild(this.feltSprite);
+
 	var that = this;
 	$("body").mousemove(function(e) {
 		if (that.inMotion || !that.mouseClicked) {
@@ -55,8 +62,8 @@ var Bouncers = function(parent, width, height, num_choices, state, answerFunc) {
 		that.arrow.lineTo(3, Math.pow(Math.pow(e.pageX-that.mouseStart[0],2) + Math.pow(e.pageY-that.mouseStart[1],2), .4) - 6);
 		that.arrow.lineTo(-3, Math.pow(Math.pow(e.pageX-that.mouseStart[0],2) + Math.pow(e.pageY-that.mouseStart[1],2), .4) - 6);
 		that.arrow.lineTo(0,Math.pow(Math.pow(e.pageX-that.mouseStart[0],2) + Math.pow(e.pageY-that.mouseStart[1],2), .4));
-		that.arrow.x = that.bouncerGraphics.x;
-		that.arrow.y = that.bouncerGraphics.y;
+		that.arrow.x = that.bouncerGraphics.x + that.bouncerGraphics.width/2;
+		that.arrow.y = that.bouncerGraphics.y + that.bouncerGraphics.height/2;
 		that.arrow.rotation = -1*Math.atan2(e.pageX-that.mouseStart[0], e.pageY-that.mouseStart[1]);
 		that.stage.addChild(that.arrow);
 
@@ -113,6 +120,7 @@ Bouncers.prototype = {
 		this.answerChoices = [];
 		this.answerNumbers = [];
 		this.answerFunc(num);
+		this.stage.removeChild(this.feltSprite);
 	},
 
 	createBouncer: function() {
@@ -127,21 +135,21 @@ Bouncers.prototype = {
 		this.bouncer.addShape(this.bouncerShape);
 		this.world.addBody(this.bouncer);
 
-		this.bouncerGraphics = new PIXI.Graphics();
+		this.bouncerGraphics = new PIXI.Sprite.fromImage("images/sprites/cue_ball.png");
+		this.bouncerGraphics.height = 60;
+		this.bouncerGraphics.width = 66.667;
 
 		// draw the bouncer's body
-		this.bouncerGraphics.moveTo(0,0);
-		this.bouncerGraphics.beginFill(0xFFFFFF);
-		this.bouncerGraphics.drawCircle(0,0,30);
-		this.bouncerGraphics.endFill();
 
-		this.bouncerGraphics.x = this.bouncer.position[0];
-		this.bouncerGraphics.y = this.bouncer.position[1];
+		this.bouncerGraphics.x = this.bouncer.position[0]-this.bouncerGraphics.width/2;
+		this.bouncerGraphics.y = this.bouncer.position[1]-this.bouncerGraphics.height/2;
 
 		this.stage.addChild(this.bouncerGraphics);
 	},
 
 	createFoods: function(that) {
+		var foo = Array.apply(null, {length: 8}).map(Number.call, Number);
+		for(var j, x, i = foo.length; i; j = Math.floor(Math.random() * i), x = foo[--i], foo[i] = foo[j], foo[j] = x);
 		for (i = 0; i < this.num_choices; i++) {
 			var x = Math.random()*(this._width-140)+70;
 			var y = Math.random()*(this._height-140)+70;
@@ -182,16 +190,15 @@ Bouncers.prototype = {
 			that.world.addBody(food);
 
 			// Create the graphics
-			var foodGraphics = new PIXI.Graphics();
-			foodGraphics.beginFill(0xB6EE65);
-			foodGraphics.drawCircle(0,0,30);
-			foodGraphics.endFill();
+			var foodGraphics = new PIXI.Sprite.fromImage("images/sprites/ball_"+foo[i]+".png");
+			foodGraphics.width = 66.666667;
+			foodGraphics.height = 60;
 
 
-			var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0x51771a});
+			var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0x111111});
 
-			foodGraphics.x = x;
-			foodGraphics.y = y;
+			foodGraphics.x = x - foodGraphics.width/2;
+			foodGraphics.y = y - foodGraphics.height/2;
 			answerText.x = x-8;
 			answerText.y = y-14;
 
@@ -211,25 +218,25 @@ Bouncers.prototype = {
 		var yList = [0, 0, this._height, this._height];
 		for (var i = 0; i < 4; i++) {
 			var goal = new PIXI.Graphics();
-			goal.beginFill(0xFFFFFF, .5);
+			goal.beginFill(0xFFFFFF, .2);
 			goal.drawCircle(0,0,70);
 			goal.endFill();
-			goal.beginFill(this.renderer.backgroundColor);
+			goal.beginFill(0xFF0000, .3);
 			goal.drawCircle(0,0,60);
 			goal.endFill();
-			goal.beginFill(0xFFFFFF, .5);
+			goal.beginFill(0xFFFFFF, .4);
 			goal.drawCircle(0,0,50);
 			goal.endFill();
-			goal.beginFill(this.renderer.backgroundColor);
+			goal.beginFill(0xFF0000, .5);
 			goal.drawCircle(0,0,40);
 			goal.endFill();
-			goal.beginFill(0xFFFFFF, .5);
+			goal.beginFill(0xFFFFFF, .6);
 			goal.drawCircle(0,0,30);
 			goal.endFill();
-			goal.beginFill(this.renderer.backgroundColor);
+			goal.beginFill(0xFF0000, .7);
 			goal.drawCircle(0,0,20);
 			goal.endFill();
-			goal.beginFill(0xFFFFFF, .5);
+			goal.beginFill(0xFFFFFF, .8);
 			goal.drawCircle(0,0,10);
 			goal.endFill();
 			goal.x = xList[i];
@@ -249,8 +256,8 @@ Bouncers.prototype = {
 
 	updatePhysics: function () {
 
-		this.bouncerGraphics.x = this.bouncer.position[0];
-		this.bouncerGraphics.y = this.bouncer.position[1];
+		this.bouncerGraphics.x = this.bouncer.position[0]-this.bouncerGraphics.width/2;
+		this.bouncerGraphics.y = this.bouncer.position[1]-this.bouncerGraphics.height/2;
 
 		if (this.bouncer.position[0] > this._width - this.bouncer.shapes[0].radius) {
 			this.bouncer.velocity[0] *= -1;
@@ -289,8 +296,8 @@ Bouncers.prototype = {
 
 		var nothingInMotion = true;
 		for (var i = 0; i < this.foodBodies.length; i++) {
-			this.foodGraphics[i].x = this.foodBodies[i].position[0];
-			this.foodGraphics[i].y = this.foodBodies[i].position[1];
+			this.foodGraphics[i].x = this.foodBodies[i].position[0] - this.foodGraphics[i].width/2;
+			this.foodGraphics[i].y = this.foodBodies[i].position[1] - this.foodGraphics[i].height/2;
 
 			this.answerChoices[i].x = this.foodBodies[i].position[0]-8;
 			this.answerChoices[i].y = this.foodBodies[i].position[1]-14;

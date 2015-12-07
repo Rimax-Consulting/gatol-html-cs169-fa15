@@ -409,7 +409,7 @@ var Screens = (function() {
 				new Question("Bird goes:", "tweet", ["meow", "woof", "squeak", "moo", "croak", "toot"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
 
-			currentGame = new Game(-1, questionList, "Assorted Questions", 2);
+			currentGame = new Game(-1, questionList, "Assorted Questions", 4);
 			setMainTitleScreen();
 		};
 
