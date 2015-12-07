@@ -180,7 +180,7 @@ header span.of {
 	margin: auto;
 
     color: white;
-    letter-spacing: -1pt;
+    /*letter-spacing: -1pt;*/
     word-spacing: 2pt;
     text-align: center;
     font-size: 12px;
