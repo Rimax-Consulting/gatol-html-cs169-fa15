@@ -59,6 +59,20 @@
                 </button>
                 <a class="navbar-brand page-scroll" href="index.html">Game-A-Thon</a>
             </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a class="page-scroll" href="login.html">Login</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="about.html">About</a>
+                    </li>
+                    <!-- <li>
+                        <a class="page-scroll" href="#contact">Contact</a>
+                    </li> -->
+                </ul>
+            </div>
 
         </div>
         <!-- /.container-fluid -->
@@ -120,7 +134,6 @@
                             </div>
                             <div class="form-bottom">
                                 <form class="login-form">
-                                    
                                     <div class="form-group has-feedback">
                                         <label class="sr-only" for="form-username">Email</label>
                                         <input id="user-email" type="text" name="form-username" 
@@ -157,7 +170,6 @@
                                     <h3>Login as a Trainer</h3>
                                     <p >Enter your username and password to log on</p>
                                     <a id="forgot-trainer" href="#forgot">Forgot Password</a>
-                                    <p style="color:red;" class="error"></p>
                                 </div>
                                 <div class="form-top-right">
                                     <i class="fa fa-lock"></i>
@@ -165,13 +177,27 @@
                             </div>
                             <div class="form-bottom">
                                 <form class="login-form">
-                                    <div class="form-group">
+                                    <div class="form-group has-feedback">
                                         <label class="sr-only" for="form-username">Email</label>
-                                        <input id="trainer-email" type="text" name="form-username" placeholder="Email Address..." class="form-username form-control">
+                                        <input id="trainer-email" type="text" name="form-username" 
+                                               placeholder="Email Address..." class="form-username form-control"  
+                                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                                        <span class="glyphicon glyphicon-remove form-control-feedback" 
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">(error)</span>
+                                        <span class="help-block"></span>
+                                        
                                     </div>
-                                    <div class="form-group">
+                                    
+                                    <div class="form-group has-feedback">
                                         <label class="sr-only" for="form-password">Password</label>
-                                        <input id="trainer-password" type="password" name="form-password" placeholder="Password..." class="form-password form-control">
+                                        <input id="trainer-password" type="password" name="form-password" 
+                                               placeholder="Password..." 
+                                               class="form-password form-control" required>
+                                        <span class="glyphicon glyphicon-remove form-control-feedback" 
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">(error)</span>
+                                        <span class="help-block"></span>
                                     </div>
                                 </form>
                                 <button id="trainer-signin" class="btn">Sign in!</button>
@@ -186,7 +212,6 @@
                                 <div class="form-top-left">
                                     <h3>Register as a Student</h3>
                                     <p>Enter valid email, username, and password to register</p>
-                                    <p style="color:red;" class="error"></p>
                                 </div>
                                 <div class="form-top-right">
                                     <i class="fa fa-lock"></i>
@@ -194,21 +219,49 @@
                             </div>
                             <div class="form-bottom">
                                 <form class="login-form">
-                                    <div class="form-group">
+                                    <div class="form-group has-feedback">
                                         <label class="sr-only" for="form-username">Email</label>
-                                        <input id="register-email" type="text" name="form-email" placeholder="Email..." class="form-username form-control">
+                                        <input id="register-email" type="text" name="form-username" 
+                                               placeholder="Email Address..." class="form-username form-control"  
+                                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                                        <span class="glyphicon glyphicon-remove form-control-feedback" 
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">(error)</span>
+                                        <span class="help-block"></span>
+                                        
                                     </div>
-                                    <div class="form-group">
-                                        <label class="sr-only" for="form-username">Username</label>
-                                        <input id="register-username" type="text" name="form-username" placeholder="Username..." class="form-username form-control">
+
+                                    <div class="form-group has-feedback">
+                                        <label class="sr-only" for="form-password">Username</label>
+                                        <input id="register-username" type="text" name="form-username" 
+                                               placeholder="Username..." 
+                                               class="form-username form-control" required>
+                                        <span class="glyphicon glyphicon-remove form-control-feedback" 
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">(error)</span>
+                                        <span class="help-block"></span>
                                     </div>
-                                    <div class="form-group">
+
+
+                                    <div class="form-group has-feedback">
                                         <label class="sr-only" for="form-password">Password</label>
-                                        <input id="register-password" type="password" name="form-password" placeholder="Password..." class="form-password form-control">
+                                        <input id="register-password" type="password" name="form-password" 
+                                               placeholder="Password..." 
+                                               class="form-password form-control" required>
+                                        <span class="glyphicon glyphicon-remove form-control-feedback" 
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">(error)</span>
+                                        <span class="help-block"></span>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="sr-only" for="form-username">Confirm Password</label>
-                                        <input id="register-confirm-password" type="password" name="form-confirm-password" placeholder="Confirm Password..." class="form-username form-control">
+                                     <div class="form-group has-feedback">
+                                        <label class="sr-only" for="form-password">Confirm Password</label>
+                                        <input id="register-password" type="password" name="form-confirm-password" 
+                                               placeholder="Confirm Password..." 
+                                               class="form-confirm-password form-control" required>
+                                        <span class="glyphicon glyphicon-remove form-control-feedback" 
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">(error)</span>
+                                        <span class="help-block"></span>
                                     </div>
                                 </form>
                                 <button id="student-registration" class="btn">Register</button>
@@ -223,7 +276,6 @@
                                 <div class="form-top-left">
                                     <h3>Register as a Trainer</h3>
                                     <p>Enter valid email, username, and password to register</p>
-                                    <p style="color:red;" class="error"></p>
                                 </div>
                                 <div class="form-top-right">
                                     <i class="fa fa-lock"></i>

@@ -10,9 +10,9 @@ button.btn, button.btn:active {
     margin-top: 8px;
 }
 
-.form-top p {
+.form-top-left p {
     color: #888888;
-    margin-bottom: -3px;
+    margin-bottom: -5px;
 }
 
 .form-top a {

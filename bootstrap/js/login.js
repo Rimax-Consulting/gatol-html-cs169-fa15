@@ -93,18 +93,7 @@ $('#student-signin').on('click', function(e) {
         };
 
         var onFailure = function (data) {
-            //console.error('failure to login as user');
-            //consoleError(data);
-            msg = extractJSONFailMsg(data)
-            if (data.status == 422 && msg.indexOf('email') > -1) {
-                displayError('<strong>Login Failed!</strong> ' + msg, '#login-screen');
-                flagFieldError($('#user-email'), '');
-            } else if (data.status == 422 && msg.indexOf('password') > -1) {
-                displayError('<strong>Login Failed!</strong> ' + msg, '#login-screen');
-                flagFieldError($('#user-password'), '');
-            } else {
-                displayError('<strong>Login Failed!</strong> Please try again.', '#login-screen');
-            }
+            loginError(data, '#login-screen');
         };
 
         url = '/api/sessions'
@@ -293,5 +282,18 @@ function flagFieldError(field, help_msg) {
         par.removeClass('has-error');
         h.text('');
     });
+}
+
+function loginError(data, screen) {
+    msg = extractJSONFailMsg(data)
+    if (data.status == 422 && msg.indexOf('email') > -1) {
+        displayError('<strong>Login Failed!</strong> ' + msg, screen);
+        flagFieldError($('#user-email'), '');
+    } else if (data.status == 422 && msg.indexOf('password') > -1) {
+        displayError('<strong>Login Failed!</strong> ' + msg, screen);
+        flagFieldError($('#user-password'), '');
+    } else {
+        displayError('<strong>Login Failed!</strong> Please try again.', screen);
+    }
 }
 
