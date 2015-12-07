@@ -88,9 +88,10 @@ var CreateGame = (function() {
                 for (var i = 0; i < errors.length; i++) {
                     alertMsg += errors[i];
                     if (i != errors.length-1) {
-                        alertMsg += " and ";
+                        alertMsg += ". ";
                     }
                 };
+                alert(alertMsg);
 
                 consoleError(data);
             };
