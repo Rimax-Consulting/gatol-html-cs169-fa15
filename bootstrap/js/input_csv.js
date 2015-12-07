@@ -9,7 +9,7 @@ var InputCSV = (function() {
 
         csv_container.on('click', '#upload', function(e) {
 
-            var files = document.getElementById('file_select').files;
+            var files = document.getElementById('file-select').files;
             token = getCookie('auth_token');
             var csv = {}
 
@@ -35,11 +35,7 @@ var InputCSV = (function() {
             var onSuccess = function(data) {
                 alert('csv successfully uploaded!');
                 console.log(data);
-                if (inDev) {
-                    location.href = devUrl + 'create_game.html';
-                } else {
-                    location.href = 'http://allenyu94.github.io/gatol-html/create_game';
-                }
+                location.href = 'create-game.html';
             }
 
             var onFailure = function(data) {
@@ -53,11 +49,7 @@ var InputCSV = (function() {
         });
 
         csv_container.on('click', '#cancel_upload', function(e) {
-            if (inDev) {
-                location.href = devUrl + 'create_game.html';
-            } else {
-                location.href = 'http://allenyu94.github.io/gatol-html/create_game';
-            }
+            location.href = 'create-game.html';
         });
 
     };
@@ -67,7 +59,7 @@ var InputCSV = (function() {
      * @return {None}
      */
     var start = function() {
-        csv_container = $("#csv_container");
+        csv_container = $("#input-csv");
 
         attachCreateHandler();
 

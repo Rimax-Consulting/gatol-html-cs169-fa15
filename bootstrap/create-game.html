@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Shop Homepage - Start Bootstrap Template</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/create.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="js/gatol.js"></script>
+    <script src="js/create_game.js"></script>
+    <script src="js/input_csv.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            InputCSV.start();
+        });
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            CreateGame.start();
+        });
+    </script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Game-A-Thon</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a>Welcome Awesome Person</a>
+                    </li>
+                    <li>
+                        <a href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div id="create-game-container" class="container">
+
+        <h1>Create Game</h1>
+
+        <hr></hr>
+
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <p class="lead">Select CSV
+                    <button id="add-csv-btn" style="float:right;" type="button" class="btn" data-toggle="modal" data-target="#input-csv">Add CSV</button></p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div id="csv-list" style="text-align: center" class="list-group">
+                </div>
+
+                <p class="lead">Select Template</p>
+                <div id="template-list" style="text-align: center" class="list-group">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <form>
+                    <div class="form-group">
+                        <label for="form-title">Title</label>
+                        <input id="create-game-title" type="text" class="form-control" placeholder="Title...">
+                    </div>
+                    <div class="form-group">
+                        <label for="form-test-description">Test Decription</label>
+                        <textarea id="create-game-description" type="text" class="form-control" placeholder="Test Description..."></textarea>
+                    </div>
+                </form>
+                <button id="create-finish" class="btn">Finish</button>
+                <button id="create-cancel" class="btn">Cancel</button>
+            </div>
+
+        </div>
+
+
+    </div>
+    <!-- /.container -->
+
+    <div class="container">
+
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Game-A-Thon 2015</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /.container -->
+
+    <div id="input-csv" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Upload CSV</h4>
+          </div>
+          <div class="modal-body">
+            <p>One fine body&hellip;</p>
+            <hr></hr>
+            <input id="file-select" type="file"></input>
+          </div>
+          <div class="modal-footer">
+            <button id="cancel_upload" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button id="upload" type="button" class="btn btn-primary">Upload</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+
+</body>
+
+</html>

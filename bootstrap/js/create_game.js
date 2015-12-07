@@ -11,8 +11,8 @@ var CreateGame = (function() {
             var finish = {} // container to hold game data to be created
             qset = create_container.find('.csv-item.selected');
             template = create_container.find('.template-item.selected');
-            template_li = template[0].closest('li');
-            qset_li = qset[0].closest('li');
+            template_li = template[0];
+            qset_li = qset[0];
             finish.question_set_id = qset_li.id;
             finish.game_template_id = template_li.id;
             finish.description = create_container.find('#create-game-description').val();
@@ -23,11 +23,7 @@ var CreateGame = (function() {
 
             var onSuccess = function(data) {
                 //alert('successfully created game');
-                if (inDev) {
-                    location.href = devUrl + 'dashboard.html';
-                } else {
-                    location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
-                }
+                location.href = 'dashboard.html';
 
             };
 
@@ -99,7 +95,7 @@ var CreateGame = (function() {
                 var a = document.createElement('a');
 
                 a.setAttribute('href', '#' + templates[i].name);
-                a.setAttribute('class', 'list-group-item template_item');
+                a.setAttribute('class', 'list-group-item template-item');
                 a.innerHTML = templates[i].name;
                 a.setAttribute('id', templates[i].id);
                 ul.appendChild(a);

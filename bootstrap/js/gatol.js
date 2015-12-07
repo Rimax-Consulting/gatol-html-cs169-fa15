@@ -11,7 +11,7 @@
 var apiUrl = 'https://gatol.herokuapp.com' 
 
 // maps game_template_id to image
-var gameTemplateIdToImage = {1:'images/blobbers_example.png', 2:'images/baskets_example.png'};
+var gameTemplateIdToImage = {1:'img/blobbers_example.png', 2:'img/baskets_example.png'};
 
 // maps game_template_id to game description
 var gameTemplateIdToDesc = {
@@ -30,7 +30,7 @@ var devUrl = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/';
 var releaseUrl = 'https://allenyu94.github.io/gatol-html/'
 
 // determine whether or not we are in development mode. 
-var inDev = true;
+var inDev = false;
 
 
 /* =========================== JSON Request Logic =========================== */

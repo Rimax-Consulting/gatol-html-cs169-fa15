@@ -36,10 +36,7 @@ $('#logout').on('click', function(e) {
 
 
 
-$('#preview-play-btn').on('click', function(e) {
-    setCookie('game_id', current_game_id); 
-    location.href = 'game.html';
-});
+
 
 
 
@@ -57,6 +54,11 @@ var DashBoard = (function() {
 
         $('#create').on('click', function(e) {
             location.href = 'create-game.html'; 
+        });
+
+        $('#preview-play-btn').on('click', function(e) {
+            setCookie('game_id', current_game_id); 
+            location.href = 'game.html';
         });
 
         $('#preview-back-btn').on('click', function(e) {
