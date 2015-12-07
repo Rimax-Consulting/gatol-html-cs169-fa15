@@ -53,9 +53,14 @@ var CreateGame = (function() {
             template = create_container.find('.template_item.selected');
             try {
                 template_li = template[0].closest('li');
-                qset_li = qset[0].closest('li');
             } catch (err) {
-                alert("Please select a csv");
+                alert("Please select a CSV");
+                return;
+            }
+            try {
+                template_li = template[0].closest('li');
+            } catch (err) {
+                alert("Please select a Game Template");
                 return;
             }
             finish.question_set_id = qset_li.id;
