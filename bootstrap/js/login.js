@@ -20,7 +20,8 @@ $('#login-student').on('click', function(e) {
 
 $('#login-student-back').on('click', function(e) {
     $('#login-screen').hide();
-    $('#initial-screen').show(); 
+    $('#initial-screen').show();
+    resetAllErrors();
 });
 
 
@@ -80,7 +81,7 @@ $('#forgot-trainer-back').on('click', function(e) {
 $('#student-signin').on('click', function(e) {
     var creds = {} // prepare credentials for passing into backend
 
-    if (checkLoginValid(creds, false)) {
+    if (checkLoginValid(creds, false, '#login-screen')) {
         e.preventDefault();
 
         var onSuccess = function (data) {
@@ -93,12 +94,16 @@ $('#student-signin').on('click', function(e) {
 
         var onFailure = function (data) {
             //console.error('failure to login as user');
-            consoleError(data);
+            //consoleError(data);
             msg = extractJSONFailMsg(data)
-            if (data.status == 422) {
-                displayError('Login Failed! Please verify email.', '#trainer-login-screen');
+            if (data.status == 422 && msg.indexOf('email') > -1) {
+                displayError('<strong>Login Failed!</strong> ' + msg, '#login-screen');
+                flagFieldError($('#user-email'), '');
+            } else if (data.status == 422 && msg.indexOf('password') > -1) {
+                displayError('<strong>Login Failed!</strong> ' + msg, '#login-screen');
+                flagFieldError($('#user-password'), '');
             } else {
-                displayError('Login Failed! Please try again.', '#trainer-login-screen');
+                displayError('<strong>Login Failed!</strong> Please try again.', '#login-screen');
             }
         };
 
@@ -220,28 +225,27 @@ $('#trainer-registration').on('click', function(e) {
 });
 
 function displayError(message, parent) {
-    var e = $(parent).find('.error')
-    $(e).text(message);
+    var e = $(parent).find('.error');
+    $(e).html(message);
     $(e).show();
+    var i = $(parent).find('.form-group .has-feedback');
+    i.addClass('has-error');
+    
 }
 
 function resetAllErrors() {
     $('.error').hide();
-}
-
-
-function showLoginFailMsg(errors) {
-}
-
-function showRegisterFailMsg(errors) {
+    $('.form-group.has-feedback').removeClass('has-error');
+    $('.form-group .help-block').text('');
     
 }
 
 function extractJSONFailMsg(data) {
+    console.log(data.responseText);
     errors = JSON.parse(data.responseText).errors;
-    msg = ""
+    msg = "";
     if (errors != null) {
-        msg += errors[0] + '. '
+        msg += errors[0] + '. ';
     }
     return msg
 
@@ -255,21 +259,39 @@ function backToMain(currentScreen) {
 }
 
 function checkLoginValid(creds, is_trainer) {
-    user = 'user'
+    user = 'user';
     if (is_trainer) {
-        user = 'trainer'
+        user = 'trainer';
     }
     email = $('#' + user + '-email');
     password = $('#' + user + '-password');
-    valid  = email[0].checkValidity() && password[0].checkValidity()
-    if (valid) {
+    v_e = email[0].validity
+    v_p = password[0].validity
+    if (v_e.valid && v_p.valid) {
         creds.email = email.val();
         creds.password = password.val();
+        return true
     }
-
-    return valid   
-}
-
-function checkRegisterFields() {
     
+    if (!v_e.valid) {
+        flagFieldError(email, 
+                       'Please enter a valid email (ex: user@gatol.com)');
+    }
+    
+    if (!v_p.valid) {
+        flagFieldError(password, 'Please enter a password');
+    }
+    return false
 }
+
+function flagFieldError(field, help_msg) {
+    par = field.parent('.form-group');
+    par.addClass('has-error');
+    h = field.siblings('.help-block');
+    h.text(help_msg);
+    field.on('input propertychange paste', function() {
+        par.removeClass('has-error');
+        h.text('');
+    });
+}
+
