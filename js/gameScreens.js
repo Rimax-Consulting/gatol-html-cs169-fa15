@@ -388,7 +388,7 @@ var Screens = (function() {
 
 	var start = function() {
 		//probably initialized in a public method that is called by the screen that chooses the game from the student's game list
-		checkIfLoggedIn();
+		// checkIfLoggedIn();
 		
 		gameInstanceID = ""; 
 		descr = "";
@@ -409,7 +409,7 @@ var Screens = (function() {
 				new Question("Bird goes:", "tweet", ["meow", "woof", "squeak", "moo", "croak", "toot"]),
 				new Question("Which of these is not a color?", "cheese stick", ["red", "orange", "yellow", "green", "blue", "purple"])];
 
-			currentGame = new Game(-1, questionList, "Assorted Questions", 3);
+			currentGame = new Game(-1, questionList, "Assorted Questions", 1);
 			setMainTitleScreen();
 		};
 

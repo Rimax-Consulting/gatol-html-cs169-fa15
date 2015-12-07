@@ -38,6 +38,12 @@ var Blobbers = function(parent, width, height, num_choices, state, answerFunc) {
 		this.handleKeys(event.keyCode, false);
 	}.bind(this), false);
 
+	// create a background texture
+	this.skyTexture = PIXI.Texture.fromImage("images/sprites/sky.jpg");
+	// create a new background sprite
+	this.skySprite = new PIXI.TilingSprite(this.skyTexture, this._width, this._height);
+	this.stage.addChild(this.skySprite);
+
 	this.foodBodies = [];
 	this.foodGraphics = [];
 	this.enemyBodies = [];
@@ -86,6 +92,7 @@ Blobbers.prototype = {
 		this.foodGraphics = [];
 		this.answerChoices = [];
 		this.answerFunc(num);
+		this.stage.removeChild(this.skySprite);
 
 	},
 
@@ -102,15 +109,10 @@ Blobbers.prototype = {
 		this.blob.addShape(this.blobShape);
 		this.world.addBody(this.blob);
 
-		this.blobGraphics = new PIXI.Graphics();
-
-		// draw the blob's body
-		this.blobGraphics.moveTo(0,0);
-		// this.blobGraphics.beginFill(0x106283);
-		// this.blobGraphics.drawCircle(0,0,this.blobRadius+4);
-		this.blobGraphics.beginFill(0xFFFFFF);
-		this.blobGraphics.drawCircle(0,0,this.blobRadius);
-		this.blobGraphics.endFill();
+		this.blobGraphics = new PIXI.Sprite.fromImage("images/sprites/puffer.png");
+		this.blobGraphics.width = this.blobRadius*2.5;
+		this.blobGraphics.height = this.blobRadius*2.5;
+		this.blobGraphics.anchor.set(.5,.5);
 
 		this.stage.addChild(this.blobGraphics);
 
@@ -141,13 +143,13 @@ Blobbers.prototype = {
 			this.world.addBody(food);
 
 			// Create the graphics
-			var foodGraphics = new PIXI.Graphics();
-			foodGraphics.beginFill(0xB6EE65);
-			foodGraphics.drawCircle(0,0,20);
-			foodGraphics.endFill();
+			var foodGraphics = new PIXI.Sprite.fromImage("images/sprites/bubble.png");
+			foodGraphics.width = Math.random()*10 + 45;
+			foodGraphics.height = foodGraphics.width;
+			foodGraphics.anchor.set(.5,.5);
 
 
-			var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0x51771a});
+			var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0x222222});
 
 			this.stage.addChild(foodGraphics);
 			this.stage.addChild(answerText);
