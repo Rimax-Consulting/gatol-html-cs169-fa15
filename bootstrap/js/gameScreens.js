@@ -29,6 +29,8 @@ var Screens = (function() {
 			this.metaGame = BasketsMetaGame()
 		} else if (gameTemplateIdToTitle[this.templateID] == "Shooters"){
 			this.metaGame = ShootersMetaGame()
+		} else if (gameTemplateIdToTitle[this.templateID] == "Bouncers"){
+			this.metaGame = BouncersMetaGame()
 		}
 
 		this.getScore = function() {
@@ -40,6 +42,8 @@ var Screens = (function() {
 		 * answer is user's answer from the game
 		 */
 		this.checkAnswer = function(answer) {
+			$(".gameScreen").css("z-index", -1);
+			$(".answer").css("z-index",0);
 			if (answer < 0) {
 				this.mostRecentAnswer = "nothing";
 				return false;
@@ -106,6 +110,7 @@ var Screens = (function() {
 		}
 
 		this.initializeGame = function(answer) {
+			$(".gameScreen").css("z-index", 1);
 			this.metaGame.initializeGame(document.getElementById("gameScreen"), 
 								$(".gameScreen").width(),
 								$(".gameScreen").height(),
@@ -190,6 +195,7 @@ var Screens = (function() {
 		for (var i = 0; i < question.allChoices.length; i++) {
 			$(".answer").append("<div>"+String.fromCharCode('A'.charCodeAt() + i)+ ") " + question.allChoices[i]+"</div>");
 		};
+		$(".answer").css("z-index",2); // This line doesn't do what it's supposed to @Allen halp
 	};
 
 	var setCorrectScreen = function(){
