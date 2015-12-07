@@ -90,7 +90,7 @@ var GameAThon = (function () {
 
             //creds.email = $('#user_email').val();
             //creds.password = $('#user_password').val();
-            
+
             if (checkLoginValid(creds, false)) {
                 e.preventDefault();
                 var onSuccess = function (data) {
@@ -131,10 +131,12 @@ var GameAThon = (function () {
             //creds.email = $('#trainer_email').val();
             //creds.password = $('#trainer_password').val();
 
+            alert(checkLoginValid(creds, false));
+
             if (checkLoginValid(creds, true)) {
                 e.preventDefault();
                 var onSuccess = function (data) {
-                    //alert('successfully logged in as trainer, auth token is: ' + data.auth_token);
+                    alert('successfully logged in as trainer, auth token is: ' + data.auth_token);
                     setCookie("auth_token", data.auth_token);
                     setCookie("username", data.username);
                     setCookie("trainer", "true");
@@ -208,6 +210,7 @@ var GameAThon = (function () {
         });
 
         loginContainer.on('click', '#register_user', function (e) {
+            resetAllErrors();
             var creds = {} // prepare credentials for passing into backend
 
             if ($('#register_password').val() != $('#register_confirm_password').val()) {
@@ -245,6 +248,7 @@ var GameAThon = (function () {
         });
 
         loginContainer.on('click', '#register_trainer', function (e) {
+            resetAllErrors();
             var creds = {} // prepare credentials for passing into backend
 
             if ($('#register_trainer_password').val() != $('#register_trainer_confirm_password').val()) {
@@ -341,7 +345,7 @@ function backToMain(currentScreen) {
 function checkLoginValid(creds, is_trainer) {
     user = 'user'
     if (is_trainer) {
-        // user = 'trainer'
+        user = 'trainer'
         creds.is_trainer = '1';
     } else {
         creds.is_trainer = '0';
