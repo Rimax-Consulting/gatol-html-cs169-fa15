@@ -305,7 +305,7 @@ var GameAThon = (function () {
                 displayError('Register Failed: ' + alertMsg + '.', '#forgot_screen');
             };
 
-            url = 'api/students/reset';
+            url = '/api/students/reset';
             makePostRequest(url, creds, onSuccess, onFailure);
 
         });
@@ -332,7 +332,7 @@ var GameAThon = (function () {
                 displayError('Register Failed: ' + alertMsg + '.', '#trainer_forgot_screen');
             };
 
-            url = 'api/trainers/reset';
+            url = '/api/trainers/reset';
             makePostRequest(url, creds, onSuccess, onFailure);
 
         });
