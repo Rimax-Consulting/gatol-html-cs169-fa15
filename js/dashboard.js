@@ -373,7 +373,7 @@ var DashBoard = (function() {
             };
 
             //leaderboardUrl = '/api/game_instances/leaderboard?game_id=' + current_game_id;
-            leaderboardUrl = '/api/game_instances/leaderboard?game_id=5';
+            leaderboardUrl = '/api/game_instances/leaderboard?game_id='+ current_game_id;
             makeGetRequestWithAuthorization(leaderboardUrl, token, leaderboardSuccess, leaderboardFailure);
 
         });

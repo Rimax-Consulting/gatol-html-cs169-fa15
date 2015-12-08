@@ -26,7 +26,13 @@ var Shooters = function(parent, width, height, num_choices, state, answerFunc) {
 	this.world = new p2.World({
 		gravity: [0,state.gravity || 10]
 	});
-	console.log(state.gravity);
+	// console.log(state.gravity);
+
+	// create a background texture
+	this.spaceTexture = PIXI.Texture.fromImage("images/sprites/space.png");
+	// create a new background sprite
+	this.spaceSprite = new PIXI.TilingSprite(this.spaceTexture, this._width, this._height);
+	this.stage.addChild(this.spaceSprite);
 
 	this.foodBodies = [];
 	this.foodGraphics = [];
@@ -90,21 +96,16 @@ Shooters.prototype = {
 		this.answerChoices = [];
 		this.answerNumbers = [];
 		this.answerFunc(num);
+		this.stage.removeChild(this.spaceSprite);
 	},
 
 	createShooter: function() {
 
-		this.shooterGraphics = new PIXI.Graphics();
-
-		// draw the shooter's body
-		this.shooterGraphics.moveTo(0,0);
-		this.shooterGraphics.beginFill(0xFFFFFF);
-		this.shooterGraphics.drawCircle(0,0,60);
-		this.shooterGraphics.drawRect(-20,-75,40,75);
-		this.shooterGraphics.drawRect(-8,-110,16,110);
-		this.shooterGraphics.drawRect(-10,-110,20,15);
-		this.shooterGraphics.endFill();
-
+		this.shooterGraphics = new PIXI.Sprite.fromImage("images/sprites/shooter.png");
+		this.shooterGraphics.width = 200;
+		this.shooterGraphics.height = 240;
+		this.shooterGraphics.anchor.set(.5,.9);
+		// this.shooterGraphics.position = this.shooterGraphics.pivot;
 		this.shooterGraphics.x = this._width/2;
 		this.shooterGraphics.y = this._height;
 
@@ -117,7 +118,7 @@ Shooters.prototype = {
 			var y = 10;
 			var vx = 0;
 			var vy = 6 + Math.random()*10;
-			var va = 0;//(Math.random() - 0.5) * that.speed/100;
+			var va = (Math.random() - 0.5)*5;
 			// create the food physics body
 			var food = new p2.Body({
 				position: [x,y],
@@ -127,18 +128,17 @@ Shooters.prototype = {
 				velocity: [vx, vy],
 				angularVelocity: va
 			});
-			var foodShape = new p2.Circle({radius: 20});
+			var foodShape = new p2.Circle({radius: 30});
 			food.addShape(foodShape);
 			that.world.addBody(food);
 
 			// Create the graphics
-			var foodGraphics = new PIXI.Graphics();
-			foodGraphics.beginFill(0xB6EE65);
-			foodGraphics.drawCircle(0,0,20);
-			foodGraphics.endFill();
+			var foodGraphics = new PIXI.Sprite.fromImage("images/sprites/asteroid_" + Math.round(Math.random()*9) + ".png");
+			foodGraphics.width = 60;
+			foodGraphics.height = 60;
+			foodGraphics.anchor.set(.5,.5);
 
-
-			var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0x51771a});
+			var answerText = new PIXI.Text(String.fromCharCode(65+i), {font: "24px Verdana", fill: 0xFFFFFF});
 
 			that.stage.addChild(foodGraphics);
 			that.stage.addChild(answerText);
@@ -167,8 +167,12 @@ Shooters.prototype = {
 		this.world.addBody(projectile);
 
 		var projectileGraphics = new PIXI.Graphics();
-		projectileGraphics.beginFill(0xFFFFFF);
+		projectileGraphics.beginFill(0x78E6FF, .5);
+		projectileGraphics.drawCircle(0,0,7);
+		projectileGraphics.beginFill(0x78E6FF);
 		projectileGraphics.drawCircle(0,0,5);
+		projectileGraphics.beginFill(0xFFFFFF);
+		projectileGraphics.drawCircle(0,0,3);
 		projectileGraphics.endFill();
 		projectileGraphics.x = this.shooterGraphics.x;
 		projectileGraphics.y = this.shooterGraphics.y;
@@ -239,6 +243,7 @@ Shooters.prototype = {
 		for (var i = 0; i < this.foodBodies.length; i++) {
 			this.foodGraphics[i].x = this.foodBodies[i].position[0];
 			this.foodGraphics[i].y = this.foodBodies[i].position[1];
+			this.foodGraphics[i].rotation = this.foodBodies[i].angle;
 
 			this.answerChoices[i].x = this.foodBodies[i].position[0]-8;
 			this.answerChoices[i].y = this.foodBodies[i].position[1]-14;
