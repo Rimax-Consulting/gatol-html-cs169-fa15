@@ -285,12 +285,24 @@ var GameAThon = (function () {
 
         loginContainer.on('click', '#password_reset', function (e) {
             var creds = {};
-            
-            var onSuccess = function(data) {
+            creds.email = $('#forgot_screen input').val();
 
+            var onSuccess = function(data) {
+                alert('Check your email for a password.');
             };
             var onFailure = function(data) {
+                console.error(data.status);
+                errors = JSON.parse(data.responseText).errors;
+                alertMsg = "";
 
+                for (var i = 0; i < errors.length; i++) {
+                    alertMsg += errors[i];
+                    if (i != errors.length-1) {
+                        alertMsg += " and ";
+                    }
+                };
+
+                displayError('Register Failed: ' + alertMsg + '.', '#forgot_screen');
             };
 
             url = 'api/students/reset';
@@ -300,12 +312,24 @@ var GameAThon = (function () {
 
         loginContainer.on('click', '#trainer_password_reset', function (e) {
             var creds = {};
+            creds.email = $('#trainer_forgot_screen input').val();
 
             var onSuccess = function(data) {
-
+                alert('Check your email for a password.');
             };
             var onFailure = function(data) {
+                console.error(data.status);
+                errors = JSON.parse(data.responseText).errors;
+                alertMsg = "";
 
+                for (var i = 0; i < errors.length; i++) {
+                    alertMsg += errors[i];
+                    if (i != errors.length-1) {
+                        alertMsg += " and ";
+                    }
+                };
+
+                displayError('Register Failed: ' + alertMsg + '.', '#trainer_forgot_screen');
             };
 
             url = 'api/trainers/reset';
