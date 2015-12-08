@@ -285,6 +285,36 @@ var GameAThon = (function () {
 
         });
 
+        loginContainer.on('click', '#password_reset', function (e) {
+            var creds = {};
+            
+            var onSuccess = function(data) {
+
+            };
+            var onFailure = function(data) {
+
+            };
+
+            url = 'api/students/reset';
+            makePostRequest(url, creds, onSuccess, onFailure);
+
+        });
+
+        loginContainer.on('click', '#trainer_password_reset', function (e) {
+            var creds = {};
+
+            var onSuccess = function(data) {
+
+            };
+            var onFailure = function(data) {
+
+            };
+
+            url = 'api/trainers/reset';
+            makePostRequest(url, creds, onSuccess, onFailure);
+
+        });
+
     }
 
     /**
