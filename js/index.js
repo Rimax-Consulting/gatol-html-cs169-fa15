@@ -302,7 +302,7 @@ var GameAThon = (function () {
                     }
                 };
 
-                displayError('Register Failed: ' + alertMsg + '.', '#forgot_screen');
+                displayError('Reset Failed: ' + alertMsg + '.', '#forgot_screen');
             };
 
             url = '/api/students/reset';
@@ -320,16 +320,20 @@ var GameAThon = (function () {
             var onFailure = function(data) {
                 console.error(data.status);
                 errors = JSON.parse(data.responseText).errors;
-                alertMsg = "";
 
-                for (var i = 0; i < errors.length; i++) {
-                    alertMsg += errors[i];
-                    if (i != errors.length-1) {
-                        alertMsg += " and ";
-                    }
-                };
+                // The trainer and student controllers are inconsistent
+                // alertMsg = "";
 
-                displayError('Register Failed: ' + alertMsg + '.', '#trainer_forgot_screen');
+                // for (var i = 0; i < errors.length; i++) {
+                //     alertMsg += errors[i];
+                //     if (i != errors.length-1) {
+                //         alertMsg += " and ";
+                //     }
+                // };
+
+                // displayError('Reset Failed: ' + alertMsg + '.', '#trainer_forgot_screen');
+
+                displayError('Reset Failed: ' + errors + '.', '#trainer_forgot_screen');
             };
 
             url = '/api/trainers/reset';
