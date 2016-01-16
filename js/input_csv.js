@@ -38,7 +38,7 @@ var InputCSV = (function() {
                 if (inDev) {
                     location.href = devUrl + 'create_game.html';
                 } else {
-                    location.href = 'http://allenyu94.github.io/gatol-html/create_game';
+                    location.href = 'http://gatolteam.github.io/gatol-html/create_game';
                 }
             }
 
@@ -56,7 +56,7 @@ var InputCSV = (function() {
             if (inDev) {
                 location.href = devUrl + 'create_game.html';
             } else {
-                location.href = 'http://allenyu94.github.io/gatol-html/create_game';
+                location.href = 'http://gatolteam.github.io/gatol-html/create_game';
             }
         });
 

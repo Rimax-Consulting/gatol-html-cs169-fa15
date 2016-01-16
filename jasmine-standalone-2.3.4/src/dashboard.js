@@ -17,7 +17,7 @@ var DashBoard = (function() {
             if (inDev) {
                 location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/input_link.html';
             } else {
-                location.href = 'http://allenyu94.github.io/gatol-html/input_link'; 
+                location.href = 'http://gatolteam.github.io/gatol-html/input_link'; 
             }
         });
 
@@ -25,7 +25,7 @@ var DashBoard = (function() {
             if (inDev) {
                 location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/create_game.html';
             } else {
-                location.href = 'http://allenyu94.github.io/gatol-html/create_game';
+                location.href = 'http://gatolteam.github.io/gatol-html/create_game';
             }
         });
 
@@ -41,7 +41,7 @@ var DashBoard = (function() {
                     if (inDev) {
                         location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/index.html'
                     } else {
-                        location.href = 'http://allenyu94.github.io/gatol-html/';
+                        location.href = 'http://gatolteam.github.io/gatol-html/';
                     }
                 }
             };
