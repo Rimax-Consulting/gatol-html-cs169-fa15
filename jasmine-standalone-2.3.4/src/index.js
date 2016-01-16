@@ -99,7 +99,7 @@ var GameAThon = (function() {
                 if (inDev) {
                     location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
                 } else {
-                    location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+                    location.href = 'http://gatolteam.github.io/gatol-html/dashboard';
                 }
             };
             var onFailure = function() { 
@@ -133,7 +133,7 @@ var GameAThon = (function() {
                 if (inDev) {
                     location.href = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/dashboard.html';
                 } else {
-                    location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+                    location.href = 'http://gatolteam.github.io/gatol-html/dashboard';
                 }
             };
             var onFailure = function(data) { 

@@ -27,7 +27,7 @@ var gameTemplateIdToTitle = {1:'Blobbers', 2:'Baskets', 3:'Shooters'};
 var devUrl = 'file:///Users/AllenYu/Desktop/cs169-dx/gatol_html_proj/';
 
 // url to use for release
-var releaseUrl = 'https://allenyu94.github.io/gatol-html/'
+var releaseUrl = 'https://gatolteam.github.io/gatol-html/'
 
 // determine whether or not we are in development mode. 
 var inDev = true;

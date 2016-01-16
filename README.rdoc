@@ -2,9 +2,9 @@
 
 === Links
 
-{Website}[http://allenyu94.github.io/gatol-html/]
+{Website}[http://gatolteam.github.io/gatol-html/]
 
-{Backend}[https://github.com/occhen11/gatol]
+{Backend}[https://github.com/gatolteam/gatol]
 
 === Testing Information
 

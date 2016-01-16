@@ -11,7 +11,7 @@ var CreateGame = (function() {
             if (inDev) {
                 location.href = devUrl + 'input_csv.html';
             } else {
-                location.href = 'http://allenyu94.github.io/gatol-html/input_csv'; 
+                location.href = 'http://gatolteam.github.io/gatol-html/input_csv'; 
             }
         });
 
@@ -34,7 +34,7 @@ var CreateGame = (function() {
                 if (inDev) {
                     location.href = devUrl + 'dashboard.html';
                 } else {
-                    location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+                    location.href = 'http://gatolteam.github.io/gatol-html/dashboard';
                 }
 
             };
@@ -52,7 +52,7 @@ var CreateGame = (function() {
             if (inDev) {
                 location.href = devUrl + 'dashboard.html';
             } else {
-                location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+                location.href = 'http://gatolteam.github.io/gatol-html/dashboard';
             }
         });
 

@@ -101,7 +101,7 @@ var GameAThon = (function () {
                     if (inDev) {
                         location.href = devUrl + 'dashboard.html';
                     } else {
-                        location.href = 'http://allenyu94.github.io/gatol-html/dashboard';
+                        location.href = 'http://gatolteam.github.io/gatol-html/dashboard';
                     }
                 };
                 var onFailure = function (data) {
