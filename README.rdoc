@@ -6,12 +6,15 @@
 
 {Backend}[https://github.com/gatolteam/gatol]
 
+
 === Testing Information
 
 Jasmine testing framework, automates ui testing. To run the tests, 
 pull jasmine-standalone-2.3.4 and run SpecRunner.html. 
 
 == Documentation
+
+The code itself is in the gh-pages branch.
 
 === Gatol.js
 
